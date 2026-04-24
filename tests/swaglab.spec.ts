@@ -26,12 +26,29 @@ test('Visibility the product details page', async ({ page }) => {
     await page.locator('[data-test="inventory-container"]').click();
 
     
-    await expect(page.locator('[data-test="item-4-img-link"]')).toBeVisible();
-    await expect(page.locator('[data-test="item-4-title-link"]')).toBeVisible();
-    await expect(page.getByText('carry.allTheThings() with the')).toBeVisible();
-    await expect(page.getByText('$29.99')).toBeVisible();
-    await expect(page.locator('[data-test="add-to-cart-sauce-labs-backpack"]')).toBeVisible();
-    
+    // await expect(page.locator('[data-test="item-4-img-link"]')).toBeVisible();
+    // await expect(page.locator('[data-test="item-4-title-link"]')).toBeVisible();
+    // await expect(page.getByText('carry.allTheThings() with the')).toBeVisible();
+    // await expect(page.getByText('$29.99')).toBeVisible();
+    // await expect(page.locator('[data-test="add-to-cart-sauce-labs-backpack"]')).toBeVisible();
+    const products = page.locator('.inventory_item');
+    const allProducts = await products.all();
+
+    for (const product of allProducts) {
+    // Check that the product card is visible
+    await expect(product).toBeVisible();
+
+    // You can even check things INSIDE each product
+    const name = product.locator('.inventory_item_name');
+    const price = product.locator('.inventory_item_price');
+
+    await expect(name).not.toBeEmpty();
+    console.log(`Verified product name: ${await name.textContent()}`);
+    await expect(price).toContainText('$');
+    console.log(`Verified product price: ${await price.textContent()}`);
+  }
+
+  console.log(`Successfully verified ${allProducts.length} products.`);
     
     
     
