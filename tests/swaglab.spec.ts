@@ -211,5 +211,37 @@ test('Add multiple products to cart and check the cart badge 2', async ({ page }
 
   await expect(page.locator('.shopping_cart_badge')).toHaveText(count.toString());
 
+  const removeButtons = page.getByRole('button', { name: 'Remove' });
+  const removeCount = await removeButtons.count();
+  console.log(`Total "Remove" buttons after adding to cart: ${removeCount}`);
+  await expect(removeButtons).toHaveCount(count);
+
+  for (let i = 0; i < removeCount; i++) {
+    await removeButtons.first().click();
+    const cartBadge = page.locator('.shopping_cart_badge');
+    const remainingCount = removeCount - (i + 1);
+    console.log(`Removed product ${i + 1} from cart. Remaining products: ${remainingCount}`);
+    await expect(cartBadge).toHaveText(remainingCount > 0 ? remainingCount.toString() : '');
+  }
+
+
+});
+
+test('Click on the product and see the details page', async ({ page }) => {
+
+    await page.goto('https://www.saucedemo.com/inventory.html');
+    await page.locator('.inventory_item_name').first().click();
+    await expect(page.locator('.inventory_details_name')).toHaveText('Sauce Labs Backpack');
+    await expect(page.locator('.inventory_details_desc')).toHaveText('carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.');
+    await expect(page.locator('.inventory_details_price')).toHaveText('$29.99');
+    await page.locator('button', { hasText: 'Add to cart' }).click();
+    const cartBadge = page.locator('.shopping_cart_badge');
+    await expect(cartBadge).toHaveText('1');
+    console.log('Successfully added product to cart and verified the cart badge.');
+
+    await page.locator('button', { hasText: 'Back to products' }).click();
+    const removeButtons = page.getByRole('button', { name: 'Remove' });
+    await expect(removeButtons).toBeVisible();
+
 
 });
