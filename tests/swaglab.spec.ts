@@ -54,8 +54,11 @@ test('Visibility the product details page', async ({ page }) => {
 
   console.log(`Successfully verified ${allProducts.length} products.`);
     
+   await expect(page.locator('.social_twitter')).toBeVisible();
+   await expect(page.locator('.social_facebook')).toBeVisible();
+   await expect(page.locator('.social_linkedin')).toBeVisible();
     
-    
+   await expect(page.locator('.footer_copy')).toHaveText('© 2026 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy'); 
 
 });
 
@@ -245,3 +248,82 @@ test('Click on the product and see the details page', async ({ page }) => {
 
 
 });
+
+test('Remove product from cart and check the cart badge', async ({ page }) => {
+
+
+    await page.goto('https://www.saucedemo.com/inventory.html');
+
+  const buttonSelector = 'button:has-text("Add to cart")';
+  
+  // Find out how many buttons exist total
+  const count = await page.locator(buttonSelector).count();
+
+  for (let i = 0; i < count; i++) {
+    // We always target the FIRST available "Add to cart" button.
+    // As buttons change to "Remove", the "first" one will always be the next available item.
+    await page.locator(buttonSelector).first().click();
+    const cartBadge = page.locator('.shopping_cart_badge');
+    const productName = await page.locator('.inventory_item_name').nth(i).textContent();
+    console.log(`Added product ${i + 1} to cart: ${productName}`);
+    await expect(cartBadge).toHaveText((i + 1).toString());
+  }
+
+  await expect(page.locator('.shopping_cart_badge')).toHaveText(count.toString());
+
+  await page.locator('.shopping_cart_badge').click();
+
+  const removeButtons = page.getByRole('button', { name: 'Remove' });
+  const removeCount = await removeButtons.count();
+
+  for (let i = 0; i < removeCount; i++) {
+    await removeButtons.first().click();
+    const cartBadge = page.locator('.shopping_cart_badge');
+    const remainingCount = removeCount - (i + 1);
+    console.log(`Removed product ${i + 1} from cart. Remaining products: ${remainingCount}`);
+    //await expect(cartBadge).toHaveText(remainingCount > 0 ? remainingCount.toString() : '');
+  }
+
+  //await page.locator('.continue_shopping').click();
+  // const back = await page.getByRole('button', {name : 'Continue Shopping'});
+  // await page(back).click();
+  await page.locator('[data-test="continue-shopping"]').click();
+  
+});
+
+  test('Add one product and checkout', async ({ page }) => {
+    
+    await page.goto('https://www.saucedemo.com/inventory.html');
+    await page.locator('.inventory_item_name').first().click();
+    await page.locator('button', { hasText: 'Add to cart' }).click();
+    const cartBadge = page.locator('.shopping_cart_badge');
+    await cartBadge.click();
+    await page.locator('[data-test="checkout"]').click();
+    await page.locator('#first-name').fill('John');
+    await page.locator('#last-name').fill('Leclerc');
+    await page.locator('#postal-code').fill('81000');
+    await page.locator('[data-test="continue"]').click();
+    await page.locator('[data-test="finish"]').click();
+    await page.locator('[data-test="back-to-products"]').click();
+    const cartBadge1 = page.locator('.shopping_cart_badge');
+    await expect(cartBadge1).toBeHidden();
+    console.log('Cart badge is hidden');
+
+
+    // if( cartBadge === cartBadge1){
+    //   await expect(cartBadge).toHaveText('0');
+    //   console.log('Cart badge is 0');
+    // }
+    //await expect(cartBadge).toHaveText('0');
+  
+  });
+
+
+
+  
+
+
+  
+
+
+
