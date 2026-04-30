@@ -318,6 +318,56 @@ test('Remove product from cart and check the cart badge', async ({ page }) => {
   
   });
 
+  test('Add two products and checkout', async ({ page }) => {
+    await page.goto('https://www.saucedemo.com/inventory.html');
+    await page.locator('.inventory_item_name').first().click();
+    await page.locator('button', { hasText: 'Add to cart' }).click();
+    await page.getByRole('button', { name: 'Back to products' }).click();
+    await page.locator('.inventory_item_name').nth(1).click();
+    await page.locator('button', { hasText: 'Add to cart' }).click();
+    const cartBadge = page.locator('.shopping_cart_badge');
+    await cartBadge.click();
+    await page.locator('[data-test="checkout"]').click();
+    await page.locator('#first-name').fill('John');
+    await page.locator('#last-name').fill('Leclerc');
+    await page.locator('#postal-code').fill('81000');
+    await page.locator('[data-test="continue"]').click();
+
+    const currentCartBadge = await page.locator('.shopping_cart_badge').textContent();
+    const cartCount = currentCartBadge ? parseInt(currentCartBadge, 10) : 0;
+    
+
+    for(let i = 0; i < cartCount; i++){
+      console.log('Current item in Checkout')
+      const productName = await page.locator('.inventory_item_name').nth(i).textContent();
+      console.log(productName);
+      const productPrice = await page.locator('.inventory_item_price').nth(i).textContent();
+      console.log(productPrice);
+    }
+
+    const payment =await page.locator('[data-test="payment-info-value"]').textContent();
+    console.log(payment);
+
+    const shipping = await page.locator('[data-test="shipping-info-value"]').textContent();
+    console.log(shipping);
+
+    const price = await page.locator('[data-test="subtotal-label"]').textContent();
+    console.log(price);
+
+    const tax = await page.locator('[data-test="tax-label"]').textContent();
+    console.log(tax);
+    
+    const totalPrice = await page.locator('[data-test="total-label"]').textContent();
+    console.log(totalPrice);
+
+
+    await page.locator('[data-test="finish"]').click();
+    await page.locator('[data-test="back-to-products"]').click();
+    const cartBadge1 = page.locator('.shopping_cart_badge');
+    await expect(cartBadge1).toBeHidden();
+    console.log('Cart badge is hidden');
+  });
+
 
 
   
