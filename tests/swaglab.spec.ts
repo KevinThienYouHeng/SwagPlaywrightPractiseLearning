@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import Axe from '@axe-core/playwright';
 
 test('Login and see the products page', async ({ page }) => {
   // Navigation goes straight to the inventory because of the storageState
@@ -366,6 +367,13 @@ test('Remove product from cart and check the cart badge', async ({ page }) => {
     const cartBadge1 = page.locator('.shopping_cart_badge');
     await expect(cartBadge1).toBeHidden();
     console.log('Cart badge is hidden');
+  });
+
+  test('Accesibility test', async ({ page }) => {
+    
+    await page.goto('https://www.saucedemo.com/inventory.html');
+    const accessibilityScanResults = await new Axe({ page }).analyze();
+    console.log('Accessibility Violations:', accessibilityScanResults.violations);
   });
 
 
