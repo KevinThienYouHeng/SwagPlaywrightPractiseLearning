@@ -63,6 +63,87 @@ test('Visibility the product details page', async ({ page }) => {
 
 });
 
+// test.describe('Image test with slow mode', () => {
+  
+//     test.use({
+//       storageState: 'user.json',
+//       launchOptions: {
+//         slowMo: 500,
+//       },
+//       headless: false,
+//     });
+
+//     test('Verify Image is visible for each item', async ({page}) => {
+
+//       //const page = await browser.newPage();
+
+//       await page.goto('https://www.saucedemo.com/inventory.html');
+
+//       //locate the images html 
+//       const products = page.locator('.inventory_item_img img');
+//       const allProducts = await products.count(); //Count how many it has
+      
+
+//       // Do a loop based on how many products and verify its content one by one
+//       for ( let i = 0 ; i< allProducts ; i++){
+//         //const image = page.locator('.inventory_item_img').nth(i);
+//         const isLoaded = await products.nth(i).evaluate(img => {
+//           const image = img as HTMLImageElement;
+//           return image.complete && image.naturalWidth > 0;
+//         });
+        
+//         const src = await products.nth(i).getAttribute('src');
+//         expect(isLoaded).toBe(true);
+//         //await expect(image).toBeVisible();
+//         console.log(`Verified product image: ${src}`);
+//       }
+//           // for (const product of allProducts) {
+//           //   // Check that the product card is visible
+//           //   await expect(product).toBeVisible();
+
+//           //   // You can even check things INSIDE each product
+//           //   const image = product.locator('.inventory_item_img');
+//           //   await expect(image).toBeVisible();
+//           //   console.log(`Verified product image: ${await image.getAttribute('src')}`);
+//           // }
+//     });
+// });
+
+test('Verify Image is visible for each item', async ({page}) => {
+
+      //const page = await browser.newPage();
+
+      await page.goto('https://www.saucedemo.com/inventory.html');
+
+      //locate the images html 
+      const products = page.locator('.inventory_item_img img');
+      const allProducts = await products.count(); //Count how many it has
+      
+
+      // Do a loop based on how many products and verify its content one by one
+      for ( let i = 0 ; i< allProducts ; i++){
+        //const image = page.locator('.inventory_item_img').nth(i);
+        const isLoaded = await products.nth(i).evaluate(img => {
+          const image = img as HTMLImageElement;
+          return image.complete && image.naturalWidth > 0;
+        });
+        
+        const src = await products.nth(i).getAttribute('src');
+        expect(isLoaded).toBe(true);
+        //await expect(image).toBeVisible();
+        console.log(`Verified product image: ${src}`);
+      }
+          // for (const product of allProducts) {
+          //   // Check that the product card is visible
+          //   await expect(product).toBeVisible();
+
+          //   // You can even check things INSIDE each product
+          //   const image = product.locator('.inventory_item_img');
+          //   await expect(image).toBeVisible();
+          //   console.log(`Verified product image: ${await image.getAttribute('src')}`);
+          // }
+    });
+
 test('Dropdown Name(A to Z) and compare the first and last product', async ({ page }) => {
 
 
