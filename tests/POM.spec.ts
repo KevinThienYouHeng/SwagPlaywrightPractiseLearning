@@ -8,7 +8,7 @@ test('User can add item to cart using POM', async ({ page }) => {
   const inventoryPage = new InventoryPage(page);
 
   // 2. Perform actions using our page classes
-  await loginPage.navigate();
+  await loginPage.goToLoginPage();
   //await loginPage.login('standard_user', 'secret_sauce'); // Not needed because we are using storageState
 
   await inventoryPage.addProductToCart('Sauce Labs Backpack');
