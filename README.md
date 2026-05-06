@@ -1,4 +1,4 @@
-SauceDemo Automation Learning
+SauceDemo Test Automation Learning
 
 This repository contain an end-to-end automated testing suite for the https://www.saucedemo.com/. The goal is to learn how to automate an eccomence webpage using playwright learning and try to discover different ways to automate the website with any possible testing creative way. Learn Page object model where how to write cleaner code for best practises
 
@@ -23,7 +23,8 @@ Utilizes modern Playwright assertions to ensure UI elements and data statas are 
 
 Getting Started
 1. Ensure node.js is installed
-2. git clone https://github.com/KevinThienYouHeng/SwagPlaywrightPractiseLearning/tree/main
+2. git clone (https://github.com/KevinThienYouHeng/SwagPlaywrightPractiseLearning.git)
 3. cd [Folder_name]
 4. npm install
-5. npx install @playwright@install
+5. npm init playwright@latest
+6. npx playwright test
