@@ -1,6 +1,6 @@
 SauceDemo Test Automation Learning
 
-This repository contain an end-to-end automated testing suite for the https://www.saucedemo.com/. The goal is to learn how to automate an eccomence webpage using playwright learning and try to discover different ways to automate the website with any possible testing creative way. Learn Page object model where how to write cleaner code for best practises
+This repository contain an end-to-end automated testing suite for the https://www.saucedemo.com/. The goal is to learn how to automate an eccomence webpage using playwright learning and try to discover different ways to automate the website with any possible testing creative way. Learn Page object model where how to write cleaner code for best practises. Built with the help of Playwright docs, and AI-assisted learning tools to accelerate my understanding of automation concept
 
 Tech stack
 1. Language: TypeScript
