@@ -222,7 +222,7 @@ test('Dropdown Price(High to Low) and compare first and last products', async ({
 });
 
 test('Dropdown Price(High to Low) and compare all products', async ({ page }) => {
-
+  //first version with rough idea of what to do
   await page.goto('https://www.saucedemo.com/inventory.html');
   await expect(page.locator('[data-test="product-sort-container"]')).toBeVisible();
   await page.selectOption('[data-test="product-sort-container"]', 'hilo');
@@ -946,6 +946,25 @@ test('Verify Finish button', async ({page}) => {
   await page.locator('[data-test="back-to-products"]').click();
   await page.close();
   console.log('Test End to End Complete');
+});
+
+test('Verify burger Menu (About Button)', async ({page}) => {
+
+  await page.goto('https://www.saucedemo.com/inventory.html');
+  await page.getByRole('button', { name: 'Open Menu' }).click();
+  await page.locator('[data-test="about-sidebar-link"]').click();
+  await expect(page).toHaveURL('https://saucelabs.com/');
+
+});
+
+test('Verify burger Menu (Logout Button)', async ({page}) => {
+
+  await page.goto('https://www.saucedemo.com/inventory.html');
+  await page.getByRole('button', { name: 'Open Menu' }).click();
+  await page.locator('[data-test="logout-sidebar-link"]').click();
+  await expect(page).toHaveURL('https://www.saucedemo.com/');
+  await page.close();
+
 });
 
 
