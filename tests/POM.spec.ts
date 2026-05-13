@@ -88,6 +88,7 @@ test('Click on Product name', async ({page}) => {
   await loginPage.goToLoginPage();
   //await inventoryPage.clickProductName();
   //await inventoryPage.verifyCartCount(1);
-  await inventoryPage.addItemToCartFromDetailPage();
+  await inventoryPage.clickProductImg();
+  //await inventoryPage.addItemToCartFromDetailPage();
   
 })

@@ -256,6 +256,15 @@ export class InventoryPage {
         await this.backProduct.click();
     }
 
+    async clickProductImg(){
+
+        const item = this.inventoryItems;
+        const product = item.locator('.inventory_item_img').first();
+        await product.click();
+        await this.addToCartButton.click();
+        await this.backProduct.click();
+    }
+
     async addItemToCartFromDetailPage(){
             const productNameLocator = this.inventoryItems.locator('.inventory_item_name');
             const productCount = await productNameLocator.count();
