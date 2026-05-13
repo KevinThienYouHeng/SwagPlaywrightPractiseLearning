@@ -79,3 +79,15 @@ test("Verify random item added to cart", async ({ page }) => {
   await page.close();
 
 });
+
+test('Click on Product name', async ({page}) => {
+
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+
+  await loginPage.goToLoginPage();
+  //await inventoryPage.clickProductName();
+  //await inventoryPage.verifyCartCount(1);
+  await inventoryPage.addItemToCartFromDetailPage();
+  
+})

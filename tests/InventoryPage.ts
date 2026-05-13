@@ -14,6 +14,7 @@ export class InventoryPage {
     readonly logoutButton: Locator;
     readonly removeButton: Locator;
     readonly title: Locator;
+    readonly backProduct: Locator;
     //readonly checkoutButton: Locator;
     //readonly productNames: Locator;
     //readonly productPrices: Locator;
@@ -32,6 +33,7 @@ export class InventoryPage {
         this.linkedinIcon = page.getByRole('link', { name: 'Linkedin' });
         this.logoutButton = page.locator('[data-test="logout-sidebar-link"]');
         this.removeButton = page.locator('[data-test^="remove"]');
+        this.backProduct = page.locator('[data-test="back-to-products"]');
         //this.checkoutButton = page.locator('[data-test="checkout"]');
         //this.productNames = page.locator('.inventory_item_name');
         //this.productPrices = page.locator('.inventory_item_price');
@@ -243,5 +245,45 @@ export class InventoryPage {
             console.log(`Removed product ${i + 1} from cart. Remaining products: ${remainingCount}`);
             await expect(this.addToCartButton.first()).toBeVisible();
         }
+    }
+
+    async clickProductName(){
+
+        const item = this.inventoryItems;
+        const product = item.locator('.inventory_item_name').first();
+        await product.click();
+        await this.addToCartButton.click();
+        await this.backProduct.click();
+    }
+
+    async addItemToCartFromDetailPage(){
+            const productNameLocator = this.inventoryItems.locator('.inventory_item_name');
+            const productCount = await productNameLocator.count();
+            const productNames: string[] = [];
+
+            for (let i = 0; i < productCount; i++) {
+                const name = await productNameLocator.nth(i).textContent();
+                productNames.push(name ?? '');
+            }
+
+            console.log(`Total products to add: ${productCount}`);
+            console.log(`Products: ${productNames.join(', ')}`);
+
+            for(let i = 0; i < productNames.length; i++){
+                
+                const productName = productNames[i];
+                await this.inventoryItems
+                .locator('.inventory_item_name', { hasText: productName })
+                .click();
+                //await this.waitForPageLoad();
+                console.log(`Navigated to detail page: ${productName}`);
+                await this.addToCartButton.click();
+                console.log(`Added to cart from detail page: ${productName}`);
+                await expect(this.removeButton).toBeVisible();
+                await this.backProduct.click();
+                console.log(`Returned to inventory. Item ${i + 1}/${productNames.length} done`);
+
+            }
+
     }
 }
