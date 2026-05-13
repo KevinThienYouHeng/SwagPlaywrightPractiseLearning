@@ -13,10 +13,11 @@ test('User can add item to cart using POM', async ({ page }) => {
   await loginPage.goToLoginPage();
   //await loginPage.login('standard_user', 'secret_sauce'); // Not needed because we are using storageState
 
-  await inventoryPage.addProductToCart('Sauce Labs Backpack');
-  
-  // 3. Assert result
+  //await inventoryPage.addProductToCart('Sauce Labs Backpack');
+  await inventoryPage.addOneItemToCart();
   await inventoryPage.verifyCartCount(1);
+  await inventoryPage.removeOneItem();
+  await inventoryPage.verifyCartCount(0);
 });
 
 test('Verify content in inventory page using POM', async ({ page }) => {
@@ -25,7 +26,8 @@ test('Verify content in inventory page using POM', async ({ page }) => {
   const inventoryPage = new InventoryPage(page);
 
   await loginPage.goToLoginPage();
-  await inventoryPage.verifyInventoryPageItem(); 
+  await inventoryPage.verifyInventoryPageItem();
+  await inventoryPage.verifyImagePerItem(); 
   await inventoryPage.verifyInventoryPage();
   await inventoryPage.verifyCartCount(0);
   await inventoryPage.logoutPage();
@@ -53,6 +55,7 @@ test('Add multiply item into the cart', async ({ page }) => {
   const inventoryPage = new InventoryPage(page);
 
   await loginPage.goToLoginPage();
+  await inventoryPage.verifyCartCount(0); 
   await inventoryPage.addMultiplyItemToCart();
   await inventoryPage.verifyCartCount(6);
   //await inventoryPage.removeOneItem();
@@ -61,5 +64,18 @@ test('Add multiply item into the cart', async ({ page }) => {
 
   await page.close();
 
+
+});
+
+test("Verify random item added to cart", async ({ page }) => {
+  
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+
+  await loginPage.goToLoginPage();
+  await inventoryPage.addRandomItemToCart(2);
+  await inventoryPage.verifyCartCount(2);
+
+  await page.close();
 
 });

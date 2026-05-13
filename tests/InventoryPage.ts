@@ -13,12 +13,14 @@ export class InventoryPage {
     readonly linkedinIcon: Locator;
     readonly logoutButton: Locator;
     readonly removeButton: Locator;
+    readonly title: Locator;
     //readonly checkoutButton: Locator;
     //readonly productNames: Locator;
     //readonly productPrices: Locator;
 
     constructor(page: Page) {
         this.page = page;
+        this.title = page.getByText('Swag Labs');
         this.inventoryItems = page.locator('.inventory_item');
         this.addToCartButton = page.locator('button', { hasText: 'Add to cart' });
         this.cartBadgeLink = page.locator('[data-test="shopping-cart-link"]');
@@ -53,6 +55,7 @@ export class InventoryPage {
     async verifyInventoryPage(){
     
         //await expect(this.addToCartButton).toBeVisible();
+        await expect(this.title).toBeVisible();
         await expect(this.cartBadgeLink).toBeVisible();
         await expect(this.burgerButton).toBeVisible();
         await expect(this.productSortContainer).toBeVisible();
@@ -62,6 +65,7 @@ export class InventoryPage {
         //await expect(this.checkoutButton).toBeVisible();
     }
 
+    //Function verify the six items
     async verifyInventoryPageItem(){
         
         const product =  this.inventoryItems;
@@ -72,12 +76,35 @@ export class InventoryPage {
 
             const name = item.locator('.inventory_item_name');
             const price = item.locator('.inventory_item_price');
+            const desc = item.locator('.inventory_item_desc');
 
             await expect(name).not.toBeEmpty();
             console.log(`Verified product name: ${await name.textContent()}`);
+            await expect(desc).not.toBeEmpty();
+            console.log(`Verified product description: ${await desc.textContent()}`);
             await expect(price).toContainText('$');
             console.log(`Verified product price: ${await price.textContent()}`);
+            await expect(this.addToCartButton.first()).toBeVisible();
         }
+    }
+
+    async verifyImagePerItem(){
+
+        const product = this.inventoryItems.locator('.inventory_item_img img');
+        const imageAll = await product.count();
+
+        for ( let i = 0 ; i< imageAll ; i++){
+        
+            const isLoaded = await product.nth(i).evaluate(img => {
+            const image = img as HTMLImageElement;
+            return image.complete && image.naturalWidth > 0;
+        });
+        
+        const src = await product.nth(i).getAttribute('src');
+        expect(isLoaded).toBe(true);
+        console.log(`Verified product image: ${src}`);
+      }
+
     }
     
     async logoutPage(){
@@ -154,14 +181,53 @@ export class InventoryPage {
             await expect(this.cartBadge).toHaveText((i + 1).toString());
             const productName = await item.locator('.inventory_item_name').nth(i).textContent();
             console.log(`Added product ${i + 1} to cart: ${productName}`);
+            await expect(this.removeButton.first()).toBeVisible();
         }
+    }
+
+    async addOneItemToCart(){
+
+        await this.addToCartButton.first().click();
+        //await expect(this.cartBadge).toHaveText('1');
+    }
+
+    async addRandomItemToCart(numberOfItems: number){
+        
+        const count = await this.addToCartButton.count();
+
+        if(numberOfItems > count){
+            throw new Error(`Cannot add ${numberOfItems} items to cart. There are only ${count} items available.`);
+        }
+
+        const randomIndices: number[] = [];
+
+        while(randomIndices.length < numberOfItems){
+            const randomIndex = Math.floor(Math.random() * count);
+            if(!randomIndices.includes(randomIndex)){
+                randomIndices.push(randomIndex);
+            }
+        }
+
+        for (const index of randomIndices) {
+            const productName = await this.inventoryItems
+                .locator('.inventory_item_name')
+                .nth(index)
+                .textContent();
+
+            await this.addToCartButton.nth(index).click();
+            //await expect(this.removeButton.nth(index)).toBeVisible();
+
+            console.log(`Randomly added product: ${productName} (index: ${index})`);
+        }
+
     }
 
     async removeOneItem(){
 
         const removeButton = this.removeButton.first();
         await removeButton.click();
-        console.log(`Current cart count: ${await this.cartBadge.textContent()}`);
+        //console.log(`Current cart count: ${await this.cartBadge.textContent()}`);
+        await expect(this.addToCartButton.first()).toBeVisible();
         //await expect(this.cartBadge).toHaveText('0');
     }
 
@@ -175,6 +241,7 @@ export class InventoryPage {
             await removeButton.first().click();
             const remainingCount = count - (i + 1);
             console.log(`Removed product ${i + 1} from cart. Remaining products: ${remainingCount}`);
+            await expect(this.addToCartButton.first()).toBeVisible();
         }
     }
 }
