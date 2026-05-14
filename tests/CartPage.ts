@@ -9,6 +9,7 @@ export class CartPage extends BasePage {
   readonly continueShoppingButton: Locator;
   readonly checkoutButton: Locator;
   readonly cartBadge: Locator;
+  readonly cartTitle: Locator;
  
   constructor(page: Page) {
     super(page);
@@ -19,10 +20,13 @@ export class CartPage extends BasePage {
     this.continueShoppingButton = page.locator('[data-test="continue-shopping"]');
     this.checkoutButton = page.locator('[data-test="checkout"]');
     this.cartBadge = page.locator('.shopping_cart_badge');
+    this.cartTitle = page.locator('.title');
   }
  
   async goToCartPage(): Promise<void> {
     await this.navigate('https://www.saucedemo.com/cart.html');
+    await expect(this.page).toHaveURL(/.*cart.html/);
+    await expect(this.cartTitle).toHaveText('Your Cart');
     await this.waitForPageLoad();
   }
   
