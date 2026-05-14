@@ -1,8 +1,7 @@
 import { test } from '@playwright/test';
 import { LoginPage } from './LoginPage';
 import { InventoryPage } from './InventoryPage';
-import { CartPage } from './CartPage';
-import { Checkout } from './Checkout';
+
 
 test('User can add item to cart using POM', async ({ page }) => {
   // 1. Initialize Pages
@@ -11,13 +10,14 @@ test('User can add item to cart using POM', async ({ page }) => {
 
   // 2. Perform actions using our page classes
   await loginPage.goToLoginPage();
-  //await loginPage.login('standard_user', 'secret_sauce'); // Not needed because we are using storageState
+  await loginPage.login('standard_user', 'secret_sauce'); // Not needed because we are using storageState
 
   //await inventoryPage.addProductToCart('Sauce Labs Backpack');
   await inventoryPage.addOneItemToCart();
+  await inventoryPage.goToCartPage();
   await inventoryPage.verifyCartCount(1);
-  await inventoryPage.removeOneItem();
-  await inventoryPage.verifyCartCount(0);
+  //await inventoryPage.removeOneItem();
+  //await inventoryPage.verifyCartCount(0);
 });
 
 test('Verify content in inventory page using POM', async ({ page }) => {
@@ -26,6 +26,7 @@ test('Verify content in inventory page using POM', async ({ page }) => {
   const inventoryPage = new InventoryPage(page);
 
   await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.verifyInventoryPageItem();
   await inventoryPage.verifyImagePerItem(); 
   await inventoryPage.verifyInventoryPage();
@@ -88,7 +89,30 @@ test('Click on Product name', async ({page}) => {
   await loginPage.goToLoginPage();
   //await inventoryPage.clickProductName();
   //await inventoryPage.verifyCartCount(1);
-  await inventoryPage.clickProductImg();
+  //await inventoryPage.clickProductImg();
+  //await inventoryPage.addItemToCartFromDetailPage();
+  await inventoryPage.addAllItemsFromDetailPage('image');
+  await inventoryPage.verifyCartCount(6);
+  await inventoryPage.resetAppState();
+  await inventoryPage.verifyCartCount(0);
   //await inventoryPage.addItemToCartFromDetailPage();
   
+})
+
+test('Login Logout', async ({page}) => {
+
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+
+  await loginPage.goToLoginPage();
+  await inventoryPage.logoutSideBar();
+})
+
+test('Login--> About', async ({page}) => {
+
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+
+  await loginPage.goToLoginPage();
+  await inventoryPage.aboutSideBar();
 })

@@ -1,3 +1,5 @@
+//Code where i learn how to create test steps and understand the flow of webpage before implement using POM
+
 import { test, expect } from '@playwright/test';
 import Axe from '@axe-core/playwright';
 

@@ -1,5 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+export type NavigationType = 'name' | 'image';
+
 export class InventoryPage {
     readonly page: Page;
     readonly inventoryItems: Locator;
@@ -15,6 +17,11 @@ export class InventoryPage {
     readonly removeButton: Locator;
     readonly title: Locator;
     readonly backProduct: Locator;
+    readonly resetAppStateButton: Locator;
+    readonly logoutSideBarLink: Locator;
+    readonly aboutSideBarLink: Locator;
+    readonly allItemsSideBarLink: Locator;
+    readonly closeSideBarLink: Locator;
     //readonly checkoutButton: Locator;
     //readonly productNames: Locator;
     //readonly productPrices: Locator;
@@ -34,6 +41,11 @@ export class InventoryPage {
         this.logoutButton = page.locator('[data-test="logout-sidebar-link"]');
         this.removeButton = page.locator('[data-test^="remove"]');
         this.backProduct = page.locator('[data-test="back-to-products"]');
+        this.resetAppStateButton = page.locator('[data-test="reset-sidebar-link"]');
+        this.logoutSideBarLink = page.locator('[data-test="logout-sidebar-link"]');
+        this.aboutSideBarLink = page.locator('[data-test="about-sidebar-link"]');
+        this.allItemsSideBarLink = page.locator('[data-test="inventory-sidebar-link"]');
+        this.closeSideBarLink = page.locator('.react-burger-menu-btn');
         //this.checkoutButton = page.locator('[data-test="checkout"]');
         //this.productNames = page.locator('.inventory_item_name');
         //this.productPrices = page.locator('.inventory_item_price');
@@ -295,4 +307,106 @@ export class InventoryPage {
             }
 
     }
+
+    //Only clears the cart, not the entire app state.
+    async resetAppState(){
+        await this.burgerButton.click();
+        await this.resetAppStateButton.click();
+    }
+
+    async addImgToCartFromDetailPageByImg(){
+
+        const productNameLocator = this.inventoryItems.locator('.inventory_item_img img');
+        const productCount = await productNameLocator.count();
+        const productNames: string[] = [];
+
+        for (let i = 0; i < productCount; i++) {
+            const name = await productNameLocator.nth(i).textContent();
+            productNames.push(name ?? '');
+        }
+
+        console.log(`Total products to add: ${productCount}`);
+            console.log(`Products: ${productNames.join(', ')}`);
+
+            for(let i = 0; i < productNames.length; i++){
+                
+                const productName = productNames[i];
+                await this.inventoryItems
+                .locator('.inventory_item_img img')
+                .nth(i)
+                .click();
+                //await this.waitForPageLoad();
+                console.log(`Navigated to detail page: ${productName}`);
+                await this.addToCartButton.click();
+                console.log(`Added to cart from detail page: ${productName}`);
+                await expect(this.removeButton).toBeVisible();
+                await this.backProduct.click();
+                console.log(`Returned to inventory. Item ${i + 1}/${productNames.length} done`);
+
+            }
+
+    }
+
+    //Use this function when want to be flexible to click name or image for passing paramter
+    async addAllItemsFromDetailPage(navigateBy: NavigationType = 'name'): Promise<void> {
+        //const detailPage = new DetailPage(this.page);
+
+        const productNameLocator = this.inventoryItems.locator('.inventory_item_name');
+        const productCount = await productNameLocator.count();
+        const productNames: string[] = [];
+
+        for (let i = 0; i < productCount; i++) {
+            const name = await productNameLocator.nth(i).textContent();
+            productNames.push(name ?? '');
+        }
+
+        for (let i = 0; i < productNames.length; i++) {
+            const productName = productNames[i];
+
+            if (navigateBy === 'name') {
+                // ✅ Click by name
+                await this.inventoryItems
+                    .locator('.inventory_item_name', { hasText: productName })
+                    .click();
+            } else {
+                // ✅ Click by image
+                await this.inventoryItems
+                    .locator('.inventory_item_img img')
+                    .nth(i)
+                    .click();
+            }
+
+            //await this.waitForPageLoad();
+            //await detailPage.addToCart();
+            //await detailPage.goBackToInventory();
+            await this.addToCartButton.click();
+            await this.backProduct.click();
+
+            await expect(this.cartBadge).toHaveText((i + 1).toString());
+            console.log(`Done ${i + 1}/${productNames.length}: ${productName} (via ${navigateBy})`);
+        }
+    }
+
+    async logoutSideBar(){
+        await this.burgerButton.click();
+        await this.logoutSideBarLink.click();
+        await expect(this.page).toHaveURL('https://www.saucedemo.com/');
+    }
+
+    async aboutSideBar(){
+
+        await this.burgerButton.click();
+        await this.aboutSideBarLink.click();
+        await expect(this.page).toHaveURL(/saucelabs.com/);
+        await expect(this.page).toHaveTitle(/Sauce Labs/);
+
+    }
+
+    async goToCartPage(){
+        await this.cartBadgeLink.click();
+        await expect(this.page).toHaveURL(/.*cart.html/);
+    }
+    
+
+    
 }
