@@ -5,11 +5,14 @@ export class CartPage extends BasePage {
     readonly cartItems: Locator;
   readonly cartItemNames: Locator;
   readonly cartItemPrices: Locator;
+  readonly cartItemDescriptions: Locator;
   readonly removeButtons: Locator;
   readonly continueShoppingButton: Locator;
   readonly checkoutButton: Locator;
   readonly cartBadge: Locator;
   readonly cartTitle: Locator;
+  readonly cartDescLabel: Locator;
+  readonly cartQtyLabel: Locator;
  
   constructor(page: Page) {
     super(page);
@@ -21,27 +24,35 @@ export class CartPage extends BasePage {
     this.checkoutButton = page.locator('[data-test="checkout"]');
     this.cartBadge = page.locator('.shopping_cart_badge');
     this.cartTitle = page.locator('.title');
+    this.cartDescLabel = page.locator('[data-test="cart-desc-label"]');
+    this.cartQtyLabel = page.locator('[data-test="cart-qty-label"]');
+    this.cartItemDescriptions = page.locator('.inventory_item_desc');
   }
  
   async goToCartPage(): Promise<void> {
     await this.navigate('https://www.saucedemo.com/cart.html');
     await expect(this.page).toHaveURL(/.*cart.html/);
     await expect(this.cartTitle).toHaveText('Your Cart');
+    await expect(this.cartDescLabel).toBeVisible();
+    await expect(this.cartQtyLabel).toBeVisible();
     await this.waitForPageLoad();
   }
   
   //Remove item based on index
   async removeItemByIndex(index: number): Promise<void> {
+    await expect(this.removeButtons.nth(index)).toBeVisible();
     await this.removeButtons.nth(index).click();
     await this.waitForPageLoad();
   }
  
   async continueShopping(): Promise<void> {
+    await expect(this.continueShoppingButton).toBeVisible();
     await this.continueShoppingButton.click();
     await this.waitForPageLoad();
   }
  
   async proceedToCheckout(): Promise<void> {
+    await expect(this.checkoutButton).toBeVisible();
     await this.checkoutButton.click();
     await this.waitForPageLoad();
     await expect(this.page).toHaveURL(/.*checkout-step-one.html/)
@@ -53,7 +64,13 @@ export class CartPage extends BasePage {
   
   //Get item based on index/position in the cart
   async getItemNameByIndex(index: number): Promise<string> {
+    await expect(this.cartItemNames.nth(index)).toBeVisible();
     return await this.cartItemNames.nth(index).innerText();
+  }
+
+  async getItemDescriptionByIndex(index: number): Promise<string> {
+    await expect(this.cartItemDescriptions.nth(index)).toBeVisible();
+    return await this.cartItemDescriptions.nth(index).innerText();
   }
 
   //Get all items in the cart
@@ -61,13 +78,14 @@ export class CartPage extends BasePage {
     const names = await this.cartItemNames.allInnerTexts();
 
     names.forEach((name, index) => {
-      console.log(`Items ${index + 1}: name ${name}`);
+      console.log(`Items ${index + 1}: ${name}`);
     })
     return names;
   }
   
   //Get price based on index in the cart
   async getItemPriceByIndex(index: number): Promise<string> {
+    await expect(this.cartItemPrices.nth(index)).toBeVisible();
     return await this.cartItemPrices.nth(index).innerText();
   }
 
@@ -76,9 +94,19 @@ export class CartPage extends BasePage {
     const prices = await this.cartItemPrices.allInnerTexts();
 
     prices.forEach((price, index) => {
-      console.log(`Items ${index + 1}: price ${price}`);
+      console.log(`Items ${index + 1}: ${price}`);
     })
     return prices;
+  }
+
+  async getAllCurrentDescriptionsInCart(): Promise<string[]> {
+    
+    const descriptions = await this.cartItemDescriptions.allInnerTexts();
+
+    descriptions.forEach((desc, index) => {
+      console.log(`Items ${index + 1}: ${desc}`);
+    })
+    return descriptions;
   }
 
  
@@ -112,4 +140,48 @@ export class CartPage extends BasePage {
     await expect(this.cartItemPrices.first()).toHaveText(expectedPrice);
   }
 
+  async removeAllItemsFromCart(): Promise<void> {
+    const itemCount = await this.getCartItemCount();
+    for(let i = 0; i < itemCount; i++){
+      await this.removeItemByIndex(0);
+    }
+  }
+
+  //Remove based on index not randomly
+  async removeCertainNumberofItemsFromCart(numberOfItems: number): Promise<number> {
+    const itemCount = await this.getCartItemCount();
+    for(let i = 0; i < Math.min(numberOfItems, itemCount); i++){
+      //Get the name and price of the item being removed
+      const name = await this.getItemNameByIndex(0);
+      const price = await this.getItemPriceByIndex(0);
+
+      await this.removeItemByIndex(0);
+      console.log(`Removed item ${i + 1}: ${name} with price ${price}`);
+    }
+    return await this.getCartItemCount();
+  }
+
+  async removeSpecificItemFromCart(productName:string): Promise<void> {
+    const allNames = await this.cartItemNames.allInnerTexts();
+    //const index = allNames.findIndex(name => name === productName);
+
+    const itemExists = allNames.includes(productName);
+    expect(itemExists).toBe(true);
+    console.log(`Removing item: ${productName}`);
+
+    const itemIndex = allNames.indexOf(productName);
+    const price = await this.getItemPriceByIndex(itemIndex);
+    console.log(`Removing ${productName} with price ${price}`);
+
+    await this.cartItems.filter({ hasText: productName }).locator('.cart_button').click();
+
+    const remainingNames = await this.cartItemNames.allInnerTexts();
+    expect(remainingNames).not.toContain(productName);
+    console.log(`Successfully removed: ${productName}`);
+    console.log(`Remaining items: ${remainingNames.join(', ') || 'Cart is empty'}`);
+  }
+
+  async verifyCartPageUrl(): Promise<void> {
+    await expect(this.page).toHaveURL(/.*cart.html/);
+  }
 }

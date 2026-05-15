@@ -52,7 +52,71 @@ readonly cartBadge: Locator;
  
   async goToCheckoutStepOne(): Promise<void> {
     await this.navigate('https://www.saucedemo.com/checkout-step-one.html');
+    await expect(this.page).toHaveURL(/.*checkout-step-one.html/);
     await this.waitForPageLoad();
+  }
+
+  async verifyCheckoutContent(): Promise<void> {
+    await expect(this.cartBadge).toBeVisible();
+    await expect(this.firstNameInput).toBeVisible()
+    await expect(this.firstNameInput).toHaveAttribute('placeholder', 'First Name');
+    await expect(this.lastNameInput).toBeVisible();
+    await expect(this.lastNameInput).toHaveAttribute('placeholder', 'Last Name');
+    await expect(this.postalCodeInput).toBeVisible();
+    await expect(this.postalCodeInput).toHaveAttribute('placeholder', 'Zip/Postal Code');
+    await expect(this.continueButton).toBeVisible();
+    await expect(this.continueButton).toHaveText('Continue');
+    await expect(this.cancelButtonStepOne).toBeVisible();
+    await expect(this.cancelButtonStepOne).toHaveText('Cancel');
+    console.log('Checkout Step One content verified successfully.');
+  }
+
+  async verifyInputFieldsEmpty(): Promise<void> {
+    //toBeEmpty() only works for input and textarea element
+    await expect(this.firstNameInput).toHaveValue('');
+    await expect(this.lastNameInput).toHaveValue('');
+    await expect(this.postalCodeInput).toHaveValue('');
+  }
+
+  async verifyFirstNameInputField(firstName: string): Promise<void> {
+    await this.firstNameInput.clear();
+    await this.firstNameInput.fill(firstName);
+    await expect(this.firstNameInput).toHaveValue(firstName);
+    console.log(`First name input field verified with value: ${firstName}`);
+  }
+
+  async verifyLastNameInputField(lastName: string): Promise<void> {
+    await this.lastNameInput.clear();
+    await this.lastNameInput.fill(lastName);
+    await expect(this.lastNameInput).toHaveValue(lastName);
+    console.log(`Last name input field verified with value: ${lastName}`);
+  }
+
+  async verifyPostalCodeInputField(postalCode: string): Promise<void> {
+    await this.postalCodeInput.clear();
+    await this.postalCodeInput.fill(postalCode);
+    await expect(this.postalCodeInput).toHaveValue(postalCode);
+    console.log(`Postal code input field verified with value: ${postalCode}`);
+  }
+
+  async verifyTabKeyMovesFormFocus(): Promise<void> {
+    await this.firstNameInput.focus();
+    await this.page.keyboard.press('Tab');
+    await expect(this.lastNameInput).toBeFocused();
+    await this.page.keyboard.press('Tab');
+    await expect(this.postalCodeInput).toBeFocused();
+    await this.page.keyboard.press('Tab');
+    await expect(this.cancelButtonStepOne).toBeFocused();
+    await this.page.keyboard.press('Tab');
+    await expect(this.continueButton).toBeFocused();
+    console.log('Tab key navigation successfully');
+  }
+
+  async clearAllFields(): Promise<void> {
+    await this.firstNameInput.clear();
+    await this.lastNameInput.clear();
+    await this.postalCodeInput.clear();
+    console.log('All input fields cleared');
   }
  
   // Step 1 Methods
@@ -102,6 +166,7 @@ readonly cartBadge: Locator;
   async verifyErrorMessage(expectedMessage: string): Promise<void> {
     await expect(this.errorMessage).toBeVisible();
     await expect(this.errorMessage).toContainText(expectedMessage);
+    console.log(`Error message verified: ${expectedMessage}`);
   }
  
   async verifyOnStepOne(): Promise<void> {

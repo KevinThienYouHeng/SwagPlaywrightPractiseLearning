@@ -259,6 +259,7 @@ export class InventoryPage {
         }
     }
 
+    //Just Grab the first one, not randomly
     async clickProductName(){
 
         const item = this.inventoryItems;
@@ -268,8 +269,8 @@ export class InventoryPage {
         await this.backProduct.click();
     }
 
+    //Just Grab the first one, not randomly
     async clickProductImg(){
-
         const item = this.inventoryItems;
         const product = item.locator('.inventory_item_img').first();
         await product.click();
@@ -407,6 +408,8 @@ export class InventoryPage {
         await expect(this.page).toHaveURL(/.*cart.html/);
     }
     
+    async verifyInventoryPageUrl(){
+        await expect(this.page).toHaveURL(/.*inventory.html/);
+    }
 
-    
 }

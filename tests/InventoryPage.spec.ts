@@ -116,3 +116,26 @@ test('Login--> About', async ({page}) => {
   await loginPage.goToLoginPage();
   await inventoryPage.aboutSideBar();
 })
+
+test('Verify sorting after adding an item into the cart', async ({page}) => {
+
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce'); 
+  await inventoryPage.addOneItemToCart();
+  await inventoryPage.verifyProductContainerZA();
+})
+
+test('Verify sorting after adding an item into the cart from the product detail page', async ({page}) => {
+
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce'); 
+  await inventoryPage.clickProductName();
+  await inventoryPage.verifyProductContainerZA();
+  await inventoryPage.verifyProductContainerLowToHigh();
+})
