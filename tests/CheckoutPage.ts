@@ -17,12 +17,15 @@ readonly taxLabel: Locator;
 readonly totalLabel: Locator;
 readonly finishButton: Locator;
 readonly cancelButtonStepTwo: Locator;
+readonly summaryInfoLabel: Locator;
+readonly summaryInfoValue: Locator;
 
 // Complete
 readonly completeHeader: Locator;
 readonly completeText: Locator;
 readonly backHomeButton: Locator;
 readonly cartBadge: Locator;
+
  
   constructor(page: Page) {
     super(page);
@@ -42,12 +45,15 @@ readonly cartBadge: Locator;
     this.totalLabel = page.locator('.summary_total_label');
     this.finishButton = page.locator('[data-test="finish"]');
     this.cancelButtonStepTwo = page.locator('[data-test="cancel"]');
+    this.summaryInfoLabel = page.locator('[data-test="payment-info-value"]');
+    this.summaryInfoValue = page.locator('[data-test="shipping-info-value"]');
  
     // Complete
     this.completeHeader = page.locator('.complete-header');
     this.completeText = page.locator('.complete-text');
     this.backHomeButton = page.locator('[data-test="back-to-products"]');
     this.cartBadge = page.locator('.shopping_cart_badge');
+    
   }
  
   async goToCheckoutStepOne(): Promise<void> {
@@ -177,6 +183,7 @@ readonly cartBadge: Locator;
   async verifyOnStepTwo(): Promise<void> {
     await expect(this.page).toHaveURL('https://www.saucedemo.com/checkout-step-two.html');
   }
+
  
   async verifyTotalEqualsSubtotalPlusTax(): Promise<void> {
     const subtotal = await this.getSubtotal();
@@ -190,6 +197,9 @@ readonly cartBadge: Locator;
     await expect(this.subtotalLabel).toBeVisible();
     await expect(this.taxLabel).toBeVisible();
     await expect(this.totalLabel).toBeVisible();
+    await expect(this.finishButton).toBeVisible();
+    await expect(this.cancelButtonStepTwo).toBeVisible();
+    console.log('Order summary content verified successfully.');
   }
  
   // Verify Methods — Complete
@@ -199,9 +209,45 @@ readonly cartBadge: Locator;
  
   async verifySuccessMessage(): Promise<void> {
     await expect(this.completeHeader).toHaveText('Thank you for your order!');
+    const header = await this.completeHeader.innerText();
+    const text = await this.completeText.innerText();
+    console.log(header);
+    console.log(text);
   }
- 
+  
+  async verifyBackHomeButton(): Promise<void> {
+    await expect(this.backHomeButton).toBeVisible();
+    await this.backHomeButton.click();
+  }
   async verifyCartIsCleared(): Promise<void> {
     await expect(this.cartBadge).toHaveCount(0);
   }
+
+  async getOrderSummary(): Promise<void> {
+    const summaryProduct = await this.summaryInfoLabel.innerText();
+    console.log(`Order summary info: ${summaryProduct}`);
+    const shippingInfo = await this.summaryInfoValue.innerText();
+    console.log(`Shipping info: ${shippingInfo}`);
+
+    await this.verifyTotalEqualsSubtotalPlusTax();
+    const subtotal = await this.getSubtotal();
+    const tax = await this.getTax();
+    const total = await this.getTotal();
+
+    console.log(`Subtotal: $${subtotal}`);
+    console.log(`Tax: $${tax}`);
+    console.log(`Total: $${total}`); 
+
+  }
+
+  async getCompleteItemNamesList(): Promise<void> {
+    const itemNames = await this.cartItems.locator('.inventory_item_name').allInnerTexts();
+    itemNames.forEach((name, index) => {
+      console.log(`Complete page - Item ${index + 1}: ${name}`);
+    });
+  }
+
+
+
+
 }

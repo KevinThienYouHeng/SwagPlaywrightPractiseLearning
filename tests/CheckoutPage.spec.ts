@@ -122,7 +122,26 @@ test('Verify input fields(alphanumeric)', async ({ page }) => {
     await checkout.clearAllFields();
 });
 
-test('Verify Cancel Button', async ({ page }) => {
+test('Verify Cancel Button and Cart count does not change', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneItemToCart();
+    await inventoryPage.goToCartPage();
+    await inventoryPage.verifyCartCount(1);
+    await cartPage.proceedToCheckout();
+    await checkout.clickCancelStepOne();
+    await cartPage.getItemNameByIndex(0);
+    await cartPage.verifyCartPageUrl();
+    await cartPage.verifyCartBadgeCount(1);
+
+});
+
+test('Verify Continue Button', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
     const cartPage = new CartPage(page);
@@ -133,7 +152,125 @@ test('Verify Cancel Button', async ({ page }) => {
     await inventoryPage.addOneItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
-    await checkout.clickCancelStepOne();
-    await cartPage.verifyCartPageUrl();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.verifyOnStepTwo();
+
+});
+
+test('Verify Continue Button and checkout-two contents', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.verifyOnStepTwo();
+    await checkout.verifyOrderSummaryVisible();
+    await checkout.getCompleteItemNamesList();
+    await checkout.getOrderSummary();
+
+});
+
+test('Verify all items at checkout-two page', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addMultiplyItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.getCompleteItemNamesList();
+    await checkout.getOrderSummary();
+
+});
+
+test('Verify random items at checkout-two page', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addRandomItemToCart(3);
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.getCompleteItemNamesList();
+    await checkout.getOrderSummary();
+
+});
+
+test('Verify Cancel Part 2 Button', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.verifyOnStepTwo();
+    await checkout.clickCancelStepTwo();
+    await inventoryPage.verifyInventoryPageUrl();
+});
+
+test('Verify Finish Button and complete page content', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.verifyOnStepTwo();
+    await checkout.clickFinish();
+    await checkout.verifyOnCompletePage();
+    await checkout.verifySuccessMessage();
+    await checkout.verifyCartIsCleared();
+
+});
+
+test('Verify back button ', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.verifyOnStepTwo();
+    await checkout.clickFinish();
+    await checkout.verifyOnCompletePage();
+    await checkout.verifySuccessMessage();
+    await checkout.verifyBackHomeButton();
+    await inventoryPage.verifyInventoryPageUrl();
 
 });
