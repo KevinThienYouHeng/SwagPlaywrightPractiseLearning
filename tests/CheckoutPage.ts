@@ -247,6 +247,13 @@ readonly cartBadge: Locator;
     });
   }
 
+  async getCompleteItemPricesList(): Promise<void> {
+    const itemPrices = await this.cartItems.locator('.inventory_item_price').allInnerTexts();
+    itemPrices.forEach((Price, index) => {
+      console.log(`Item ${index + 1}: ${Price}`);
+    });
+  }
+
 
 
 

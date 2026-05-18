@@ -1,6 +1,5 @@
 import { test } from '@playwright/test';
 import { LoginPage } from './LoginPage';
-import { InventoryPage } from './InventoryPage';
 
 test('Login Page', async ({ page }) => {
     const loginPage = new LoginPage(page);

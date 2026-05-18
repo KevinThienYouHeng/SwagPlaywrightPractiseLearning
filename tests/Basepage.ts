@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import Axe from '@axe-core/playwright';
 
 export class BasePage {
 
@@ -18,5 +19,10 @@ export class BasePage {
 
     protected async takeScreenshot(fileName: string): Promise<void> {
         await this.page.screenshot({ path: fileName });
+    }
+
+    protected async runAccessibilityCheck(): Promise<void> {
+        const axe = await new Axe({ page: this.page }).analyze();
+        console.log('Accessibility Violations:', axe.violations);
     }
 }

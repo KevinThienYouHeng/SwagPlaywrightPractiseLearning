@@ -412,4 +412,50 @@ export class InventoryPage {
         await expect(this.page).toHaveURL(/.*inventory.html/);
     }
 
+    async verifyItemsNameInCart(): Promise<void> {
+
+        //const itemStartingName = 'Sauce Labs';
+        const items = this.inventoryItems;
+        const itemsName = await items.locator('.inventory_item_name').allInnerTexts();
+        console.log(`Items in cart: ${itemsName.join(',')}`);
+
+        for (const name of itemsName) {
+            expect(name).toContain('Sauce Labs');
+            console.log(`Verified ${name}`);
+        }
+        // expectedNames.forEach(expectedName => {
+        //     const fullExpectedName = `${itemStartingName} ${expectedName}`;
+        //     expect(itemsName).toContain(fullExpectedName);
+        //     console.log(`Verified item in cart: ${fullExpectedName}`);
+        // });
+
+    }
+
+    async verifyDifferentImagePerItem(): Promise<void> {
+       
+        const items = this.inventoryItems;
+        const imageLocator = items.locator('.inventory_item_img img');
+        const imageCount = await imageLocator.count();
+        const srcList: string[] = [];
+
+        for (let i = 0; i < imageCount; i++) {
+            const src = await imageLocator.nth(i).getAttribute('src');
+
+            const isLoaded = await imageLocator.nth(i).evaluate(img => {
+            const image = img as HTMLImageElement;
+            return image.complete && image.naturalWidth > 0;
+
+            });
+            expect(isLoaded).toBe(true);
+            expect(src).not.toBeNull();
+            expect(src).not.toBe('');
+
+            expect(srcList).not.toContain(src);
+            srcList.push(src ?? '');
+            console.log(`Image ${i + 1} src: ${src}`);
+        }
+
+        console.log('Verified all items image have different src');
+    }
+
 }

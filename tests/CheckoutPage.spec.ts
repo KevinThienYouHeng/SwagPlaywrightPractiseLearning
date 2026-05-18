@@ -174,6 +174,7 @@ test('Verify Continue Button and checkout-two contents', async ({ page }) => {
     await checkout.verifyOnStepTwo();
     await checkout.verifyOrderSummaryVisible();
     await checkout.getCompleteItemNamesList();
+    await checkout.verifyTotalEqualsSubtotalPlusTax();
     await checkout.getOrderSummary();
 
 });
@@ -192,6 +193,8 @@ test('Verify all items at checkout-two page', async ({ page }) => {
     await checkout.fillCheckoutInfo('Max','Leclerc','16331');
     await checkout.clickContinue();
     await checkout.getCompleteItemNamesList();
+    await checkout.getCompleteItemPricesList();
+    await checkout.verifyTotalEqualsSubtotalPlusTax();
     await checkout.getOrderSummary();
 
 });
@@ -210,6 +213,8 @@ test('Verify random items at checkout-two page', async ({ page }) => {
     await checkout.fillCheckoutInfo('Max','Leclerc','16331');
     await checkout.clickContinue();
     await checkout.getCompleteItemNamesList();
+    await checkout.getCompleteItemPricesList();
+    await checkout.verifyTotalEqualsSubtotalPlusTax();
     await checkout.getOrderSummary();
 
 });
@@ -230,6 +235,8 @@ test('Verify Cancel Part 2 Button', async ({ page }) => {
     await checkout.verifyOnStepTwo();
     await checkout.clickCancelStepTwo();
     await inventoryPage.verifyInventoryPageUrl();
+    await inventoryPage.verifyCartCount(1);
+    //await inventoryPage.verifyInventoryPageItem();
 });
 
 test('Verify Finish Button and complete page content', async ({ page }) => {
@@ -272,5 +279,6 @@ test('Verify back button ', async ({ page }) => {
     await checkout.verifySuccessMessage();
     await checkout.verifyBackHomeButton();
     await inventoryPage.verifyInventoryPageUrl();
+    await inventoryPage.verifyCartCount(0);
 
 });

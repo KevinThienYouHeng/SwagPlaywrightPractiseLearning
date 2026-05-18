@@ -139,3 +139,26 @@ test('Verify sorting after adding an item into the cart from the product detail 
   await inventoryPage.verifyProductContainerZA();
   await inventoryPage.verifyProductContainerLowToHigh();
 })
+
+test('Verify different image per item', async ({page}) => {
+
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce'); 
+  await inventoryPage.verifyDifferentImagePerItem();
+})
+
+//This test should failed
+test('Verify items name accuracy', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await loginPage.verifyLoginSuccess();
+    await inventoryPage.verifyItemsNameInCart();
+    await page.close();
+    
+})

@@ -3,14 +3,29 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test",
+    "update:all": "npm install @playwright/test@latest @types/node@latest && npx playwright install && npm outdated",
+    "update:playwright": "npm install @playwright/test@latest && npx playwright install",
+    "update:types": "npm install @types/node@latest",
+    "update:browsers": "npx playwright install",
+    "update:check": "npm outdated",
+    "version:check": "echo Playwright: && npx playwright --version && echo Node: && node --version && echo TypeScript: && npx tsc --version && echo NPM: && npm --version",
+
+    "shard:1": "npx playwright test --shard=1/2 --workers=2",
+    "shard:2": "npx playwright test --shard=2/2 --workers=2"
+    
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
-    "@playwright/test": "^1.59.1",
-    "@types/node": "^25.6.0"
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.8.0"
+  },
+  "dependencies": {
+    "typescript": "^6.0.3"
   }
 }
