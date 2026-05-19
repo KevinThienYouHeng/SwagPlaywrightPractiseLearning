@@ -128,8 +128,11 @@ readonly cartBadge: Locator;
   // Step 1 Methods
   async fillCheckoutInfo(firstName: string, lastName: string, postalCode: string): Promise<void> {
     await this.firstNameInput.fill(firstName);
+    await expect(this.firstNameInput).toHaveValue(firstName);
     await this.lastNameInput.fill(lastName);
+    await expect(this.lastNameInput).toHaveValue(lastName);
     await this.postalCodeInput.fill(postalCode);
+    await expect(this.postalCodeInput).toHaveValue(postalCode);
   }
  
   async clickContinue(): Promise<void> {
@@ -241,13 +244,30 @@ readonly cartBadge: Locator;
   }
 
   async getCompleteItemNamesList(): Promise<void> {
+    const itemCount = await this.cartItems.count();
+
+    if(itemCount === 0){
+      console.log('No items found in the cart.');
+      return;
+    }
+
     const itemNames = await this.cartItems.locator('.inventory_item_name').allInnerTexts();
+
+
     itemNames.forEach((name, index) => {
       console.log(`Complete page - Item ${index + 1}: ${name}`);
     });
+
   }
 
   async getCompleteItemPricesList(): Promise<void> {
+    const itemCount = await this.cartItems.count();
+
+    if(itemCount === 0){
+      console.log('No items found in the cart.');
+      return;
+    }
+
     const itemPrices = await this.cartItems.locator('.inventory_item_price').allInnerTexts();
     itemPrices.forEach((Price, index) => {
       console.log(`Item ${index + 1}: ${Price}`);

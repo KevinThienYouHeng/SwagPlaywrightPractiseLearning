@@ -17,7 +17,7 @@ export class BasePage {
         await this.page.waitForLoadState('networkidle');
     }
 
-    protected async takeScreenshot(fileName: string): Promise<void> {
+    async takeScreenshot(fileName: string): Promise<void> {
         await this.page.screenshot({ path: fileName });
     }
 

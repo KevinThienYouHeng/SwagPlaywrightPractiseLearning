@@ -11,10 +11,8 @@
     "update:browsers": "npx playwright install",
     "update:check": "npm outdated",
     "version:check": "echo Playwright: && npx playwright --version && echo Node: && node --version && echo TypeScript: && npx tsc --version && echo NPM: && npm --version",
-
     "shard:1": "npx playwright test --shard=1/2 --workers=2",
     "shard:2": "npx playwright test --shard=2/2 --workers=2"
-    
   },
   "keywords": [],
   "author": "",
@@ -23,7 +21,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.8.0"
+    "@types/node": "^25.9.0"
   },
   "dependencies": {
     "typescript": "^6.0.3"

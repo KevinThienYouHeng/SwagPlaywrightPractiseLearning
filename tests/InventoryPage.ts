@@ -313,6 +313,7 @@ export class InventoryPage {
     async resetAppState(){
         await this.burgerButton.click();
         await this.resetAppStateButton.click();
+        await this.closeSideBarLink.click();
     }
 
     async addImgToCartFromDetailPageByImg(){
@@ -456,6 +457,57 @@ export class InventoryPage {
         }
 
         console.log('Verified all items image have different src');
+    }
+
+    async verifyRemoveButtonVisbilityAfterAddingToCart(): Promise<void> {
+
+        const removeButtonCount = await this.removeButton.count();
+        console.log(`Total remove buttons: ${removeButtonCount}`);
+
+        for( let i = 0; i < removeButtonCount; i++){
+            await expect(this.removeButton.nth(i)).toBeVisible();
+        }
+
+        //await expect(this.removeButton).toBeVisible();
+    }
+
+    async getItemThatDidNotGetAddedToCart(): Promise<void> {
+        const items = this.inventoryItems;
+        const itemCount = await items.count();
+        const failedItemNames: string[] = [];
+        const successItemNames: string[] = [];
+
+        for (let i = 0; i < itemCount; i++) {
+            
+            const addToCartItem = await items.locator('.inventory_item_name').nth(i).innerText();
+            
+            //const addButton = this.addToCartButton.nth(i);;
+            await this.addToCartButton.nth(i).click();
+            const removeButton = this.removeButton.nth(i);
+            const isRemoveVisible = await removeButton.isVisible();
+
+            if(isRemoveVisible){
+                successItemNames.push(addToCartItem);
+                console.log(`Successfully added to cart: ${addToCartItem}`);
+            } else {
+                failedItemNames.push(addToCartItem);
+                console.log(`Failed to add to cart: ${addToCartItem}`);
+            }
+        }
+
+        successItemNames.forEach((name, index) => {
+            console.log(`Successfully added item ${index + 1}: ${name}`);
+        })
+
+        failedItemNames.forEach((name, index) => {
+            console.log(`Failed to add item ${index + 1}: ${name}`);
+        })
+
+    }
+
+    async compareInventoryPageInfoAndDetailPageInfo(): Promise<void> {
+
+
     }
 
 }

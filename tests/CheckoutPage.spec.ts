@@ -282,3 +282,22 @@ test('Verify back button ', async ({ page }) => {
     await inventoryPage.verifyCartCount(0);
 
 });
+
+test('Verify empty checkout checkout-two page', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.getCompleteItemNamesList();
+    await checkout.getCompleteItemPricesList();
+    await checkout.verifyTotalEqualsSubtotalPlusTax();
+    await checkout.getOrderSummary();
+
+});

@@ -14,6 +14,7 @@ test('User can add item to cart using POM', async ({ page }) => {
 
   //await inventoryPage.addProductToCart('Sauce Labs Backpack');
   await inventoryPage.addOneItemToCart();
+  await inventoryPage.verifyRemoveButtonVisbilityAfterAddingToCart();
   await inventoryPage.goToCartPage();
   await inventoryPage.verifyCartCount(1);
   //await inventoryPage.removeOneItem();
@@ -56,8 +57,10 @@ test('Add multiply item into the cart', async ({ page }) => {
   const inventoryPage = new InventoryPage(page);
 
   await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.verifyCartCount(0); 
   await inventoryPage.addMultiplyItemToCart();
+  await inventoryPage.verifyRemoveButtonVisbilityAfterAddingToCart();
   await inventoryPage.verifyCartCount(6);
   //await inventoryPage.removeOneItem();
   await inventoryPage.removeAllItem();
@@ -74,7 +77,9 @@ test("Verify random item added to cart", async ({ page }) => {
   const inventoryPage = new InventoryPage(page);
 
   await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.addRandomItemToCart(2);
+  await inventoryPage.verifyRemoveButtonVisbilityAfterAddingToCart();
   await inventoryPage.verifyCartCount(2);
 
   await page.close();
@@ -161,4 +166,20 @@ test('Verify items name accuracy', async ({ page }) => {
     await inventoryPage.verifyItemsNameInCart();
     await page.close();
     
+})
+
+//The cart will become empty but the item will button remain in the cart
+test('Verify Rest App state', async ({page}) => {
+
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce'); 
+  await inventoryPage.addOneItemToCart();
+  await inventoryPage.verifyCartCount(1);
+  await inventoryPage.resetAppState();
+  await page.reload();
+  await inventoryPage.verifyCartCount(0);
+
 })
