@@ -79,5 +79,20 @@ test('Login Page with username problem_user and verify checkout process', async 
         throw error;
     }
     
+})
+
+test('Verify details first item between inventory page and detail page', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('problem_user', 'secret_sauce');
+    await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(0);
+    await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(1);
+    await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(2);
+    await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(3);
+    await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(4);
+    await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(5); 
     
 })

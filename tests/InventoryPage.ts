@@ -505,9 +505,35 @@ export class InventoryPage {
 
     }
 
-    async compareInventoryPageInfoAndDetailPageInfo(): Promise<void> {
+    //Compare only one
+    async compareInventoryPageInfoAndDetailPageInfo(item: number): Promise<void> {
 
+        const firstItem = this.inventoryItems.nth(item);
+        const inventoryName = await firstItem.locator('.inventory_item_name').innerText();
+        const inventoryPrice = await firstItem.locator('.inventory_item_price').innerText();
+        const inventoryDesc = await firstItem.locator('.inventory_item_desc').innerText();
 
+        await firstItem.locator('.inventory_item_name').click();
+
+        const detailName = await this.page.locator('.inventory_details_name').innerText();
+        const detailPrice = await this.page.locator('.inventory_details_price').innerText();
+        const detailDesc = await this.page.locator('.inventory_details_desc').innerText();
+
+        //const nameMatch = expect(inventoryName).toBe(detailName);
+        // const priceMatch = expect(inventoryPrice).toBe(detailPrice);
+        // const descMatch = expect(inventoryDesc).toBe(detailDesc);
+
+        const nameMatch = inventoryName === detailName;
+        const priceMatch = inventoryPrice === detailPrice;
+        const descMatch = inventoryDesc === detailDesc;
+
+        console.log( `Item: ${inventoryName} ${item + 1}`);
+        console.log(` Name : ${nameMatch ? 'Match ' : 'Mismatch'}`);
+        console.log(` Price : ${priceMatch ? 'Match ' : 'Mismatch'}`);
+        console.log(` Description : ${descMatch ? 'Match ' : 'Mismatch'}`);
+        console.log('----------------------------------------------------');
+
+        await this.backProduct.click();
     }
 
 }
