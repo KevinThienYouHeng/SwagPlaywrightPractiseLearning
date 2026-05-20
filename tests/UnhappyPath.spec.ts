@@ -96,3 +96,34 @@ test('Verify details first item between inventory page and detail page', async (
     await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(5); 
     
 })
+
+test('Verify direct link to checkout page one', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+
+    try {
+        await cartPage.goToCartPage();
+    } catch (error) {
+        console.log("Unable to direct open cart page");
+        throw error;
+    }
+    
+    
+})
+
+test('Verify direct link to checkout page two', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    try{
+        await checkout.goToCheckoutStepOne();
+    } catch (error) {
+        console.log("Unable to direct open checkout page");
+        throw error;
+    }
+     
+    
+})

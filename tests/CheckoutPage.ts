@@ -62,6 +62,12 @@ readonly cartBadge: Locator;
     await this.waitForPageLoad();
   }
 
+  async goToCheckoutStepTwo(): Promise<void> {
+    await this.navigate('https://www.saucedemo.com/checkout-step-otwo.html');
+    await expect(this.page).toHaveURL(/.*checkout-step-two.html/);
+    await this.waitForPageLoad();
+  }
+
   async verifyCheckoutContent(): Promise<void> {
     await expect(this.cartBadge).toBeVisible();
     await expect(this.firstNameInput).toBeVisible()
