@@ -129,3 +129,14 @@ test('Verify direct link to checkout page two', async ({ page }) => {
      
     
 })
+
+test('Login Page with username performance_glitch_user', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('performance_glitch_user', 'secret_sauce');
+    await loginPage.verifyLoginSuccess();
+    await page.close();
+    
+})

@@ -301,3 +301,22 @@ test('Verify empty checkout checkout-two page', async ({ page }) => {
     await checkout.getOrderSummary();
 
 });
+
+test('Verify Browser back Button', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.verifyOnStepTwo();
+    await page.goBack();
+    await checkout.verifyOnStepOne();
+
+});

@@ -41,7 +41,7 @@ export class LoginPage extends BasePage {
     }
 
     async verifyLoginSuccess(): Promise<void> {
-        await expect(this.page).toHaveURL(/.*inventory.html/);
+        await expect(this.page).toHaveURL(/.*inventory.html/, {timeout: 5000});
         console.log('Login successful, max verstappen');
     }
 
