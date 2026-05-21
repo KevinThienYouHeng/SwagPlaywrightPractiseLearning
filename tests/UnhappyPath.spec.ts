@@ -105,6 +105,7 @@ test('Verify direct link to checkout page one', async ({ page }) => {
     try {
         await cartPage.goToCartPage();
     } catch (error) {
+        await loginPage.verifyErroMessage("Epic sadface: You can only access '/cart.html' when you are logged in.");
         console.log("Unable to direct open cart page");
         throw error;
     }
@@ -121,6 +122,7 @@ test('Verify direct link to checkout page two', async ({ page }) => {
     try{
         await checkout.goToCheckoutStepOne();
     } catch (error) {
+        await loginPage.verifyErroMessage("Epic sadface: You can only access '/checkout-step-one.html' when you are logged in.");
         console.log("Unable to direct open checkout page");
         throw error;
     }
