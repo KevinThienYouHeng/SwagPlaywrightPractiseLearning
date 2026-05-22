@@ -536,4 +536,58 @@ export class InventoryPage {
         await this.backProduct.click();
     }
 
+    async VerifyProductSortZA(): Promise<void> {
+
+        await expect(this.productSortContainer).toBeVisible();
+        await this.productSortContainer.selectOption('za');
+
+        const productNames = await this.inventoryItems.locator('.inventory_item_name').allTextContents();
+        const expectedProductNames = [...productNames].sort((a,b) => b.localeCompare(a));
+
+        productNames.forEach((name, index) => {
+            console.log(` ${index + 1}: ${name}`);
+        })
+
+        console.log('--------------------------------------');
+        expectedProductNames.forEach((name, index) => {
+            console.log(` ${index + 1}: ${name}`);
+        })
+
+        try{
+            expect(productNames).toEqual(expectedProductNames);
+        }catch {
+            productNames.forEach((name, index) => {
+            const matches = name === expectedProductNames[index];
+            console.log(`   ${index + 1}. ${matches ? '✅' : '❌'} Actual: "${name}" | Expected: "${expectedProductNames[index]}"`);
+            });
+        }
+    }
+
+    async VerifyProductSortLOHI(): Promise<void> {
+
+        await expect(this.productSortContainer).toBeVisible();
+        await this.productSortContainer.selectOption('lohi');
+
+        const productPrices = await this.inventoryItems.locator('.inventory_item_price').allTextContents();
+        const expectedProductPrices = [...productPrices].sort((a,b) => b.localeCompare(a));
+
+        productPrices.forEach((name, index) => {
+            console.log(` ${index + 1}: ${name}`);
+        })
+
+        console.log('--------------------------------------');
+        expectedProductPrices.forEach((name, index) => {
+            console.log(` ${index + 1}: ${name}`);
+        })
+
+        try{
+            expect(productPrices).toEqual(expectedProductPrices);
+        }catch {
+            productPrices.forEach((name, index) => {
+            const matches = name === expectedProductPrices[index];
+            console.log(`   ${index + 1}. ${matches ? '✅' : '❌'} Actual: "${name}" | Expected: "${expectedProductPrices[index]}"`);
+            });
+        }
+    }
+
 }

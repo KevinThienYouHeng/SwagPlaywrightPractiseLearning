@@ -14,7 +14,17 @@ export class BasePage {
     }
 
     protected async waitForPageLoad(): Promise<void> {
+
+        const startTime = Date.now();
+
         await this.page.waitForLoadState('networkidle');
+
+        const endTime = Date.now();
+
+        const durationMS = endTime - startTime;
+        const durationSec = (durationMS / 1000).toFixed(2);
+
+        console.log(`Page loaded in ${durationSec} seconds.`);
     }
 
     async takeScreenshot(fileName: string): Promise<void> {

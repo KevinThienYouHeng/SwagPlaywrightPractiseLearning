@@ -19,7 +19,20 @@ Validate data accuracy for product sorting (A-Z, Z-A, Price High/Low) and invent
 Integrated axe-core to proactively identify and report UI compliance violations
 
 4. Robust Assertions
-Utilizes modern Playwright assertions to ensure UI elements and data statas are consisten
+Utilizes modern Playwright assertions to ensure UI elements and data statas are consistent
+
+5. Github actions
+Implement my porject with CI continuous integration where github can run my test run after git push
+
+6. CLI (Command Line Interface)
+Understood how to use command line as an alternative way to automate the website to know about its elements
+
+7. MCP (Model Context Protocol)
+Learn that LLM can interact with my source code and use AI to generate test cases and run the test cases. Try with claude but require the pay version to use the AI
+
+8. POM (Page Object Model)
+A design pattern which organizing your code that makes it cleaner and easier to maintain
+
 
 Getting Started
 1. Ensure node.js is installed

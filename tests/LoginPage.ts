@@ -7,6 +7,7 @@ export class LoginPage extends BasePage {
     readonly password: Locator;
     readonly loginButton: Locator;
     readonly errorMessage: Locator;
+    readonly errorCloseButton: Locator;
     //readonly page: Page;
 
     constructor(page: Page) {
@@ -15,6 +16,7 @@ export class LoginPage extends BasePage {
         this.password = page.locator('[data-test="password"]');
         this.loginButton = page.locator('[data-test="login-button"]');
         this.errorMessage = page.locator('[data-test="error"]');
+        this.errorCloseButton = page.locator('[data-test="error-button"]');
     }
 
     async goToLoginPage() : Promise<void> {
@@ -38,11 +40,16 @@ export class LoginPage extends BasePage {
         await expect(this.errorMessage).toBeVisible();
         await expect(this.errorMessage).toContainText(expectedMessage);
         console.log(`Error message verifired: ${expectedMessage}`);
+        await this.errorCloseButton.click();
     }
 
     async verifyLoginSuccess(): Promise<void> {
         await expect(this.page).toHaveURL(/.*inventory.html/, {timeout: 5000});
         console.log('Login successful, max verstappen');
+    }
+
+    async clickLoginButton(): Promise<void> {
+        await this.loginButton.click();
     }
 
 }

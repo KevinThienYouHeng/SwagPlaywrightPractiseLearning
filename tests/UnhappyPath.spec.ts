@@ -5,6 +5,16 @@ import { BasePage } from './Basepage';
 import { CartPage } from './CartPage';
 import { Checkout } from './CheckoutPage';
 
+test('Direct login using button', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.clickLoginButton();
+    await loginPage.verifyErroMessage('Epic sadface: Username is required');
+    
+})
+
+
 test('Login Page with username problem_user', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
@@ -138,5 +148,50 @@ test('Login Page with username performance_glitch_user', async ({ page }) => {
     await loginPage.login('performance_glitch_user', 'secret_sauce');
     await loginPage.verifyLoginSuccess();
     await page.close();
+    
+})
+
+test('Verify sorting does not break with problem_user', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('problem_user', 'secret_sauce');
+    await inventoryPage.VerifyProductSortZA();
+    await inventoryPage.verifyProductContainerZA();
+    await inventoryPage.verifyProductContainerLowToHigh();
+    await inventoryPage.verifyProductContainerHighToLow();
+    await inventoryPage.verifyProductSortContainerAZ();
+    
+    
+})
+
+test('Verify error sorting LOHI with problem_user', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('problem_user', 'secret_sauce');
+    await inventoryPage.VerifyProductSortLOHI();
+    
+})
+
+test('Verify error sorting ZtoA with problem_user', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('problem_user', 'secret_sauce');
+    await inventoryPage.VerifyProductSortZA();
+    
+})
+
+test('Verify error sorting HIOL with problem_user', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('problem_user', 'secret_sauce');
+    await inventoryPage.verifyProductContainerHighToLow();
     
 })
