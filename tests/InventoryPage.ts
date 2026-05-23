@@ -590,4 +590,8 @@ export class InventoryPage {
         }
     }
 
+    async goToInventoryPage(): Promise<void> {
+        await this.page.goto('https://www.saucedemo.com/inventory.html');
+    }
+
 }
