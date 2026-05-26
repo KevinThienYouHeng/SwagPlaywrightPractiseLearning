@@ -85,3 +85,32 @@ test('Login Page with visual_user', async ({ page }) => {
     await page.close();
 })
 
+test('Do two user at the same time with two browsers', async ({browser}) => {
+
+    
+    const user1 = await browser.newContext();
+    const page1 = await user1.newPage();
+
+    const user2 = await browser.newContext();
+    const page2 = await user2.newPage();
+
+    const loginPage1 = new LoginPage(page1);
+    const loginPage2 = new LoginPage(page2);
+
+    await Promise.all([
+        loginPage1.goToLoginPage(),
+        loginPage2.goToLoginPage(),
+    ]);
+
+    await loginPage1.login('standard_user', 'secret_sauce');
+    await loginPage2.login('problem_user', 'secret_sauce');
+    await loginPage1.verifyLoginSuccess();
+    await loginPage2.verifyLoginSuccess();
+    await page1.close();
+    await page2.close();
+});
+
+test('Same user two tabs', async ({browser}) => {
+
+    const context = await browser.newContext();
+})

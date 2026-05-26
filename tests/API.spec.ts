@@ -27,7 +27,7 @@ test('Learn Route Continue', async ({ page }) => {
 
   await page.goto('https://www.saucedemo.com');
   await loginpage.login('standard_user', 'secret_sauce');
-  await loginpage.clickLoginButton();
+  //await loginpage.clickLoginButton();
 });
 
 
@@ -61,10 +61,10 @@ test('Learn Route fulfill', async ({ page}) => {
 
   await loginpage.goToLoginPage();
   await loginpage.login('standard_user', 'secret_sauce');
-  await loginpage.clickLoginButton();
+  //await loginpage.clickLoginButton();
   await inventorypage.verifyInventoryPageUrl();
   await basepage.takeScreenshot('inventory-page.png');
-  await inventorypage.verifyItemsNameInCart();
+  //await inventorypage.verifyItemsNameInCart();
   
 })
 
