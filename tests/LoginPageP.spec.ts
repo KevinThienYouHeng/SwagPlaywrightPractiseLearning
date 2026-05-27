@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 import { LoginPage } from './LoginPage';
+import { InventoryPage } from './InventoryPage';
 
 test('Login Page', async ({ page }) => {
     const loginPage = new LoginPage(page);
@@ -113,4 +114,24 @@ test('Do two user at the same time with two browsers', async ({browser}) => {
 test('Same user two tabs', async ({browser}) => {
 
     const context = await browser.newContext();
+
+    const tab1 = await context.newPage();
+    const tab2 = await context.newPage();
+
+    const loginPage1 = new LoginPage(tab1);
+    const loginPage2 = new LoginPage(tab2); 
+    const inventoryPage1 = new InventoryPage(tab1);
+    const inventoryPage2 = new InventoryPage(tab2);
+
+    await loginPage1.goToLoginPage();
+    await loginPage1.login('standard_user', 'secret_sauce');
+    await loginPage1.verifyLoginSuccess();
+
+    await loginPage2.goToLoginPage();
+    await loginPage2.login('problem_user', 'secret_sauce');
+    await loginPage2.verifyLoginSuccess();
+
+    await inventoryPage1.verifyInventoryPageUrl();
+    await inventoryPage2.verifyInventoryPageUrl();
+
 })

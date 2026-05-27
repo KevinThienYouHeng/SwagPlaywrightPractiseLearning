@@ -594,4 +594,6 @@ export class InventoryPage {
         await this.page.goto('https://www.saucedemo.com/inventory.html');
     }
 
+    
+
 }

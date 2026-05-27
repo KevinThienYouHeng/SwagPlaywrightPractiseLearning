@@ -308,6 +308,8 @@ test('Verify Browser back Button', async ({ page }) => {
     const cartPage = new CartPage(page);
     const checkout = new Checkout(page);
 
+    
+
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.addOneItemToCart();
@@ -318,5 +320,33 @@ test('Verify Browser back Button', async ({ page }) => {
     await checkout.verifyOnStepTwo();
     await page.goBack();
     await checkout.verifyOnStepOne();
+
+});
+
+test('Verify Browser back Button with API request', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new Checkout(page);
+
+    await page.route('**/*', async route => {
+        const url = route.request().url();
+        const method = route.request().method();
+        
+        console.log(`📮 Request: ${method} → ${url}`);
+        await route.continue(); 
+    });
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkout.clickContinue();
+    await checkout.verifyOnStepTwo();
+    await page.goBack();
+    await checkout.verifyOnStepOne();
+    await page.close();
 
 });

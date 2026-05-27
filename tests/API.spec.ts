@@ -27,6 +27,7 @@ test('Learn Route Continue', async ({ page }) => {
 
   await page.goto('https://www.saucedemo.com');
   await loginpage.login('standard_user', 'secret_sauce');
+  await page.close();
   //await loginpage.clickLoginButton();
 });
 
@@ -89,4 +90,12 @@ test('shows error when page fails to load', async ({ page }) => {
   await inventorypage.goToInventoryPage();
   // Verify error page shows
   await expect(page.getByText('Server Error')).toBeVisible();
+});
+
+test('Verify Sauce Demo is reachable', async ({ page }) => {
+  
+    const basePage = new BasePage(page);
+    await basePage.validatePageIsReachable('https://www.saucedemo.com/');
+    await page.close();
+
 });
