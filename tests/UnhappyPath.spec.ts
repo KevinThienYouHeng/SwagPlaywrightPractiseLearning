@@ -26,6 +26,19 @@ test('Login Page with username problem_user', async ({ page }) => {
     
 })
 
+test('Login Page with username error_user', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const basePage = new BasePage(page);
+
+    await basePage.routeApiSetup();
+    await loginPage.goToLoginPage();
+    await loginPage.login('error_user', 'secret_sauce');
+    await loginPage.verifyLoginSuccess();
+    await page.close();
+    
+})
+
 //Should failed
 test('Login Page with username problem_user and verify image content', async ({ page }) => {
     const loginPage = new LoginPage(page);

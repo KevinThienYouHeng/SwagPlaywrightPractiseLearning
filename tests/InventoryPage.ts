@@ -594,6 +594,13 @@ export class InventoryPage {
         await this.page.goto('https://www.saucedemo.com/inventory.html');
     }
 
+    async interceptImageRequests(): Promise<void> {
+    await this.page.route('**/*.{jpg,jpeg,png,gif,svg,webp,src}', async route => {
+            const url = route.request().url();
+            console.log(`🖼️ Image request: ${url}`);
+            await route.continue();
+        });
+    }
     
 
 }

@@ -26,6 +26,8 @@ test('Verify content in inventory page using POM', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const inventoryPage = new InventoryPage(page);
 
+
+  await inventoryPage.interceptImageRequests();
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.verifyInventoryPageItem();

@@ -1,13 +1,17 @@
 import { test } from '@playwright/test';
 import { LoginPage } from './LoginPage';
 import { InventoryPage } from './InventoryPage';
+import { BasePage } from './Basepage';
 
 test('Login Page', async ({ page }) => {
     const loginPage = new LoginPage(page);
+    const basepage = new BasePage(page);
 
+    await basepage.checkStatusURL();
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await loginPage.verifyLoginSuccess();
+    await basepage.interceptLoginState();
     await page.close();
 })
 
@@ -111,7 +115,7 @@ test('Do two user at the same time with two browsers', async ({browser}) => {
     await page2.close();
 });
 
-test('Same user two tabs', async ({browser}) => {
+test('different user two tabs', async ({browser}) => {
 
     const context = await browser.newContext();
 
@@ -134,4 +138,32 @@ test('Same user two tabs', async ({browser}) => {
     await inventoryPage1.verifyInventoryPageUrl();
     await inventoryPage2.verifyInventoryPageUrl();
 
-})
+});
+
+[
+    {username: 'standard_user', password: 'secret_sauce'},
+    {username: 'problem_user', password: 'secret_sauce'},
+    {username: 'performance_glitch_user', password: 'secret_sauce'},
+    {username: 'visual_user', password: 'secret_sauce'},
+    {username: 'locked_out_user', password: 'secret_sauce'},
+    {username: 'error_user', password: 'secret_sauce'}, 
+].forEach(({username, password}) => {
+    
+    test(`Different users - ${username}`, async({page}) => {
+
+        const loginPage = new LoginPage(page);
+        await loginPage.goToLoginPage();
+
+        try {
+            await loginPage.login(username, password);
+            await loginPage.verifyLoginSuccess();
+            await page.close();
+        } catch {
+            console.log('Login failed');
+            await page.close();
+        }
+        
+        
+    });
+});
+

@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from './LoginPage';
 import { InventoryPage } from './InventoryPage';
 import { BasePage } from './Basepage';
+import Database from 'better-sqlite3';
+import path from 'path';
 
 test('intercept SauceDemo requests', async ({ page }) => {
   // Intercept any request to saucedemo

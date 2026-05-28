@@ -42,7 +42,31 @@ export class BasePage {
         console.log(`✅ ${url} is reachable!`);
     }
 
-    async routeApiSetup() {
-       
+    async routeApiSetup(): Promise<void> {
+        await this.page.route('**/*', async route => {
+            const url = route.request().url();
+            const method = route.request().method();
+            
+            console.log(`📮 Request: ${method} → ${url}`);
+            await route.continue(); 
+        });
+    }
+
+    async interceptLoginState(): Promise<void> {
+        const localStorage = await this.page.evaluate(() => {
+        return {
+            username: window.localStorage.getItem('session-username'),
+            cartContents: window.localStorage.getItem('cart-contents'),
+        };
+    });
+        console.log(`   Username      : ${localStorage.username}`);
+        console.log(`   Cart Contents : ${localStorage.cartContents}`);
+
+    }
+
+    async checkStatusURL(): Promise<void> {
+        const response = await this.page.request.get('https://www.saucedemo.com/');
+        expect(response.status()).toBe(200);
+        console.log('Web page is up and running');
     }
 }
