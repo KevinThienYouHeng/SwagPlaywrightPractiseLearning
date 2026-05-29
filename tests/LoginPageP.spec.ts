@@ -3,6 +3,8 @@ import { LoginPage } from './LoginPage';
 import { InventoryPage } from './InventoryPage';
 import { BasePage } from './Basepage';
 
+
+//Below are hardcoded tests
 test('Login Page', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const basepage = new BasePage(page);
