@@ -1,12 +1,13 @@
-import { test } from '@playwright/test';
+//import { test } from '@playwright/test';
 import { LoginPage } from './LoginPage';
 import { InventoryPage } from './InventoryPage';
 import { BasePage } from './Basepage';
+import { test } from './index';
 
 
 //Below are hardcoded tests
-test('Login Page', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+test('Login Page', async ({ loginPage,page }) => {
+    //const loginPage = new LoginPage(page);
     const basepage = new BasePage(page);
 
     await basepage.checkStatusURL();
