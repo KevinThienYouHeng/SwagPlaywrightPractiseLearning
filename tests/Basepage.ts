@@ -1,5 +1,7 @@
 import { Page, expect } from '@playwright/test';
 import Axe from '@axe-core/playwright';
+import path from 'path';
+import fs from 'fs';
 
 export class BasePage {
 
@@ -28,7 +30,16 @@ export class BasePage {
     }
 
     async takeScreenshot(fileName: string): Promise<void> {
-        await this.page.screenshot({ path: fileName });
+
+        const screenshotsDir = path.join(process.cwd(), 'screenshots');
+
+        if(!fs.existsSync(screenshotsDir)) {
+            fs.mkdirSync(screenshotsDir, { recursive:true});
+        }
+
+        const filePath = path.join(screenshotsDir, fileName);
+
+        await this.page.screenshot({ path: filePath });
     }
 
     protected async runAccessibilityCheck(): Promise<void> {
