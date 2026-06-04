@@ -4,6 +4,7 @@ import { LoginPage } from './LoginPage';
 import { InventoryPage } from './InventoryPage';
 import { CartPage } from './CartPage';
 import { Checkout } from './CheckoutPage';
+import { BasePage } from './Basepage';
 
 type MyFixtures = {
     loginPage: LoginPage;
@@ -11,11 +12,16 @@ type MyFixtures = {
     cartPage: CartPage;
     checkoutPage: Checkout;
     standardUser: LoginPage;
+    basePage: BasePage;
 
 }
 
 export const test = base.extend<MyFixtures>({
 
+    basePage: async ({ page}, use) => {
+        const basePage = new BasePage(page);
+        await use(basePage);
+    },
     loginPage: async ({ page}, use) => {
         const loginPage = new LoginPage(page);
         await use(loginPage);

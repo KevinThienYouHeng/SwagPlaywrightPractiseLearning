@@ -45,7 +45,7 @@ export class InventoryPage {
         this.logoutSideBarLink = page.locator('[data-test="logout-sidebar-link"]');
         this.aboutSideBarLink = page.locator('[data-test="about-sidebar-link"]');
         this.allItemsSideBarLink = page.locator('[data-test="inventory-sidebar-link"]');
-        this.closeSideBarLink = page.locator('.react-burger-menu-btn');
+        this.closeSideBarLink = page.locator('#react-burger-cross-btn');
         //this.checkoutButton = page.locator('[data-test="checkout"]');
         //this.productNames = page.locator('.inventory_item_name');
         //this.productPrices = page.locator('.inventory_item_price');
@@ -199,9 +199,11 @@ export class InventoryPage {
         }
     }
 
-    async addOneItemToCart(){
+    async addOneRandomItemToCart(){
 
-        await this.addToCartButton.first().click();
+        const count = await this.addToCartButton.count();
+        const randomIndex = Math.floor(Math.random() * count);
+        await this.addToCartButton.nth(randomIndex).click();
         //await expect(this.cartBadge).toHaveText('1');
     }
 

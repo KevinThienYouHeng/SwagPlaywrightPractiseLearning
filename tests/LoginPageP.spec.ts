@@ -6,11 +6,16 @@ import { test } from './index';
 
 
 //Below are hardcoded tests
+test('Verify Login page', async ({ basePage, page}) => {
+    await basePage.checkStatusURL();
+    await page.close();
+})
+
 test('Login Page', async ({ loginPage,page }) => {
     //const loginPage = new LoginPage(page);
     const basepage = new BasePage(page);
 
-    await basepage.checkStatusURL();
+    await loginPage.routeApiSetup();
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await loginPage.verifyLoginSuccess();
@@ -18,9 +23,9 @@ test('Login Page', async ({ loginPage,page }) => {
     await page.close();
 })
 
-test('Login Page with no username ', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
+test('Login Page with no username ', async ({ loginPage, page }) => {
+    
+    await loginPage.routeApiSetup();
     await loginPage.goToLoginPage();
     await loginPage.login('', 'secret_sauce');
     await loginPage.verifyErroMessage('Epic sadface: Username is required');

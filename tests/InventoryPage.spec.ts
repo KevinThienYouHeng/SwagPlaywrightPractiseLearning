@@ -1,31 +1,22 @@
-import { test } from '@playwright/test';
+
 import { LoginPage } from './LoginPage';
 import { InventoryPage } from './InventoryPage';
+import { test } from './index';
 
 
-test('User can add item to cart using POM', async ({ page }) => {
-  // 1. Initialize Pages
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
-
-  // 2. Perform actions using our page classes
+test('User can add item to cart', async ({ loginPage, inventoryPage}) => {
+  
+  
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); // Not needed because we are using storageState
-
-  //await inventoryPage.addProductToCart('Sauce Labs Backpack');
-  await inventoryPage.addOneItemToCart();
+  await inventoryPage.addOneRandomItemToCart();
   await inventoryPage.verifyRemoveButtonVisbilityAfterAddingToCart();
   await inventoryPage.goToCartPage();
   await inventoryPage.verifyCartCount(1);
-  //await inventoryPage.removeOneItem();
-  //await inventoryPage.verifyCartCount(0);
+  
 });
 
-test('Verify content in inventory page using POM', async ({ page }) => {
-
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
-
+test('Verify content in inventory page', async ({ loginPage, inventoryPage, page }) => {
 
   await inventoryPage.interceptImageRequests();
   await loginPage.goToLoginPage();
@@ -35,7 +26,6 @@ test('Verify content in inventory page using POM', async ({ page }) => {
   await inventoryPage.verifyInventoryPage();
   await inventoryPage.verifyCartCount(0);
   await inventoryPage.logoutPage();
-
   await page.close();
 });
 
@@ -45,6 +35,7 @@ test('Verify sorting Martix', async ({ page }) => {
   const inventoryPage = new InventoryPage(page);
 
   await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.verifyProductSortContainerAZ();
   await inventoryPage.verifyProductContainerZA();
   await inventoryPage.verifyProductContainerLowToHigh();
@@ -64,7 +55,6 @@ test('Add multiply item into the cart', async ({ page }) => {
   await inventoryPage.addMultiplyItemToCart();
   await inventoryPage.verifyRemoveButtonVisbilityAfterAddingToCart();
   await inventoryPage.verifyCartCount(6);
-  //await inventoryPage.removeOneItem();
   await inventoryPage.removeAllItem();
   await inventoryPage.verifyCartCount(0); 
 
@@ -131,7 +121,7 @@ test('Verify sorting after adding an item into the cart', async ({page}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); 
-  await inventoryPage.addOneItemToCart();
+  await inventoryPage.addOneRandomItemToCart();
   await inventoryPage.verifyProductContainerZA();
 })
 
@@ -178,7 +168,7 @@ test('Verify Rest App state', async ({page}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); 
-  await inventoryPage.addOneItemToCart();
+  await inventoryPage.addOneRandomItemToCart();
   await inventoryPage.verifyCartCount(1);
   await inventoryPage.resetAppState();
   await page.reload();

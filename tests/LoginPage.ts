@@ -20,9 +20,8 @@ export class LoginPage extends BasePage {
     }
 
     async goToLoginPage() : Promise<void> {
-        //await this.page.goto('https://www.saucedemo.com/inventory.html');
-        await this.page.goto('https://www.saucedemo.com/');
-        //await this.runAccessibilityCheck(); 
+        
+        await this.navigate('https://www.saucedemo.com/'); 
         await this.waitForPageLoad();
         await this.takeScreenshot('login-page.png');
     }

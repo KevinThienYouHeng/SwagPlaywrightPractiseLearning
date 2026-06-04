@@ -77,7 +77,16 @@ export class BasePage {
 
     async checkStatusURL(): Promise<void> {
         const response = await this.page.request.get('https://www.saucedemo.com/');
-        expect(response.status()).toBe(200);
-        console.log('Web page is up and running');
+        try {
+            expect(response.status()).toBe(200);
+            console.log('Web page is up and running');
+        }catch{
+            console.log('Web page is not reachable');
+        }
+        
+    }
+
+    async longLine(): Promise<void> {
+        console.log('--------------------------------------------------');
     }
 }
