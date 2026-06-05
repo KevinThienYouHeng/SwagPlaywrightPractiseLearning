@@ -15,7 +15,7 @@ export class BasePage {
         await this.page.goto(url);
     }
 
-    protected async waitForPageLoad(): Promise<void> {
+    async waitForPageLoad(): Promise<void> {
 
         const startTime = Date.now();
 

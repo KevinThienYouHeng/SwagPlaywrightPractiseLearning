@@ -3,16 +3,16 @@ import { BasePage } from './Basepage';
 
 export class CartPage extends BasePage {
     readonly cartItems: Locator;
-  readonly cartItemNames: Locator;
-  readonly cartItemPrices: Locator;
-  readonly cartItemDescriptions: Locator;
-  readonly removeButtons: Locator;
-  readonly continueShoppingButton: Locator;
-  readonly checkoutButton: Locator;
-  readonly cartBadge: Locator;
-  readonly cartTitle: Locator;
-  readonly cartDescLabel: Locator;
-  readonly cartQtyLabel: Locator;
+    readonly cartItemNames: Locator;
+    readonly cartItemPrices: Locator;
+    readonly cartItemDescriptions: Locator;
+    readonly removeButtons: Locator;
+    readonly continueShoppingButton: Locator;
+    readonly checkoutButton: Locator;
+    readonly cartBadge: Locator;
+    readonly cartTitle: Locator;
+    readonly cartDescLabel: Locator;
+    readonly cartQtyLabel: Locator;
  
   constructor(page: Page) {
     super(page);

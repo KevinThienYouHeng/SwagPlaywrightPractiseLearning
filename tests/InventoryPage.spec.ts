@@ -6,7 +6,6 @@ import { test } from './index';
 
 test('User can add item to cart', async ({ loginPage, inventoryPage}) => {
   
-  
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); // Not needed because we are using storageState
   await inventoryPage.addOneRandomItemToCart();
@@ -29,10 +28,7 @@ test('Verify content in inventory page', async ({ loginPage, inventoryPage, page
   await page.close();
 });
 
-test('Verify sorting Martix', async ({ page }) => {
-
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+test('Verify sorting Martix', async ({ loginPage, inventoryPage, page }) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
@@ -44,10 +40,25 @@ test('Verify sorting Martix', async ({ page }) => {
   await page.close();
 });
 
-test('Add multiply item into the cart', async ({ page }) => {
+test('Verify sorting ZA', async ({ loginPage, inventoryPage, page }) => {
 
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
+  await inventoryPage.VerifyProductSortZA();
+
+  await page.close();
+});
+
+test('Verify sorting LOHI', async ({ loginPage, inventoryPage, page }) => {
+
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
+  await inventoryPage.VerifyProductSortLOHI();
+
+  await page.close();
+});
+
+test('Add multiply item into the cart', async ({ loginPage, inventoryPage, page }) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
@@ -63,11 +74,8 @@ test('Add multiply item into the cart', async ({ page }) => {
 
 });
 
-test("Verify random item added to cart", async ({ page }) => {
+test("Verify random item added to cart", async ({ loginPage, inventoryPage, page }) => {
   
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
-
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.addRandomItemToCart(2);
@@ -78,93 +86,105 @@ test("Verify random item added to cart", async ({ page }) => {
 
 });
 
-test('Click on Product name', async ({page}) => {
-
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+test('Click on Product name and add to cart', async ({loginPage, inventoryPage, page}) => {
 
   await loginPage.goToLoginPage();
-  //await inventoryPage.clickProductName();
-  //await inventoryPage.verifyCartCount(1);
-  //await inventoryPage.clickProductImg();
-  //await inventoryPage.addItemToCartFromDetailPage();
-  await inventoryPage.addAllItemsFromDetailPage('image');
-  await inventoryPage.verifyCartCount(6);
-  await inventoryPage.resetAppState();
-  await inventoryPage.verifyCartCount(0);
-  //await inventoryPage.addItemToCartFromDetailPage();
+  await loginPage.login('standard_user', 'secret_sauce');
+  await inventoryPage.clickProductName();
+  await inventoryPage.verifyCartCount(1);
+
+  await page.close();
   
 })
 
-test('Login Logout', async ({page}) => {
-
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+test('Click on Product image and add to cart', async ({loginPage, inventoryPage, page}) => {
 
   await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
+  await inventoryPage.clickProductImg();
+  await inventoryPage.verifyCartCount(1);
+  
+  await page.close();
+})
+
+test('Click on all Product name and add to cart', async ({loginPage, inventoryPage, page}) => {
+
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
+  await inventoryPage.addItemToCartFromDetailPage();
+  await inventoryPage.verifyCartCount(6);
+
+  await page.close();
+  
+})
+
+test('Click on all Product images and add to cart', async ({loginPage, inventoryPage, page}) => {
+
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
+  await inventoryPage.addImgToCartFromDetailPageByImg();
+  await inventoryPage.verifyCartCount(6);
+
+  await page.close();
+  
+})
+
+test('Login Logout', async ({loginPage, inventoryPage, page}) => {
+
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.logoutSideBar();
+  await page.close();
 })
 
-test('Login--> About', async ({page}) => {
-
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+test('Login--> About', async ({loginPage, inventoryPage, page}) => {
 
   await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.aboutSideBar();
+  await page.close();
 })
 
-test('Verify sorting after adding an item into the cart', async ({page}) => {
-
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+test('Verify sorting after adding an item into the cart', async ({loginPage, inventoryPage,page}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); 
   await inventoryPage.addOneRandomItemToCart();
   await inventoryPage.verifyProductContainerZA();
+  await page.close();
 })
 
-test('Verify sorting after adding an item into the cart from the product detail page', async ({page}) => {
-
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+test('Verify sorting after adding an item into the cart from the product detail page', async ({loginPage, inventoryPage, page}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); 
   await inventoryPage.clickProductName();
   await inventoryPage.verifyProductContainerZA();
   await inventoryPage.verifyProductContainerLowToHigh();
+  await page.close();
 })
 
-test('Verify different image per item', async ({page}) => {
-
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+test('Verify different image per item', async ({loginPage, inventoryPage, page}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); 
+  await inventoryPage.interceptImageRequests();
   await inventoryPage.verifyDifferentImagePerItem();
+  await page.close();
 })
 
 //This test should failed
-test('Verify items name accuracy', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-
+test('Verify items name accuracy', async ({loginPage, inventoryPage, page }) => {
+   
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await loginPage.verifyLoginSuccess();
     await inventoryPage.verifyItemsNameInCart();
     await page.close();
     
 })
 
 //The cart will become empty but the item will button remain in the cart
-test('Verify Rest App state', async ({page}) => {
-
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+test('Verify Reset App state', async ({loginPage, inventoryPage, page}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); 
@@ -173,14 +193,12 @@ test('Verify Rest App state', async ({page}) => {
   await inventoryPage.resetAppState();
   await page.reload();
   await inventoryPage.verifyCartCount(0);
+  await page.close();
 
 })
 
-test('Verify details first item between inventory page and detail page', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-
-
+test('Verify details first item between inventory page and detail page', async ({loginPage, inventoryPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(0);
@@ -189,5 +207,33 @@ test('Verify details first item between inventory page and detail page', async (
     await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(3);
     await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(4);
     await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(5); 
+    await page.close();
+    
+})
+
+test('Get all items name', async ({loginPage, inventoryPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.displayAllItemsName();
+    await page.close();
+    
+})
+
+test('Get all items prices', async ({loginPage, inventoryPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.displayAllPricesName();
+    await page.close();
+    
+})
+
+test('Get all items descriptions', async ({loginPage, inventoryPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.displayAllDescriptionsName();
+    await page.close();
     
 })

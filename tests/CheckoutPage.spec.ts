@@ -12,7 +12,7 @@ test('Verify first checkout page and all its content', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     //await checkout.goToCheckoutStepOne();
@@ -29,7 +29,7 @@ test('Verify Error message when only first name is entered', async ({ page }) =>
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.verifyCheckoutContent();
@@ -46,7 +46,7 @@ test('Verify Error message when only last name is entered', async ({ page }) => 
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.verifyCheckoutContent();
@@ -63,7 +63,7 @@ test('Verify Error message when only ZipCode is entered', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.verifyCheckoutContent();
@@ -87,7 +87,7 @@ test('Verify Error message when only ZipCode is entered', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     //await checkout.goToCheckoutStepOne();
@@ -107,7 +107,7 @@ test('Verify input fields(alphanumeric)', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.verifyInputFieldsEmpty();
@@ -130,7 +130,7 @@ test('Verify Cancel Button and Cart count does not change', async ({ page }) => 
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await inventoryPage.verifyCartCount(1);
     await cartPage.proceedToCheckout();
@@ -149,7 +149,7 @@ test('Verify Continue Button', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.fillCheckoutInfo('Max','Leclerc','16331');
@@ -166,7 +166,7 @@ test('Verify Continue Button and checkout-two contents', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.fillCheckoutInfo('Max','Leclerc','16331');
@@ -227,7 +227,7 @@ test('Verify Cancel Part 2 Button', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.fillCheckoutInfo('Max','Leclerc','16331');
@@ -247,7 +247,7 @@ test('Verify Finish Button and complete page content', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.fillCheckoutInfo('Max','Leclerc','16331');
@@ -268,7 +268,7 @@ test('Verify back button ', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.fillCheckoutInfo('Max','Leclerc','16331');
@@ -312,7 +312,7 @@ test('Verify Browser back Button', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.fillCheckoutInfo('Max','Leclerc','16331');
@@ -339,7 +339,7 @@ test('Verify Browser back Button with API request', async ({ page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneItemToCart();
+    await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
     await checkout.fillCheckoutInfo('Max','Leclerc','16331');

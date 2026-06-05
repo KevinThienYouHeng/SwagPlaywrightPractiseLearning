@@ -51,4 +51,15 @@ export class LoginPage extends BasePage {
         await this.loginButton.click();
     }
 
+    async verifyLoginPage(): Promise<void> {
+
+        await expect(this.page).toHaveTitle('Swag Labs');
+        await expect(this.username).toBeVisible();
+        await expect(this.username).toHaveAttribute('placeholder', 'Username');
+        await expect(this.password).toBeVisible();
+        await expect(this.password).toHaveAttribute('placeholder', 'Password');
+        await expect(this.loginButton).toBeVisible();
+        await expect(this.loginButton).toContainText('Login');
+    }
+
 }

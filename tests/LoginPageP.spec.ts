@@ -6,20 +6,21 @@ import { test } from './index';
 
 
 //Below are hardcoded tests
-test('Verify Login page', async ({ basePage, page}) => {
+test('Verify Login page', async ({ basePage, loginPage, page}) => {
+    
     await basePage.checkStatusURL();
+    await loginPage.goToLoginPage();
+    await loginPage.verifyLoginPage();
     await page.close();
 })
 
-test('Login Page', async ({ loginPage,page }) => {
-    //const loginPage = new LoginPage(page);
-    const basepage = new BasePage(page);
-
+test('Login Page', async ({ basePage, loginPage, page }) => {
+    
     await loginPage.routeApiSetup();
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await loginPage.verifyLoginSuccess();
-    await basepage.interceptLoginState();
+    await basePage.interceptLoginState();
     await page.close();
 })
 
@@ -32,26 +33,23 @@ test('Login Page with no username ', async ({ loginPage, page }) => {
     await page.close();
 })
 
-test('Login Page with no password', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
+test('Login Page with no password', async ({ loginPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', '');
     await loginPage.verifyErroMessage('Epic sadface: Password is required');
     await page.close();
 })
 
-test('Login Page with no username and no password', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
+test('Login Page with no username and no password', async ({loginPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('', '');
     await loginPage.verifyErroMessage('Epic sadface: Username is required');
     await page.close();
 })
 
-test('Login Page with invalid credentials', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+test('Login Page with invalid credentials', async ({ loginPage, page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('Max', 'Lestappen');
@@ -59,9 +57,8 @@ test('Login Page with invalid credentials', async ({ page }) => {
     await page.close();
 })
 
-test('Login Page with username locked_out_user', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
+test('Login Page with username locked_out_user', async ({ loginPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('locked_out_user', 'secret_sauce');
     await loginPage.verifyErroMessage('Epic sadface: Sorry, this user has been locked out.');
@@ -69,8 +66,7 @@ test('Login Page with username locked_out_user', async ({ page }) => {
 })
 
 //For problem_user, the login will be successful but the problem is the image of all the items will be all dogs
-test('Login Page with username problem_user', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+test('Login Page with username problem_user', async ({loginPage, page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('problem_user', 'secret_sauce');
@@ -78,20 +74,20 @@ test('Login Page with username problem_user', async ({ page }) => {
     await page.close();
 })
 
-//This user test the time taken to load the page, it will be around 5 seconds
-test('Login Page with username performance_glitch_user', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+//This user test the time taken to load the page, it will be around 3 - 5 seconds
+test('Login Page with username performance_glitch_user', async ({basePage, loginPage, page }) => {
+    
 
     await loginPage.goToLoginPage();
     await loginPage.login('performance_glitch_user', 'secret_sauce');
+    await basePage.waitForPageLoad();
     await loginPage.verifyLoginSuccess();
     await page.close();
 })
 
 //Page login successful and this user is used for visual testing
-test('Login Page with visual_user', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
+test('Login Page with visual_user', async ({ loginPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('visual_user', 'secret_sauce');
     await loginPage.verifyLoginSuccess();
@@ -157,9 +153,8 @@ test('different user two tabs', async ({browser}) => {
     {username: 'error_user', password: 'secret_sauce'}, 
 ].forEach(({username, password}) => {
     
-    test(`Different users - ${username}`, async({page}) => {
+    test(`Different users - ${username}`, async({loginPage, page}) => {
 
-        const loginPage = new LoginPage(page);
         await loginPage.goToLoginPage();
 
         try {
