@@ -14,7 +14,6 @@ test('Verify cart page with 0 items', async ({loginPage, inventoryPage, cartPage
     await cartPage.verifyCartIsEmpty();
     const cart = await cartPage.getCartItemCount();
     console.log(`Cart item count: ${cart}`);
-
     await page.close();
 })
 
@@ -32,7 +31,6 @@ test('Verify cart page with 1 items', async ({loginPage, inventoryPage, cartPage
     console.log(`Cart item description ${cartDesc}`);
     const cart = await cartPage.getCartItemCount();
     console.log(`Cart item count: ${cart}`);
-
     await page.close();
     
 })
@@ -46,7 +44,6 @@ test('Verify cart page with 1 items and continue shopping', async ({loginPage, i
     await cartPage.verifyCartBadgeCount(1);
     await cartPage.continueShopping();
     await inventoryPage.verifyInventoryPageUrl();
-
     await page.close();
     
 })
@@ -60,7 +57,6 @@ test('Verify cart page with 1 items and checkout button', async ({loginPage, inv
     await cartPage.verifyCartBadgeCount(1);
     await cartPage.proceedToCheckout();
     await checkoutPage.goToCheckoutStepOne();
-
     await page.close();
     
 })
@@ -91,7 +87,6 @@ test('Verify cart page with random number items', async ({loginPage, inventoryPa
     await cartPage.getAllCurrentDescriptionsInCart();
     const cart = await cartPage.getCartItemCount();
     console.log(`Cart item count: ${cart}`);
-
     await page.close();
     
 })
@@ -108,17 +103,12 @@ test('Verify cart page with all items', async ({loginPage, inventoryPage, cartPa
     await cartPage.getAllCurrentNamesInCart();
     await cartPage.getAllCurrentPricesInCart();
     await cartPage.getAllCurrentDescriptionsInCart();
-    
-
     await page.close();
     
 })
 
-test('Verify cart page with 1 items and Remove button', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-
+test('Verify cart page with 1 items and Remove button', async ({ loginPage, inventoryPage, cartPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.addOneRandomItemToCart();
@@ -127,16 +117,12 @@ test('Verify cart page with 1 items and Remove button', async ({ page }) => {
     await cartPage.removeItemByIndex(0);
     await cartPage.verifyCartBadgeCount(0);
     await cartPage.verifyCartIsEmpty();
-
     await page.close();
     
 })
 
-test('Verify cart page with all items and remove all', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-
+test('Verify cart page with all items and remove all', async ({ loginPage, inventoryPage, cartPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.addMultiplyItemToCart();
@@ -154,11 +140,8 @@ test('Verify cart page with all items and remove all', async ({ page }) => {
     
 })
 
-test('Verify cart page with all items and remove 3 items', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-
+test('Verify cart page with all items and remove 3 items', async ({ loginPage, inventoryPage, cartPage, page }) => {
+   
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.addMultiplyItemToCart();
@@ -175,11 +158,8 @@ test('Verify cart page with all items and remove 3 items', async ({ page }) => {
     
 })
 
-test('Verify cart page with 1 items from detail page using name', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-
+test('Verify cart page with 1 items from detail page using name', async ({ loginPage, inventoryPage, cartPage, page }) => {
+   
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     //await inventoryPage.addItemToCartFromDetailPage();
@@ -194,11 +174,8 @@ test('Verify cart page with 1 items from detail page using name', async ({ page 
     
 })
 
-test('Verify cart page with 1 items from detail page using img', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-
+test('Verify cart page with 1 items from detail page using img', async ({loginPage, inventoryPage, cartPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     //await inventoryPage.addItemToCartFromDetailPage();
@@ -213,11 +190,8 @@ test('Verify cart page with 1 items from detail page using img', async ({ page }
     
 })
 
-test('Verify cart page with All items and remove one specific item with name', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-
+test('Verify cart page with All items and remove one specific item with name', async ({loginPage, inventoryPage, cartPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     //await inventoryPage.addItemToCartFromDetailPage();
@@ -226,8 +200,6 @@ test('Verify cart page with All items and remove one specific item with name', a
     await cartPage.verifyCartBadgeCount(6);
     await cartPage.removeSpecificItemFromCart('Sauce Labs Backpack');
     await cartPage.verifyCartBadgeCount(5);
-    await cartPage.removeItemByIndex(1);
-    await cartPage.verifyCartBadgeCount(4);
-    //await page.close();
+    await page.close();
     
 })

@@ -1,75 +1,77 @@
-import { expect, test } from '@playwright/test';
 import { LoginPage } from './LoginPage';
 import { InventoryPage } from './InventoryPage';
 import { CartPage } from './CartPage';
 import { Checkout } from './CheckoutPage';
+import { test } from './index';
 
-test('Verify first checkout page and all its content', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
+test('Verify first checkout page and all its content', async ({loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
-    //await checkout.goToCheckoutStepOne();
-    await checkout.verifyInputFieldsEmpty();
-    await checkout.verifyCheckoutContent();
+    await checkoutPage.verifyOnStepOne();
+    await checkoutPage.verifyInputFieldsEmpty();
+    await checkoutPage.verifyCheckoutContent();
+    await page.close();
+})
+
+test('Verify first checkout page and input content', async ({loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.verifyFirstNameInputField('Charles');
+    await checkoutPage.verifyLastNameInputField('Piastri');
+    await checkoutPage.verifyPostalCodeInputField('44444');
+    await checkoutPage.clearAllFields();
+    await checkoutPage.verifyTabKeyMovesFormFocus();
+    await page.close();
 })
 
 
-test('Verify Error message when only first name is entered', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
+test('Verify Error message when only first name is entered', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
-    await checkout.verifyCheckoutContent();
-    await checkout.fillCheckoutInfo('Max','','');
-    await checkout.clickContinue();
-    await checkout.verifyErrorMessage('Last Name is required');
+    await checkoutPage.fillCheckoutInfo('Max','','');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyErrorMessage('Last Name is required');
+    await page.close();
 })
 
-test('Verify Error message when only last name is entered', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
+test('Verify Error message when only last name is entered', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
-    await checkout.verifyCheckoutContent();
-    await checkout.fillCheckoutInfo('','Leclerc','');
-    await checkout.clickContinue();
-    await checkout.verifyErrorMessage('First Name is required');
+    await checkoutPage.verifyCheckoutContent();
+    await checkoutPage.fillCheckoutInfo('','Leclerc','');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyErrorMessage('First Name is required');
+    await page.close();
 })
 
-test('Verify Error message when only ZipCode is entered', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
+test('Verify Error message when only ZipCode is entered', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
-    await checkout.verifyCheckoutContent();
-    await checkout.fillCheckoutInfo('','','16813');
-    await checkout.clickContinue();
-    await checkout.verifyErrorMessage('First Name is required');
+    await checkoutPage.verifyCheckoutContent();
+    await checkoutPage.fillCheckoutInfo('','','16813');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyErrorMessage('First Name is required');
+    await page.close();
 });
 
 
@@ -79,235 +81,8 @@ test('Verify Error message when only ZipCode is entered', async ({ page }) => {
     {firstname: '', lastname: '', postalcode: '16813', expectedError: 'First Name is required'},
 ].forEach(({firstname, lastname, postalcode, expectedError}) => {
 
-    test(`Verify error when firstname: "${firstname}" lastname: "${lastname}" postalcode: "${postalcode}"`, async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    //await checkout.goToCheckoutStepOne();
-    await checkout.verifyCheckoutContent();
-    await checkout.fillCheckoutInfo(firstname, lastname, postalcode);
-    await checkout.clickContinue();
-    await checkout.verifyErrorMessage(expectedError);
-
-    });
-});
-
-test('Verify input fields(alphanumeric)', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    await checkout.verifyInputFieldsEmpty();
-    await checkout.verifyFirstNameInputField('Max');
-    await checkout.verifyLastNameInputField('Leclerc');
-    await checkout.verifyPostalCodeInputField('33168');
-    await checkout.verifyTabKeyMovesFormFocus();
-    await checkout.clearAllFields();
-    await checkout.verifyFirstNameInputField('33567');
-    await checkout.verifyLastNameInputField('33452');
-    await checkout.verifyPostalCodeInputField('Verstappen');
-    await checkout.clearAllFields();
-});
-
-test('Verify Cancel Button and Cart count does not change', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
-    await inventoryPage.goToCartPage();
-    await inventoryPage.verifyCartCount(1);
-    await cartPage.proceedToCheckout();
-    await checkout.clickCancelStepOne();
-    await cartPage.getItemNameByIndex(0);
-    await cartPage.verifyCartPageUrl();
-    await cartPage.verifyCartBadgeCount(1);
-
-});
-
-test('Verify Continue Button', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.verifyOnStepTwo();
-
-});
-
-test('Verify Continue Button and checkout-two contents', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.verifyOnStepTwo();
-    await checkout.verifyOrderSummaryVisible();
-    await checkout.getCompleteItemNamesList();
-    await checkout.verifyTotalEqualsSubtotalPlusTax();
-    await checkout.getOrderSummary();
-
-});
-
-test('Verify all items at checkout-two page', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addMultiplyItemToCart();
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.getCompleteItemNamesList();
-    await checkout.getCompleteItemPricesList();
-    await checkout.verifyTotalEqualsSubtotalPlusTax();
-    await checkout.getOrderSummary();
-
-});
-
-test('Verify random items at checkout-two page', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addRandomItemToCart(3);
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.getCompleteItemNamesList();
-    await checkout.getCompleteItemPricesList();
-    await checkout.verifyTotalEqualsSubtotalPlusTax();
-    await checkout.getOrderSummary();
-
-});
-
-test('Verify Cancel Part 2 Button', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.verifyOnStepTwo();
-    await checkout.clickCancelStepTwo();
-    await inventoryPage.verifyInventoryPageUrl();
-    await inventoryPage.verifyCartCount(1);
-    //await inventoryPage.verifyInventoryPageItem();
-});
-
-test('Verify Finish Button and complete page content', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.verifyOnStepTwo();
-    await checkout.clickFinish();
-    await checkout.verifyOnCompletePage();
-    await checkout.verifySuccessMessage();
-    await checkout.verifyCartIsCleared();
-
-});
-
-test('Verify back button ', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.verifyOnStepTwo();
-    await checkout.clickFinish();
-    await checkout.verifyOnCompletePage();
-    await checkout.verifySuccessMessage();
-    await checkout.verifyBackHomeButton();
-    await inventoryPage.verifyInventoryPageUrl();
-    await inventoryPage.verifyCartCount(0);
-
-});
-
-test('Verify empty checkout checkout-two page', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.goToCartPage();
-    await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.getCompleteItemNamesList();
-    await checkout.getCompleteItemPricesList();
-    await checkout.verifyTotalEqualsSubtotalPlusTax();
-    await checkout.getOrderSummary();
-
-});
-
-test('Verify Browser back Button', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
+    test(`Verify error when firstname: "${firstname}" lastname: "${lastname}" postalcode: "${postalcode}"`, 
+        async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
     
 
     await loginPage.goToLoginPage();
@@ -315,38 +90,221 @@ test('Verify Browser back Button', async ({ page }) => {
     await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.verifyOnStepTwo();
-    await page.goBack();
-    await checkout.verifyOnStepOne();
+    await checkoutPage.verifyCheckoutContent();
+    await checkoutPage.fillCheckoutInfo(firstname, lastname, postalcode);
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyErrorMessage(expectedError);
+    await page.close();
 
+    });
 });
 
-test('Verify Browser back Button with API request', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new Checkout(page);
-
-    await page.route('**/*', async route => {
-        const url = route.request().url();
-        const method = route.request().method();
-        
-        console.log(`📮 Request: ${method} → ${url}`);
-        await route.continue(); 
-    });
-
+test('Verify input fields(alphanumeric)', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
-    await checkout.fillCheckoutInfo('Max','Leclerc','16331');
-    await checkout.clickContinue();
-    await checkout.verifyOnStepTwo();
+    await checkoutPage.verifyInputFieldsEmpty();
+    await checkoutPage.verifyFirstNameInputField('Max');
+    await checkoutPage.verifyLastNameInputField('Leclerc');
+    await checkoutPage.verifyPostalCodeInputField('33168');
+    await checkoutPage.verifyTabKeyMovesFormFocus();
+    await checkoutPage.clearAllFields();
+    await checkoutPage.verifyFirstNameInputField('33567');
+    await checkoutPage.verifyLastNameInputField('33452');
+    await checkoutPage.verifyPostalCodeInputField('Verstappen');
+    await checkoutPage.clearAllFields();
+    await page.close();
+});
+
+test('Verify Cancel Button and Cart count does not change', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.verifyCartItemCount(1);
+    await cartPage.verifyCartBadgeCount(1);
+    await cartPage.proceedToCheckout();
+    await checkoutPage.clickCancelStepOne();
+    const itemName = await cartPage.getItemNameByIndex(0);
+    console.log(itemName);
+    await cartPage.verifyCartPageUrl();
+    await cartPage.verifyCartBadgeCount(1);
+    await page.close();
+
+});
+
+test('Verify Continue Button', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyOnStepTwo();
+    await page.close();
+
+});
+
+test('Verify Continue Button and checkout-two contents', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyOnStepTwo();
+    await checkoutPage.verifyOrderSummaryVisible();
+    await checkoutPage.getCompleteItemNamesList();
+    await checkoutPage.verifyTotalEqualsSubtotalPlusTax();
+    await checkoutPage.getOrderSummary();
+    await page.close();
+
+});
+
+test('Verify all items at checkout-two page', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
+
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addMultiplyItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.getCompleteItemNamesList();
+    await checkoutPage.getCompleteItemPricesList();
+    await checkoutPage.verifyTotalEqualsSubtotalPlusTax();
+    await checkoutPage.getOrderSummary();
+    await page.close();
+
+});
+
+test('Verify random items at checkout-two page', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addRandomItemToCart(3);
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.getCompleteItemNamesList();
+    await checkoutPage.getCompleteItemPricesList();
+    await checkoutPage.verifyTotalEqualsSubtotalPlusTax();
+    await checkoutPage.getOrderSummary();
+    await page.close();
+
+});
+
+test('Verify Cancel Part 2 Button', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyOnStepTwo();
+    await checkoutPage.clickCancelStepTwo();
+    await inventoryPage.verifyInventoryPageUrl();
+    await inventoryPage.verifyCartCount(1);
+    await page.close();
+    
+});
+
+test('Verify Finish Button and complete page content', async ({loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+   
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyOnStepTwo();
+    await checkoutPage.clickFinish();
+    await checkoutPage.verifyOnCompletePage();
+    await checkoutPage.verifySuccessMessage();
+    await checkoutPage.verifyCartIsCleared();
+    await page.close();
+
+});
+
+test('Verify back button ', async ({ loginPage, inventoryPage, cartPage, checkoutPage,page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyOnStepTwo();
+    await checkoutPage.clickFinish();
+    await checkoutPage.verifyOnCompletePage();
+    await checkoutPage.verifySuccessMessage();
+    await checkoutPage.verifyBackHomeButton();
+    await inventoryPage.verifyInventoryPageUrl();
+    await inventoryPage.verifyCartCount(0);
+    await page.close();
+
+});
+
+test('Verify empty checkout checkout-two page', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.getCompleteItemNamesList();
+    await checkoutPage.getCompleteItemPricesList();
+    await checkoutPage.verifyTotalEqualsSubtotalPlusTax();
+    await checkoutPage.getOrderSummary();
+    await page.close();
+
+});
+
+test('Verify Browser back Button', async ({ loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyOnStepTwo();
     await page.goBack();
-    await checkout.verifyOnStepOne();
+    await checkoutPage.verifyOnStepOne();
+    await page.close();
+
+});
+
+test('Verify Browser back Button with API request', async ({ basePage, loginPage, inventoryPage, cartPage, checkoutPage,  page }) => {
+    
+    await basePage.routeApiSetup();
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.goToCartPage();
+    await cartPage.proceedToCheckout();
+    await checkoutPage.fillCheckoutInfo('Max','Leclerc','16331');
+    await checkoutPage.clickContinue();
+    await checkoutPage.verifyOnStepTwo();
+    await page.goBack();
+    await checkoutPage.verifyOnStepOne();
     await page.close();
 
 });

@@ -188,7 +188,6 @@ export class InventoryPage {
         const count = await this.addToCartButton.count();
         const item = this.inventoryItems;
 
-
         for ( let i = 0; i < count; i ++){
 
             await this.addToCartButton.first().click();
