@@ -29,6 +29,18 @@ export class BasePage {
         console.log(`Page loaded in ${durationSec} seconds.`);
     }
 
+    async measureEndpointPerformance(): Promise<void> {
+        const startTime = performance.now();
+  
+       await this.page.waitForLoadState('networkidle');
+        
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+        
+        console.log(`API Navigation response took: ${duration.toFixed(2)}ms`);
+        expect(duration).toBeLessThan(3000);
+    }
+
     async takeScreenshot(fileName: string): Promise<void> {
 
         const screenshotsDir = path.join(process.cwd(), 'screenshots');
@@ -39,7 +51,7 @@ export class BasePage {
 
         const filePath = path.join(screenshotsDir, fileName);
 
-        await this.page.screenshot({ path: filePath });
+        await this.page.screenshot({ path: filePath, fullPage: true });
     }
 
     protected async runAccessibilityCheck(): Promise<void> {
@@ -88,5 +100,20 @@ export class BasePage {
 
     async longLine(): Promise<void> {
         console.log('--------------------------------------------------');
+    }
+
+    async loadPerformanceMetrics(): Promise<void> {
+
+        const performanceTimings = await this.page.evaluate(() => {
+        const [timing] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+        return {
+            domReady: timing.domContentLoadedEventEnd - timing.startTime,
+            loadTime: timing.loadEventEnd - timing.startTime,
+        };
+        });
+        console.log(`DOM Ready: ${performanceTimings.domReady}ms`);
+        console.log(`Load Time: ${performanceTimings.loadTime}ms`);
+
+        expect(performanceTimings.loadTime).toBeLessThan(2000);
     }
 }

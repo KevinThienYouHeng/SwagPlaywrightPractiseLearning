@@ -4,6 +4,7 @@ import { InventoryPage } from './InventoryPage';
 import { BasePage } from './Basepage';
 import { test } from './index';
 
+//test.describe.configure({mode: 'parallel'});
 
 //Below are hardcoded tests
 test('Verify Login page', async ({ basePage, loginPage, page}) => {
@@ -170,3 +171,32 @@ test('different user two tabs', async ({browser}) => {
     });
 });
 
+test('Visual test', async ({ loginPage, page }) => {
+    await loginPage.visualLoginPageCheck();
+    await page.close();
+})
+
+test('Performance test', async ({ loginPage, basePage, page }) => {
+    await loginPage.goToLoginPage();
+    await basePage.loadPerformanceMetrics();
+    await page.close();
+})
+
+test('Endpoint test', async ({ loginPage, page }) => {
+    
+    await loginPage.goToLoginPageEndPoint();
+    await page.close();
+})
+
+test.describe.parallel('Measure Test',  () => {
+    test.beforeAll(async () => {
+        const startPer = performance.now();
+        const startTime = Date.now();
+    })
+    test('Loading test', async ({ loginPage }) => {
+        await loginPage.goToLoginPage();
+    })
+    test('EndPoint describe Test', async ({ loginPage }) => {
+        await loginPage.goToLoginPageEndPoint();
+    })
+})

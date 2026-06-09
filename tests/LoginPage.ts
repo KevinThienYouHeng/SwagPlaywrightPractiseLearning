@@ -23,7 +23,19 @@ export class LoginPage extends BasePage {
         
         await this.navigate('https://www.saucedemo.com/'); 
         await this.waitForPageLoad();
-        await this.takeScreenshot('login-page.png');
+        //await this.takeScreenshot('login-page.png');
+    }
+
+    async goToLoginPageEndPoint() : Promise<void> {
+        
+        await this.navigate('https://www.saucedemo.com/'); 
+        await this.measureEndpointPerformance();
+        //await this.takeScreenshot('login-page.png');
+    }
+
+    async visualLoginPageCheck(): Promise<void>{
+        await this.goToLoginPage();
+        await expect(this.page).toHaveScreenshot('login-page.png');
     }
 
     async login(username: string, password: string) : Promise<void> {

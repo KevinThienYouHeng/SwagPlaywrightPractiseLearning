@@ -22,8 +22,10 @@ test('Learn Route Continue', async ({ page }) => {
   await page.route('**/*', async route => {
     const url = route.request().url();
     const method = route.request().method();
+    const resource = route.request().resourceType();
     
     console.log(`📮 Request: ${method} → ${url}`);
+    console.log(`   Resource Type: ${resource}`);
     await route.continue(); 
   });
 
