@@ -7,7 +7,7 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:report": "playwright show-report",
-    "update:all": "npm install @playwright/test@latest @types/node@latest && npx playwright install && npm outdated",
+    "update:all": "npm install @playwright/test@latest @types/node@latest && npx playwright install && npm outdated && npm install @playwright/mcp@latest",
     "update:playwright": "npm install @playwright/test@latest && npx playwright install",
     "update:types": "npm install @types/node@latest",
     "update:browsers": "npx playwright install",
@@ -29,7 +29,7 @@
     "@types/node": "^25.9.2"
   },
   "dependencies": {
-    "@playwright/mcp": "^0.0.75",
+    "@playwright/mcp": "^0.0.76",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node-cron": "^3.0.11",
     "better-sqlite3": "^12.10.0",

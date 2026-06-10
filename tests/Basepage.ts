@@ -3,6 +3,16 @@ import Axe from '@axe-core/playwright';
 import path from 'path';
 import fs from 'fs';
 
+type NetworkCondition =
+    | 'offline'
+    | 'slow2g'
+    | '2g'
+    | '3g'
+    | '4g'
+    | 'wifi'
+    | 'fast'
+    | 'normal';
+
 export class BasePage {
 
     protected readonly page: Page;
@@ -115,5 +125,86 @@ export class BasePage {
         console.log(`Load Time: ${performanceTimings.loadTime}ms`);
 
         expect(performanceTimings.loadTime).toBeLessThan(2000);
+    }
+
+    async emulateNetwork(condition: NetworkCondition): Promise<void> {
+
+        const client = await this.page.context().newCDPSession(this.page);
+
+        switch (condition) {
+            case 'offline':
+                await client.send('Network.emulateNetworkConditions', {
+                offline: true,
+                downloadThroughput: 0,
+                uploadThroughput: 0,
+                latency: 0,
+            });
+                break;
+            
+            case 'slow2g':
+                await client.send('Network.emulateNetworkConditions', {
+                    offline: false,
+                    downloadThroughput: 250 * 1024 / 8,  // 250 Kbps
+                    uploadThroughput: 50 * 1024 / 8,      // 50 Kbps
+                    latency: 300,                          // 300ms
+                });
+                break;
+
+            case '2g':
+                await client.send('Network.emulateNetworkConditions', {
+                    offline: false,
+                    downloadThroughput: 450 * 1024 / 8,  
+                    uploadThroughput: 150 * 1024 / 8,      
+                    latency: 150,                          
+                });
+                break;
+
+            case '3g':
+                await client.send('Network.emulateNetworkConditions', {
+                    offline: false,
+                    downloadThroughput: 1.5 * 1024 * 1024 / 8,  
+                    uploadThroughput: 750 * 1024 / 8,      
+                    latency: 40,                          
+                });
+                break;
+
+            case '4g':
+                await client.send('Network.emulateNetworkConditions', {
+                    offline: false,
+                    downloadThroughput: 4 * 1024 * 1024 / 8,   // 4 Mbps
+                    uploadThroughput: 3 * 1024 * 1024 / 8,      // 3 Mbps
+                    latency: 20,                                  // 20ms
+                });
+                break;
+
+            case 'wifi':
+                await client.send('Network.emulateNetworkConditions', {
+                    offline: false,
+                    downloadThroughput: 30 * 1024 * 1024 / 8,  // 30 Mbps
+                    uploadThroughput: 15 * 1024 * 1024 / 8,     // 15 Mbps
+                    latency: 2,                                   // 2ms
+                });
+                break;
+
+            case 'fast':
+                await client.send('Network.emulateNetworkConditions', {
+                    offline: false,
+                    downloadThroughput: 100 * 1024 * 1024 / 8, // 100 Mbps
+                    uploadThroughput: 100 * 1024 * 1024 / 8,    // 100 Mbps
+                    latency: 0,                                   // 0ms
+                });
+                break;
+
+            case 'normal':
+                default:
+                    await client.send('Network.emulateNetworkConditions', {
+                        offline: false,
+                        downloadThroughput: -1, // unlimited
+                        uploadThroughput: -1,   // unlimited
+                        latency: 0,             // no latency
+                    });
+                    break;
+            
+        }
     }
 }

@@ -200,3 +200,12 @@ test.describe.parallel('Measure Test',  () => {
         await loginPage.goToLoginPageEndPoint();
     })
 })
+
+
+test.skip('Login Page for mobile', async ({ inventoryPage, loginPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await loginPage.verifyLoginSuccess();
+    await inventoryPage.verifyInventoryPage();
+})
