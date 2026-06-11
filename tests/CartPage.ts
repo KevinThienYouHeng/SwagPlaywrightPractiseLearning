@@ -30,31 +30,35 @@ export class CartPage extends BasePage {
   }
  
   async goToCartPage(): Promise<void> {
+    const startTime = Date.now();
     await this.navigate('https://www.saucedemo.com/cart.html');
     await expect(this.page).toHaveURL(/.*cart.html/);
     await expect(this.cartTitle).toHaveText('Your Cart');
     await expect(this.cartDescLabel).toBeVisible();
     await expect(this.cartQtyLabel).toBeVisible();
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
   }
   
   //Remove item based on index
   async removeItemByIndex(index: number): Promise<void> {
+    const startTime = Date.now();
     await expect(this.removeButtons.nth(index)).toBeVisible();
     await this.removeButtons.nth(index).click();
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
   }
  
   async continueShopping(): Promise<void> {
+    const startTime = Date.now();
     await expect(this.continueShoppingButton).toBeVisible();
     await this.continueShoppingButton.click();
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
   }
  
   async proceedToCheckout(): Promise<void> {
+    const startTime = Date.now();
     await expect(this.checkoutButton).toBeVisible();
     await this.checkoutButton.click();
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
     await expect(this.page).toHaveURL(/.*checkout-step-one.html/)
   }
  

@@ -21,8 +21,21 @@ export class LoginPage extends BasePage {
 
     async goToLoginPage() : Promise<void> {
         
-        await this.navigate('https://www.saucedemo.com/'); 
-        await this.waitForPageLoad();
+        const startTime = Date.now();
+
+        await this.navigate('https://www.saucedemo.com/');
+
+        await this.waitForPageLoad(startTime);
+        //await this.takeScreenshot('login-page.png');
+    }
+
+    async goToLoginPagePerformance() : Promise<void> {
+        
+        const performanceTime = performance.now();
+
+        await this.navigate('https://www.saucedemo.com/');
+
+        await this.waitForPageLoadPerformance(performanceTime);
         //await this.takeScreenshot('login-page.png');
     }
 
@@ -39,10 +52,11 @@ export class LoginPage extends BasePage {
     }
 
     async login(username: string, password: string) : Promise<void> {
+        const startTime = Date.now();
         await this.username.fill(username);
         await this.password.fill(password);
         await this.loginButton.click();
-        await this.waitForPageLoad(); // From BasePage
+        await this.waitForPageLoad(startTime); // From BasePage
     }
 
     //Message must be exactly the same if not the test will fail
@@ -73,5 +87,8 @@ export class LoginPage extends BasePage {
         await expect(this.loginButton).toBeVisible();
         await expect(this.loginButton).toContainText('Login');
     }
+
+    
+
 
 }

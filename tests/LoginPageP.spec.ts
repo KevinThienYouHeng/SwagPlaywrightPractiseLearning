@@ -78,10 +78,10 @@ test('Login Page with username problem_user', async ({loginPage, page }) => {
 //This user test the time taken to load the page, it will be around 3 - 5 seconds
 test('Login Page with username performance_glitch_user', async ({basePage, loginPage, page }) => {
     
-
+    const starttime = Date.now();
     await loginPage.goToLoginPage();
     await loginPage.login('performance_glitch_user', 'secret_sauce');
-    await basePage.waitForPageLoad();
+    await basePage.waitForPageLoad(starttime);
     await loginPage.verifyLoginSuccess();
     await page.close();
 })
@@ -201,11 +201,3 @@ test.describe.parallel('Measure Test',  () => {
     })
 })
 
-
-test.skip('Login Page for mobile', async ({ inventoryPage, loginPage, page }) => {
-    
-    await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
-    await loginPage.verifyLoginSuccess();
-    await inventoryPage.verifyInventoryPage();
-})

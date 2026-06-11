@@ -179,3 +179,84 @@ test('Verify error sorting HIOL with problem_user', async ({ loginPage, inventor
     await page.close();
     
 })
+
+test('Standard user with emulate network (slow2g)', async ({ basePage, loginPage, inventoryPage, page }) => {
+   
+    await basePage.emulateNetwork('slow2g');
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await page.close();
+    
+})
+
+test('Standard user with emulate network (offline)', async ({ basePage, loginPage, inventoryPage, page }) => {
+   
+    await basePage.emulateNetwork('offline');
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await page.close();
+    
+})
+
+test('Standard user with emulate network (2g)', async ({ basePage, loginPage, inventoryPage, page }) => {
+   
+    await basePage.emulateNetwork('2g');
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await page.close();
+    
+})
+
+test('Standard user with emulate network (3g)', async ({ basePage, loginPage, inventoryPage, page }) => {
+   
+    await basePage.emulateNetwork('3g');
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await page.close();
+    
+})
+
+test('Standard user with emulate network (4g)', async ({ basePage, loginPage, inventoryPage, page }) => {
+   
+    await basePage.emulateNetwork('4g');
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await page.close();
+    
+})
+
+test('Standard user with emulate network (wifi)', async ({ basePage, loginPage, inventoryPage, page }) => {
+   
+    await basePage.emulateNetwork('wifi');
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await page.close();
+    
+})
+
+test('Standard user with emulate network (fast)', async ({ basePage, loginPage, inventoryPage, page }) => {
+   
+    await basePage.emulateNetwork('fast');
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await page.close();
+    
+})
+
+test('Standard user with emulate network (normal)', async ({ basePage, loginPage, inventoryPage, page }) => {
+   
+    await basePage.emulateNetwork('normal');
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await page.close();
+    
+})
+
+test('Standard user with emulate performance network (2g)', async ({ basePage, loginPage, inventoryPage, page }) => {
+   
+    await basePage.emulateNetwork('2g');
+    await loginPage.goToLoginPagePerformance();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await page.close();
+    
+})

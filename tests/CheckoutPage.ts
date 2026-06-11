@@ -57,15 +57,17 @@ readonly cartBadge: Locator;
   }
  
   async goToCheckoutStepOne(): Promise<void> {
+    const startTime = Date.now();
     await this.navigate('https://www.saucedemo.com/checkout-step-one.html');
     await expect(this.page).toHaveURL(/.*checkout-step-one.html/);
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
   }
 
   async goToCheckoutStepTwo(): Promise<void> {
-    await this.navigate('https://www.saucedemo.com/checkout-step-otwo.html');
+    const startTime = Date.now();
+    await this.navigate('https://www.saucedemo.com/checkout-step-two.html');
     await expect(this.page).toHaveURL(/.*checkout-step-two.html/);
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
   }
 
   async verifyCheckoutContent(): Promise<void> {
@@ -142,24 +144,28 @@ readonly cartBadge: Locator;
   }
  
   async clickContinue(): Promise<void> {
+    const startTime = Date.now();
     await this.continueButton.click();
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
   }
  
   async clickCancelStepOne(): Promise<void> {
+    const startTime = Date.now();
     await this.cancelButtonStepOne.click();
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
   }
  
   // Step 2 Methods
   async clickFinish(): Promise<void> {
+    const startTime = Date.now();
     await this.finishButton.click();
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
   }
  
   async clickCancelStepTwo(): Promise<void> {
+    const startTime = Date.now();
     await this.cancelButtonStepTwo.click();
-    await this.waitForPageLoad();
+    await this.waitForPageLoad(startTime);
   }
  
   async getSubtotal(): Promise<number> {

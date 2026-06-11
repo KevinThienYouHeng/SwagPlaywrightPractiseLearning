@@ -25,10 +25,9 @@ export class BasePage {
         await this.page.goto(url);
     }
 
-    async waitForPageLoad(): Promise<void> {
+    async waitForPageLoad(startTime: number): Promise<void> {
 
-        const startTime = Date.now();
-
+    
         await this.page.waitForLoadState('networkidle');
 
         const endTime = Date.now();
@@ -37,6 +36,19 @@ export class BasePage {
         const durationSec = (durationMS / 1000).toFixed(2);
 
         console.log(`Page loaded in ${durationSec} seconds.`);
+    }
+
+    async waitForPageLoadPerformance(performanceTime: number): Promise<void> {
+
+    
+        await this.page.waitForLoadState('networkidle');
+
+        const endTime = performance.now();
+
+        const durationMS = endTime - performanceTime;
+        const durationSec = (durationMS / 1000).toFixed(2);
+
+        console.log(`Page loaded in ${durationSec} milliseconds.`);
     }
 
     async measureEndpointPerformance(): Promise<void> {

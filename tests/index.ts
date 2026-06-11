@@ -5,11 +5,13 @@ import { InventoryPage } from './InventoryPage';
 import { CartPage } from './CartPage';
 import { Checkout } from './CheckoutPage';
 import { BasePage } from './Basepage';
+import { MobileLoginPage } from './MobileLoginPage';
 
 type MyFixtures = {
     loginPage: LoginPage;
     inventoryPage: InventoryPage;
     cartPage: CartPage;
+    mobileLoginPage: MobileLoginPage;
     checkoutPage: Checkout;
     standardUser: LoginPage;
     basePage: BasePage;
@@ -43,6 +45,10 @@ export const test = base.extend<MyFixtures>({
         await loginPage.goToLoginPage();
         await loginPage.login('standard_user', 'secret_sauce');
         await use(loginPage);
+    },
+    mobileLoginPage: async ({ page}, use) => {
+        const mobileLoginPage = new MobileLoginPage(page);
+        await use(mobileLoginPage);
     }
 
 });
