@@ -403,6 +403,18 @@ export class InventoryPage {
 
     }
 
+    async middleClickForNewTabAboutSideBar(): Promise<Page> {
+
+        await this.burgerButton.click();
+        const [newTab] = await Promise.all([
+            this.page.context().waitForEvent('page'),
+            this.aboutSideBarLink.click({ button: 'middle' }),
+        ]);
+        await newTab.waitForLoadState('networkidle');
+        console.log(`✅ New tab opened via middle click: ${newTab.url()}`);
+        return newTab;
+    }
+
     async goToCartPage(){
         await this.cartBadgeLink.click();
         await expect(this.page).toHaveURL(/.*cart.html/);

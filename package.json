@@ -34,7 +34,9 @@
     "@types/node-cron": "^3.0.11",
     "better-sqlite3": "^12.10.0",
     "node-cron": "^4.2.1",
+    "pdf-to-img": "^6.1.0",
     "save-dev": "^0.0.1-security",
+    "tesseract.js": "^7.0.0",
     "typescript": "^6.0.3"
   }
 }

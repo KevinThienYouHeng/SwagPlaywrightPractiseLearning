@@ -145,6 +145,15 @@ test('Login--> About', async ({loginPage, inventoryPage, page}) => {
   await page.close();
 })
 
+test('Login--> About(New Tab)', async ({loginPage, inventoryPage, page}) => {
+
+  await loginPage.goToLoginPage();
+  await loginPage.login('standard_user', 'secret_sauce');
+  const newTab = await inventoryPage.middleClickForNewTabAboutSideBar();
+  await page.close();
+  await newTab.close();
+})
+
 test('Verify sorting after adding an item into the cart', async ({loginPage, inventoryPage,page}) => {
 
   await loginPage.goToLoginPage();

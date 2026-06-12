@@ -71,7 +71,7 @@ export default defineConfig({
     /* Test against mobile viewports. */
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Galaxy S9+'] },
+      use: { ...devices['Galaxy S24'] },
     },
     {
       name: 'Mobile Safari',
@@ -108,3 +108,7 @@ export default defineConfig({
   //   reuseExistingServer: !process.env.CI,
   // },
 });
+
+
+//List down all playwright current compatible devices
+//node -e "require('@playwright/test').devices; console.log(Object.keys(require('@playwright/test').devices).join('\n'))"
