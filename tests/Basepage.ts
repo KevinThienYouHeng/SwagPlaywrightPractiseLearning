@@ -2,6 +2,9 @@ import { Page, expect } from '@playwright/test';
 import Axe from '@axe-core/playwright';
 import path from 'path';
 import fs from 'fs';
+import Anthropic from '@anthropic-ai/sdk';
+import * as dotenv from 'dotenv';
+
 
 type NetworkCondition =
     | 'offline'
@@ -219,4 +222,41 @@ export class BasePage {
             
         }
     }
+
+    async injectCssScript(): Promise<void> {
+
+        await this.page.evaluate(() => {
+            document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+            document.body.style.background = '#121212';
+         });
+    }
+
+    async generateTestCases(pageContent: string): Promise<string> {
+
+        const claude = new Anthropic({
+            apiKey: process.env.ANTHROPIC_API_KEY,
+        });
+
+        const response = await claude.messages.create({
+            model: 'claude-opus-4-6',
+            max_tokens: 1024,
+            messages: [{
+                role: 'user',
+                content: `
+                    Analyze this web page HTML and suggest 5 test cases:
+                    ${pageContent}
+
+                    Return test cases in this format:
+                    1. Test name: ...
+                    Steps: ...
+                    Expected: ...
+                `
+            }]
+        });
+
+            return response.content[0].type === 'text'
+                ? response.content[0].text
+                : '';
+        }
+
 }

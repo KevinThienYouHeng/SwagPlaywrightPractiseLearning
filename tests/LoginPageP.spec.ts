@@ -15,6 +15,14 @@ test('Verify Login page', async ({ basePage, loginPage, page}) => {
     await page.close();
 })
 
+test('Dark mode CSS injectLogin page', async ({ basePage, loginPage, page}) => {
+    
+    await basePage.checkStatusURL();
+    await loginPage.goToLoginPage();
+    await basePage.injectCssScript();
+    await page.close();
+})
+
 test('Login Page', async ({ basePage, loginPage, page }) => {
     
     await loginPage.routeApiSetup();
@@ -199,5 +207,14 @@ test.describe.parallel('Measure Test',  () => {
     test('EndPoint describe Test', async ({ loginPage }) => {
         await loginPage.goToLoginPageEndPoint();
     })
+})
+
+test('AI generated test cases for SauceDemo', async ({ basePage, loginPage, page}) => {
+    
+    await loginPage.goToLoginPage();
+    const pageHTML = await page.content();
+    const testCases = await basePage.generateTestCases(pageHTML);
+    console.log(testCases);
+
 })
 

@@ -147,5 +147,7 @@ export class MobileLoginPage extends BasePage {
         console.log(`Font size: ${fontSize4}px`);
         
     }
+
+    
     
 }

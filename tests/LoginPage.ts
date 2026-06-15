@@ -59,6 +59,17 @@ export class LoginPage extends BasePage {
         await this.waitForPageLoad(startTime); // From BasePage
     }
 
+    //Not done yet
+    async fastlogin(username: string, password: string) : Promise<void> {
+        const startTime = Date.now();
+        
+        await this.page.evaluate(() => {
+            document.querySelector(username) as HTMLInputElement;
+            document.querySelector(password) as HTMLInputElement;
+        })
+    }
+    
+
     //Message must be exactly the same if not the test will fail
     //For future, maybe we can make it more flexible way to verify the error message
     async verifyErroMessage(expectedMessage: string): Promise<void> {
