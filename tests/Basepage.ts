@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { Page, expect, BrowserContext } from '@playwright/test';
 import Axe from '@axe-core/playwright';
 import path from 'path';
 import fs from 'fs';
@@ -19,9 +19,11 @@ type NetworkCondition =
 export class BasePage {
 
     protected readonly page: Page;
+    readonly context: BrowserContext;
 
     constructor(page: Page) {
         this.page = page;
+        this.context = page.context();
     }
 
     async navigate(url: string): Promise<void> {
@@ -258,5 +260,11 @@ export class BasePage {
                 ? response.content[0].text
                 : '';
         }
+
+    async getCurrentCookies() {
+        const currentSessionState = await this.context.storageState();
+        return console.log(currentSessionState);
+    }
+    
 
 }

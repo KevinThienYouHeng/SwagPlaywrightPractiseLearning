@@ -22,6 +22,7 @@ export class InventoryPage {
     readonly aboutSideBarLink: Locator;
     readonly allItemsSideBarLink: Locator;
     readonly closeSideBarLink: Locator;
+    readonly inventoryButtons: Locator;
     //readonly checkoutButton: Locator;
     //readonly productNames: Locator;
     //readonly productPrices: Locator;
@@ -46,6 +47,7 @@ export class InventoryPage {
         this.aboutSideBarLink = page.locator('[data-test="about-sidebar-link"]');
         this.allItemsSideBarLink = page.locator('[data-test="inventory-sidebar-link"]');
         this.closeSideBarLink = page.locator('#react-burger-cross-btn');
+        this.inventoryButtons = page.locator('.btn_inventory');
         //this.checkoutButton = page.locator('[data-test="checkout"]');
         //this.productNames = page.locator('.inventory_item_name');
         //this.productPrices = page.locator('.inventory_item_price');
@@ -650,4 +652,35 @@ export class InventoryPage {
             console.log(` ${index + 1}: ${desc}`);
         });
     }
+
+    async stressUIaddProductToCart(productName: string, numberTimes: number) {
+        const product = this.inventoryItems.locator('.inventory_item_name', { hasText: productName });
+        await product.click();
+        for(let i = 0; i < numberTimes ; i++){
+            await this.addToCartButton.click();
+            await this.removeButton.click();
+        }
+        await this.backProduct.click();
+        
+    }
+
+    async stressUIaddMultipleProductToCart(numberTimes: number){
+
+        const buttons = await this.inventoryButtons.all();
+
+       for (let i = 0; i < numberTimes; i++) {
+                // Step 1: Loop forward and click every button to ADD all items
+                for (const button of buttons) {
+                await button.click();
+                }
+
+                // Step 2: Loop forward again and click every button to REMOVE all items
+                for (const button of buttons) {
+                await button.click();
+                }
+            }
+        }
+
+
+
 }

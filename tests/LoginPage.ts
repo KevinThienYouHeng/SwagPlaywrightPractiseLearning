@@ -59,14 +59,33 @@ export class LoginPage extends BasePage {
         await this.waitForPageLoad(startTime); // From BasePage
     }
 
-    //Not done yet
+    //This function is call injection
     async fastlogin(username: string, password: string) : Promise<void> {
         const startTime = Date.now();
         
-        await this.page.evaluate(() => {
-            document.querySelector(username) as HTMLInputElement;
-            document.querySelector(password) as HTMLInputElement;
-        })
+        await this.username.evaluate((el: HTMLInputElement, val) => {
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+        if (nativeInputValueSetter) {
+            nativeInputValueSetter.call(el, val);
+        } else {
+            el.value = val;
+        }
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        }, username);
+
+        // 2. Inject Password using React-safe native setter
+        await this.password.evaluate((el: HTMLInputElement, val) => {
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+        if (nativeInputValueSetter) {
+            nativeInputValueSetter.call(el, val);
+        } else {
+            el.value = val;
+        }
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        }, password);
+                            
+        await this.loginButton.click();
+        await this.waitForPageLoad(startTime);
     }
     
 

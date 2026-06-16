@@ -137,11 +137,12 @@ test('Login Logout', async ({loginPage, inventoryPage, page}) => {
   await page.close();
 })
 
-test('Login--> About', async ({loginPage, inventoryPage, page}) => {
+test('Login--> About', async ({loginPage, inventoryPage, page, basePage}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.aboutSideBar();
+  await basePage.getCurrentCookies();
   await page.close();
 })
 
@@ -245,4 +246,27 @@ test('Get all items descriptions', async ({loginPage, inventoryPage, page }) => 
     await inventoryPage.displayAllDescriptionsName();
     await page.close();
     
+})
+
+test('Stress Test Add product to cart', async ({loginPage, inventoryPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.stressUIaddProductToCart('Backpack',10);
+    await inventoryPage.stressUIaddProductToCart('Bike Light',15);
+    await inventoryPage.stressUIaddProductToCart('Bolt T-shirt',20);
+    await inventoryPage.stressUIaddProductToCart('Fleece Jacket',30);
+    await inventoryPage.stressUIaddProductToCart('Onesie',40);
+    await inventoryPage.stressUIaddProductToCart('T-shirt (Red)',50);
+    await page.close();
+    
+})
+
+test('Stress Test Add Multiple product to cart', async ({loginPage, inventoryPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await inventoryPage.stressUIaddMultipleProductToCart(5);
+    await page.close();
+
 })

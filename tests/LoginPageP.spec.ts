@@ -7,7 +7,7 @@ import { test } from './index';
 //test.describe.configure({mode: 'parallel'});
 
 //Below are hardcoded tests
-test('Verify Login page', async ({ basePage, loginPage, page}) => {
+test('Verify Login page', async ({ basePage, loginPage, page, context}) => {
     
     await basePage.checkStatusURL();
     await loginPage.goToLoginPage();
@@ -15,7 +15,23 @@ test('Verify Login page', async ({ basePage, loginPage, page}) => {
     await page.close();
 })
 
-test('Dark mode CSS injectLogin page', async ({ basePage, loginPage, page}) => {
+test('Verify fast Login page', async ({ basePage, loginPage, page}) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.fastlogin('standard_user', 'secret_sauce');
+    await loginPage.verifyLoginSuccess();
+    await page.close();
+})
+
+test('Verify normal Login page', async ({ basePage, loginPage, page}) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await loginPage.verifyLoginSuccess();
+    await page.close();
+})
+
+test('Dark mode CSS inject Login page', async ({ basePage, loginPage, page}) => {
     
     await basePage.checkStatusURL();
     await loginPage.goToLoginPage();
@@ -23,7 +39,7 @@ test('Dark mode CSS injectLogin page', async ({ basePage, loginPage, page}) => {
     await page.close();
 })
 
-test('Login Page', async ({ basePage, loginPage, page }) => {
+test('Login Page with API intercept', async ({ basePage, loginPage, page }) => {
     
     await loginPage.routeApiSetup();
     await loginPage.goToLoginPage();
