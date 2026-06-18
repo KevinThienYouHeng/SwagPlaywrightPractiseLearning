@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
+//import pdfParse from 'pdf-parse';
+const pdfParse = require('pdf-parse');
+//import * as pdfParse from 'pdf-parse';
+// import * as pdfParseModule from 'pdf-parse';
+// const pdfParse = pdfParseModule.default || pdfParseModule;
 
 
 test('Download a file', async ({ page }) => {
@@ -42,4 +47,19 @@ test.skip('Download file', async ({ page }) => {
     // ✅ Step 2 — Locate the download link
     await page.locator('.btn-primary').click();
 
+});
+
+test('Extract text from sample invoice PDF', async () => {
+
+  
+    const pdfPath = path.join(process.cwd(),  'wordpress-pdf-invoice-plugin-sample.pdf');
+    const dataBuffer = fs.readFileSync(pdfPath);
+
+    //const data = await (pdfParse as any)(dataBuffer);
+    const data = await pdfParse(dataBuffer);
+    console.log(data.text);
+    
+
+    // ✅ Step 4 — Basic verification
+    expect(data.text.length).toBeGreaterThan(0);
 });
