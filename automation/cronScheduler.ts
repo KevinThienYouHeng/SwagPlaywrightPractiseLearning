@@ -1,4 +1,5 @@
-import cron from 'node-cron';
+//import cron from 'node-cron';
+const cron = require('node-cron');
 import { chromium } from '@playwright/test';
 import {  LoginPage } from '../tests/LoginPage';
 

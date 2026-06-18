@@ -8,4 +8,5 @@ node_modules/
 /playwright/.auth/
 .playwright-cli/
 tests/LoginPageP.spec.ts-snapshots
+/downloads/
 
