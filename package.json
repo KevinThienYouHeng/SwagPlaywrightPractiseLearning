@@ -26,7 +26,7 @@
     "@axe-core/playwright": "^4.11.3",
     "@playwright/test": "^1.61.0",
     "@types/k6": "^2.0.0",
-    "@types/node": "^25.9.3",
+    "@types/node": "^26.0.0",
     "@types/pdf-parse": "^1.1.5"
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "pdf-to-img": "^6.2.0",
     "save-dev": "^0.0.1-security",
     "tesseract.js": "^7.0.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "unpdf": "^1.6.2"
   }
 }
