@@ -265,6 +265,22 @@ export class BasePage {
         const currentSessionState = await this.context.storageState();
         return console.log(currentSessionState);
     }
+
+    async findIframes() {
+        const count = await this.page.locator('iframe').count();
+        console.log(`Found ${count} iframes`);
+
+        const iframes = await this.page.locator('iframe').all();
+        for (let i = 0; i < iframes.length; i++) {
+            const src = await iframes[i].getAttribute('src');
+            const name = await iframes[i].getAttribute('name');
+            const id = await iframes[i].getAttribute('id');
+            console.log(`iframe ${i + 1}:`);
+            console.log(`   src  : ${src}`);
+            console.log(`   name : ${name}`);
+            console.log(`   id   : ${id}`);
+         }
+    }
     
 
 }
