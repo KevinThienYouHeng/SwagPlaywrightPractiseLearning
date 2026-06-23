@@ -30,7 +30,7 @@
     "@types/pdf-parse": "^1.1.5"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.104.2",
+    "@anthropic-ai/sdk": "^0.105.0",
     "@playwright/mcp": "^0.0.76",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node-cron": "^3.0.11",
