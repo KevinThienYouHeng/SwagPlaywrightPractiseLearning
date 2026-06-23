@@ -7,7 +7,7 @@ import { test } from './index';
 //test.describe.configure({mode: 'parallel'});
 
 //Below are hardcoded tests
-test('Verify Login page', async ({ basePage, loginPage, page, context}) => {
+test('@smoke Verify Login page', async ({ basePage, loginPage, page, context}) => {
     
     await basePage.checkStatusURL();
     await loginPage.goToLoginPage();
@@ -15,7 +15,7 @@ test('Verify Login page', async ({ basePage, loginPage, page, context}) => {
     await page.close();
 })
 
-test('Verify fast Login page', async ({ basePage, loginPage, page}) => {
+test('@smoke Verify fast Login page', async ({ basePage, loginPage, page}) => {
     
     await loginPage.goToLoginPage();
     await loginPage.fastlogin('standard_user', 'secret_sauce');
@@ -23,7 +23,7 @@ test('Verify fast Login page', async ({ basePage, loginPage, page}) => {
     await page.close();
 })
 
-test('Verify normal Login page', async ({ basePage, loginPage, page}) => {
+test('@smoke Verify normal Login page', async ({ basePage, loginPage, page}) => {
     
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
@@ -31,7 +31,7 @@ test('Verify normal Login page', async ({ basePage, loginPage, page}) => {
     await page.close();
 })
 
-test('Dark mode CSS inject Login page', async ({ basePage, loginPage, page}) => {
+test('@smoke Dark mode CSS inject Login page', async ({ basePage, loginPage, page}) => {
     
     await basePage.checkStatusURL();
     await loginPage.goToLoginPage();
@@ -39,7 +39,7 @@ test('Dark mode CSS inject Login page', async ({ basePage, loginPage, page}) => 
     await page.close();
 })
 
-test('Login Page with API intercept', async ({ basePage, loginPage, page }) => {
+test('@smoke Login Page with API intercept', async ({ basePage, loginPage, page }) => {
     
     await loginPage.routeApiSetup();
     await loginPage.goToLoginPage();
@@ -49,7 +49,7 @@ test('Login Page with API intercept', async ({ basePage, loginPage, page }) => {
     await page.close();
 })
 
-test('Login Page with no username ', async ({ loginPage, page }) => {
+test('@smoke Login Page with no username ', async ({ loginPage, page }) => {
     
     await loginPage.routeApiSetup();
     await loginPage.goToLoginPage();
@@ -58,7 +58,7 @@ test('Login Page with no username ', async ({ loginPage, page }) => {
     await page.close();
 })
 
-test('Login Page with no password', async ({ loginPage, page }) => {
+test('@smoke Login Page with no password', async ({ loginPage, page }) => {
     
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', '');
@@ -66,7 +66,7 @@ test('Login Page with no password', async ({ loginPage, page }) => {
     await page.close();
 })
 
-test('Login Page with no username and no password', async ({loginPage, page }) => {
+test('@smoke Login Page with no username and no password', async ({loginPage, page }) => {
     
     await loginPage.goToLoginPage();
     await loginPage.login('', '');
@@ -74,7 +74,7 @@ test('Login Page with no username and no password', async ({loginPage, page }) =
     await page.close();
 })
 
-test('Login Page with invalid credentials', async ({ loginPage, page }) => {
+test('@smoke Login Page with invalid credentials', async ({ loginPage, page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('Max', 'Lestappen');
@@ -82,7 +82,7 @@ test('Login Page with invalid credentials', async ({ loginPage, page }) => {
     await page.close();
 })
 
-test('Login Page with username locked_out_user', async ({ loginPage, page }) => {
+test('@smoke Login Page with username locked_out_user', async ({ loginPage, page }) => {
     
     await loginPage.goToLoginPage();
     await loginPage.login('locked_out_user', 'secret_sauce');
@@ -91,7 +91,7 @@ test('Login Page with username locked_out_user', async ({ loginPage, page }) => 
 })
 
 //For problem_user, the login will be successful but the problem is the image of all the items will be all dogs
-test('Login Page with username problem_user', async ({loginPage, page }) => {
+test('@smoke Login Page with username problem_user', async ({loginPage, page }) => {
 
     await loginPage.goToLoginPage();
     await loginPage.login('problem_user', 'secret_sauce');
@@ -100,7 +100,7 @@ test('Login Page with username problem_user', async ({loginPage, page }) => {
 })
 
 //This user test the time taken to load the page, it will be around 3 - 5 seconds
-test('Login Page with username performance_glitch_user', async ({basePage, loginPage, page }) => {
+test('@smoke Login Page with username performance_glitch_user', async ({basePage, loginPage, page }) => {
     
     const starttime = Date.now();
     await loginPage.goToLoginPage();
@@ -111,7 +111,7 @@ test('Login Page with username performance_glitch_user', async ({basePage, login
 })
 
 //Page login successful and this user is used for visual testing
-test('Login Page with visual_user', async ({ loginPage, page }) => {
+test('@smoke Login Page with visual_user', async ({ loginPage, page }) => {
     
     await loginPage.goToLoginPage();
     await loginPage.login('visual_user', 'secret_sauce');
@@ -119,7 +119,7 @@ test('Login Page with visual_user', async ({ loginPage, page }) => {
     await page.close();
 })
 
-test('Do two user at the same time with two browsers', async ({browser}) => {
+test('@smoke Do two user at the same time with two browsers', async ({browser}) => {
 
     
     const user1 = await browser.newContext();
@@ -144,7 +144,7 @@ test('Do two user at the same time with two browsers', async ({browser}) => {
     await page2.close();
 });
 
-test('different user two tabs', async ({browser}) => {
+test('@smoke different user two tabs', async ({browser}) => {
 
     const context = await browser.newContext();
 
@@ -195,18 +195,18 @@ test('different user two tabs', async ({browser}) => {
     });
 });
 
-test('Visual test', async ({ loginPage, page }) => {
+test('@smoke Visual test', async ({ loginPage, page }) => {
     await loginPage.visualLoginPageCheck();
     await page.close();
 })
 
-test('Performance test', async ({ loginPage, basePage, page }) => {
+test('@smoke Performance test', async ({ loginPage, basePage, page }) => {
     await loginPage.goToLoginPage();
     await basePage.loadPerformanceMetrics();
     await page.close();
 })
 
-test('Endpoint test', async ({ loginPage, page }) => {
+test('@smoke Endpoint test', async ({ loginPage, page }) => {
     
     await loginPage.goToLoginPageEndPoint();
     await page.close();

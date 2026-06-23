@@ -13,40 +13,32 @@ import { extractText, getDocumentProxy } from 'unpdf';
 
 test('Download a file', async ({ page }) => {
 
-    // ✅ Step 1 — Navigate to page
     await page.goto('https://demo.automationtesting.in/FileDownload.html');
-
-    // ✅ Step 2 — Locate the download link
     const downloadLink = page.locator('.btn-primary');
 
-    // ✅ Step 3 — Listen for download AND click simultaneously!
     const [download] = await Promise.all([
         page.waitForEvent('download'),  // ✅ listener ready FIRST
         downloadLink.click(),            // ✅ triggers download
     ]);
 
-    // ✅ Step 4 — Get download info
     console.log(`Suggested filename: ${download.suggestedFilename()}`);
     console.log(`Download URL: ${download.url()}`);
 
-    // ✅ Step 5 — Save to YOUR project location
     const savePath = path.join(
         process.cwd(),
         'downloads',
         download.suggestedFilename()
     );
+
     await download.saveAs(savePath);
 
-    // ✅ Step 6 — Verify file exists
     expect(fs.existsSync(savePath)).toBe(true);
+    const fileInfo = fs.statSync(savePath).size;
+    expect(fileInfo).toBeGreaterThan(0);
+    console.log(fileInfo);
     console.log(`✅ File saved to: ${savePath}`);
-});
 
-test.skip('Download file', async ({ page }) => {
-
-    await page.goto('https://demo.automationtesting.in/FileDownload.html');
-    await page.locator('.btn-primary').click();
-
+    await page.close();
 });
 
 test('Extract text from invoice PDF using unpdf', async () => {
@@ -73,6 +65,7 @@ test('Extract text from invoice PDF using unpdf', async () => {
 
 test('Download invoice pdf from URL', async ({ page, request }) => {
 
+    //Create folder if not available and make an if statement if folder has created or not
     const downloadsDir = path.join(process.cwd(), 'inovoices');
     if(!fs.existsSync(downloadsDir)) {
         fs.mkdirSync(downloadsDir, { recursive: true });
@@ -160,22 +153,7 @@ test('Download invoice pdf from URL using button', async ({ page, request }) => 
     expect(fileSize).toBeGreaterThan(0);
 })
 
-test('Find all iframes on page', async ({ page }) => {
-    await page.goto('https://slicedinvoices.com/pdf/wordpress-pdf-invoice-plugin-sample.pdf');
 
-    const count = await page.locator('iframe').count();
-    console.log(`Found ${count} iframes`);
 
-    const iframes = await page.locator('iframe').all();
-    for (let i = 0; i < iframes.length; i++) {
-        const src = await iframes[i].getAttribute('src');
-        const name = await iframes[i].getAttribute('name');
-        const id = await iframes[i].getAttribute('id');
-        console.log(`iframe ${i + 1}:`);
-        console.log(`   src  : ${src}`);
-        console.log(`   name : ${name}`);
-        console.log(`   id   : ${id}`);
-    }
-});
 
 
