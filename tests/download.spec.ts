@@ -100,23 +100,75 @@ test('Extract text from invoice PDF2 using unpdf', async () => {
     const pdfPath = path.join(process.cwd(),'inovoices','sample-invoice.pdf');
     const buffer = await readFile(pdfPath);
 
-    // ✅ Step 2 — Get document proxy
+    //Get document proxy
     const pdf = await getDocumentProxy(new Uint8Array(buffer));
 
-    // ✅ Step 3 — Extract ALL text
+    //Extract ALL text
     const { text } = await extractText(pdf, { mergePages: true });
 
-    // ✅ Step 4 — Output to terminal
+    console.log(text);
+
+    const cleanText = text.replace(/\s+/g, ' ').trim(); 
+
+    console.log('─────────────────────────────');
+    console.log(cleanText);
+
+    const invoiceData = {
+        invoiceNumber:  cleanText.match(/Invoice Number\s+(INV-\d+)/i)?.[1] ?? 'Not found',
+        orderNumber:    cleanText.match(/Order Number\s+(\d+)/i)?.[1] ?? 'Not found',
+        invoiceDate:    cleanText.match(/Invoice Date:\s*([^\n]+?)(?=\s+Due)/)?.[1]?.trim() ?? 'Not found',
+        dueDate:        cleanText.match(/Total Due\s+\$([0-9.]+)/i)?.[1]?.trim() ?? 'Not found',
+        totalDue:       cleanText.match(/Total Due:\s*(\$[\d,.]+)/)?.[1] ?? 'Not found',
+        subTotal:       cleanText.match(/Sub Total\s*(\$[\d,.]+)/)?.[1] ?? 'Not found',
+        tax:            cleanText.match(/Tax\s*(\$[\d,.]+)/)?.[1] ?? 'Not found',
+        total:          cleanText.match(/Total\s*(\$[\d,.]+)/)?.[1] ?? 'Not found',
+        billTo:         cleanText.match(/Bill To:\s*([^\n]+)/)?.[1]?.trim() ?? 'Not found',
+        vendorName:     cleanText.match(/^([^\n]+)/)?.[1]?.trim() ?? 'Not found',
+    };
+
+    //Output to terminal
     console.log('─────────────────────────────');
     console.log('📄 Extracted Invoice Text:');
     console.log('─────────────────────────────');
-    console.log(text);
+    console.log(invoiceData.invoiceNumber);
+    console.log(invoiceData.orderNumber);
+    console.log(invoiceData.dueDate);
     console.log('─────────────────────────────');
 
-    // ✅ Step 5 — Verify text found
+    //Verify text found
     expect(text.length).toBeGreaterThan(0);
 });
 
+test('Extract and Regex PDF Invoice', async ({ page }) => {
+
+    const pdfPath = path.join(process.cwd(),'inovoices','sample-invoice.pdf');
+    const buffer = await readFile(pdfPath);
+
+    //Get document proxy
+    const pdf = await getDocumentProxy(new Uint8Array(buffer));
+
+    //Extract ALL text
+    const { text } = await extractText(pdf, { mergePages: true });
+
+    const cleanText = text.replace(/\s+/g, ' ').trim();
+    
+    // 6. Updated Regex: Notice we removed the quotes (") and commas (,)
+    const invoiceNumberMatch = cleanText.match(/Invoice Number\s+(INV-\d+)/i);
+    const orderNumberMatch = cleanText.match(/Order Number\s+(\d+)/i);
+    const totalDueMatch = cleanText.match(/Total Due\s+\$([0-9.]+)/i);
+
+    // 7. Map the data safely
+    const invoiceData = {
+        invoiceNumber: invoiceNumberMatch ? invoiceNumberMatch[1] : null,
+        orderNumber: orderNumberMatch ? orderNumberMatch[1] : null,
+        totalDue: totalDueMatch ? parseFloat(totalDueMatch[1]) : null,
+    };
+
+    console.log("Extracted Data Object:", invoiceData);
+
+    // 8. Assertions
+    expect(invoiceData.invoiceNumber).toBe('INV-3337');
+    });
 
 test('Download invoice pdf from URL using button', async ({ page, request }) => {
 
