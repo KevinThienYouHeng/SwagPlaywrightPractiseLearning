@@ -106,6 +106,12 @@ test('Extract text from invoice PDF2 using unpdf', async () => {
     //Extract ALL text
     const { text } = await extractText(pdf, { mergePages: true });
 
+    const toIndex = text.indexOf('To:');
+    console.log('Text around To:');
+    console.log(JSON.stringify(text.substring(toIndex, toIndex + 100)));
+
+     console.log('─────────────────────────────');
+
     console.log(text);
 
     const cleanText = text.replace(/\s+/g, ' ').trim(); 
@@ -116,23 +122,39 @@ test('Extract text from invoice PDF2 using unpdf', async () => {
     const invoiceData = {
         invoiceNumber:  cleanText.match(/Invoice Number\s+(INV-\d+)/i)?.[1] ?? 'Not found',
         orderNumber:    cleanText.match(/Order Number\s+(\d+)/i)?.[1] ?? 'Not found',
-        invoiceDate:    cleanText.match(/Invoice Date:\s*([^\n]+?)(?=\s+Due)/)?.[1]?.trim() ?? 'Not found',
-        dueDate:        cleanText.match(/Total Due\s+\$([0-9.]+)/i)?.[1]?.trim() ?? 'Not found',
-        totalDue:       cleanText.match(/Total Due:\s*(\$[\d,.]+)/)?.[1] ?? 'Not found',
-        subTotal:       cleanText.match(/Sub Total\s*(\$[\d,.]+)/)?.[1] ?? 'Not found',
-        tax:            cleanText.match(/Tax\s*(\$[\d,.]+)/)?.[1] ?? 'Not found',
-        total:          cleanText.match(/Total\s*(\$[\d,.]+)/)?.[1] ?? 'Not found',
-        billTo:         cleanText.match(/Bill To:\s*([^\n]+)/)?.[1]?.trim() ?? 'Not found',
-        vendorName:     cleanText.match(/^([^\n]+)/)?.[1]?.trim() ?? 'Not found',
+        invoiceDate:    cleanText.match(/Invoice Date\s+([A-Za-z]+\s+\d+,\s+\d{4})/i)?.[1]?.trim() ?? 'Not found',
+        dueDate:        cleanText.match(/Due Date\s+([A-Za-z]+\s+\d+,\s+\d{4})/i)?.[1]?.trim() ?? 'Not found',
+        totalDue:       cleanText.match(/Total Due\s+(\$[\d,.]+)/i)?.[1] ?? 'Not found',
+        subTotal:       cleanText.match(/Sub Total\s+(\$[\d,.]+)/i)?.[1] ?? 'Not found',
+        tax:            cleanText.match(/\bTax\s+(\$[\d,.]+)/i)?.[1] ?? 'Not found',
+        total:          cleanText.match(/\bTotal\b\s+(\$[\d,.]+)/i)?.[1] ?? 'Not found',
+        billTo:         cleanText.match(/To:\s+([^\n]+)/i)?.[1]?.trim() ?? 'Not found',
+        vendorName:     cleanText.match(/From:\s+([^\n]+)/i)?.[1]?.trim() ?? 'Not found',
+        hrs: cleanText.match(/Hrs\/Qty[\s\S]*?Sub Total\s+([0-9.]+)/i)?.[1] ?? 'Not found',
+        service: cleanText.match(/Hrs\/Qty[\s\S]*?Sub Total\s+[0-9.]+\s+([A-Za-z\s]+?)\s+This is/i)?.[1] ?? 'Not Found',
+        rate: cleanText.match(/Hrs\/Qty[\s\S]*?Sub Total\s+[0-9.]+\s+[A-Za-z\s]+?\s+.*?\$([0-9.,]+)/i)?.[1] ?? 'Not Found',
+        adjust: cleanText.match(/Hrs\/Qty[\s\S]*?Sub Total\s+.*?\$[0-9.,]+\s+([0-9.,]+)\%/i)?.[1] ?? 'Not Found',
     };
 
     //Output to terminal
     console.log('─────────────────────────────');
     console.log('📄 Extracted Invoice Text:');
     console.log('─────────────────────────────');
-    console.log(invoiceData.invoiceNumber);
-    console.log(invoiceData.orderNumber);
-    console.log(invoiceData.dueDate);
+    // console.log(invoiceData.invoiceNumber);
+    // console.log(invoiceData.orderNumber);
+    // console.log(invoiceData.invoiceDate);
+    // console.log(invoiceData.dueDate);
+    // console.log(invoiceData.totalDue);
+    // console.log(invoiceData.subTotal);
+    // console.log(invoiceData.tax);
+    // console.log(invoiceData.total);
+    // console.log(invoiceData.billTo);
+    // console.log(invoiceData.vendorName)
+    console.log(invoiceData.hrs);
+    console.log(invoiceData.service);
+    console.log(invoiceData.rate);
+    console.log(invoiceData.adjust);
+    console.log(invoiceData.subTotal);
     console.log('─────────────────────────────');
 
     //Verify text found
@@ -168,7 +190,7 @@ test('Extract and Regex PDF Invoice', async ({ page }) => {
 
     // 8. Assertions
     expect(invoiceData.invoiceNumber).toBe('INV-3337');
-    });
+});
 
 test('Download invoice pdf from URL using button', async ({ page, request }) => {
 
