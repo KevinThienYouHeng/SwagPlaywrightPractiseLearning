@@ -27,7 +27,8 @@
     "@playwright/test": "^1.61.1",
     "@types/k6": "^2.0.0",
     "@types/node": "^26.1.1",
-    "@types/pdf-parse": "^1.1.5"
+    "@types/pdf-parse": "^1.1.5",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",
@@ -41,7 +42,6 @@
     "pdf-to-img": "^6.2.0",
     "save-dev": "^0.0.1-security",
     "tesseract.js": "^7.0.0",
-    "typescript": "^6.0.3",
     "unpdf": "^1.6.2"
   }
 }
