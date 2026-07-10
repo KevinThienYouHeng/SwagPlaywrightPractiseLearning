@@ -16,7 +16,8 @@
     "shard:1": "npx playwright test --shard=1/2 --workers=2",
     "shard:2": "npx playwright test --shard=2/2 --workers=2",
     "db:setup": "tsx db/database.ts",
-    "scheduler:start": "tsx automation/cronScheduler.ts"
+    "scheduler:start": "tsx automation/cronScheduler.ts",
+    "test:cucumber": "cucumber-js"
   },
   "keywords": [],
   "author": "",
@@ -24,15 +25,18 @@
   "type": "commonjs",
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
+    "@cucumber/cucumber": "^13.0.0",
     "@playwright/test": "^1.61.1",
+    "@types/cucumber": "^6.0.1",
     "@types/k6": "^2.0.0",
     "@types/node": "^26.1.1",
     "@types/pdf-parse": "^1.1.5",
+    "tsx": "^4.23.0",
     "typescript": "^7.0.2"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",
-    "@playwright/mcp": "^0.0.77",
+    "@playwright/mcp": "^0.0.78",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node-cron": "^3.0.11",
     "better-sqlite3": "^12.11.1",

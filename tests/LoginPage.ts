@@ -19,6 +19,11 @@ export class LoginPage extends BasePage {
         this.errorCloseButton = page.locator('[data-test="error-button"]');
     }
 
+    async goToLoginPageOnlyUrl() : Promise<void> {
+        
+        await this.navigate('https://www.saucedemo.com/');
+
+    }
     async goToLoginPage() : Promise<void> {
         
         const startTime = Date.now();
@@ -93,7 +98,7 @@ export class LoginPage extends BasePage {
     //For future, maybe we can make it more flexible way to verify the error message
     async verifyErroMessage(expectedMessage: string): Promise<void> {
         await expect(this.errorMessage).toBeVisible();
-        await expect(this.errorMessage).toContainText(expectedMessage);
+        await expect(this.errorMessage).toHaveText(expectedMessage);
         console.log(`Error message verifired: ${expectedMessage}`);
         await this.errorCloseButton.click();
     }
