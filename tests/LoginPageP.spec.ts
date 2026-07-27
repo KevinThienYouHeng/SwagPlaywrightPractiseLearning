@@ -12,6 +12,8 @@ test('@smoke Verify Login page', async ({ basePage, loginPage, page, context}) =
     await basePage.checkStatusURL();
     await loginPage.goToLoginPage();
     await loginPage.verifyLoginPage();
+    await basePage.getCurrentCookies();
+    await basePage.findIframes();
     await page.close();
 })
 

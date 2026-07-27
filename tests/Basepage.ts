@@ -119,8 +119,10 @@ export class BasePage {
         try {
             expect(response.status()).toBe(200);
             console.log('Web page is up and running');
+            console.log(`Status code: ${response.status()}`);
         }catch{
             console.log('Web page is not reachable');
+            console.log(`Status code: ${response.status()}`);
         }
         
     }
@@ -129,6 +131,7 @@ export class BasePage {
         console.log('--------------------------------------------------');
     }
 
+    //Make sure that the page is loaded in less than 2 seconds
     async loadPerformanceMetrics(): Promise<void> {
 
         const performanceTimings = await this.page.evaluate(() => {
