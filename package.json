@@ -39,7 +39,7 @@
     "@playwright/mcp": "^0.0.78",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node-cron": "^3.0.11",
-    "better-sqlite3": "^13.0.1",
+    "better-sqlite3": "^13.0.2",
     "dotenv": "^17.4.2",
     "node-cron": "^4.2.1",
     "pdf-parse": "^2.4.5",
