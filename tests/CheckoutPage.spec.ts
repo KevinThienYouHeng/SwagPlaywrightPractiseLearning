@@ -4,10 +4,15 @@ import { CartPage } from './CartPage';
 import { Checkout } from './CheckoutPage';
 import { test } from './index';
 
+const TestConfig = {
+    username: 'standard_user',
+    password: 'secret_sauce'
+}
+
 test('Verify first checkout page and all its content', async ({loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
     
     await loginPage.goToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
+    await loginPage.login(TestConfig.username, TestConfig.password);
     await inventoryPage.addOneRandomItemToCart();
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
