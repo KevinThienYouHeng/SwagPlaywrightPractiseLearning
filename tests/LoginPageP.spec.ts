@@ -188,9 +188,10 @@ test('@smoke different user two tabs', async ({browser}) => {
             await loginPage.login(username, password);
             await loginPage.verifyLoginSuccess();
             await page.close();
-        } catch {
+        } catch (error) {
             console.log('Login failed');
             await page.close();
+            throw error;
         }
         
         

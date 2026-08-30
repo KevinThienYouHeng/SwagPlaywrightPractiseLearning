@@ -30,22 +30,22 @@
     "@types/better-sqlite3": "^9.6.0",
     "@types/cucumber": "^6.0.1",
     "@types/k6": "^2.0.0",
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.4.0",
     "@types/pdf-parse": "^1.1.5",
-    "tsx": "^4.23.8",
+    "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.115.0",
+    "@anthropic-ai/sdk": "^0.122.0",
     "@playwright/mcp": "^0.0.79",
     "@types/node-cron": "^3.0.11",
     "better-sqlite3": "^13.0.3",
     "dotenv": "^17.4.2",
     "node-cron": "^4.2.1",
     "pdf-parse": "^2.4.5",
-    "pdf-to-img": "^6.2.0",
+    "pdf-to-img": "^6.3.0",
     "save-dev": "^0.0.1-security",
     "tesseract.js": "^7.0.0",
-    "unpdf": "^1.8.0"
+    "unpdf": "^1.8.1"
   }
 }

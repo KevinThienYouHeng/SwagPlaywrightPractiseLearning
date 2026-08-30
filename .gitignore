@@ -10,3 +10,11 @@ node_modules/
 tests/LoginPageP.spec.ts-snapshots
 /downloads/
 
+# Generated screenshots and visual-test artifacts
+/screenshots/
+/checkout-failed.png
+/image-verification-failed.png
+/item-addition-failed.png
+/login-page.png
+/inventory-page.png
+

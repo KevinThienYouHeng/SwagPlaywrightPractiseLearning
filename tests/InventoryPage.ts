@@ -85,22 +85,30 @@ export class InventoryPage {
     async verifyInventoryPageItem(){
         
         const product =  this.inventoryItems;
-        const allproduct = await product.all();
+        expect(product).toHaveCount(6);
+        const productCount = await product.count();
+        //const allproduct = await product.all();
 
-        for (const item of allproduct) {
+        for (let i = 0; i < productCount; i++) {
+            const item = product.nth(i);
+
             await expect(item).toBeVisible();
 
             const name = item.locator('.inventory_item_name');
             const price = item.locator('.inventory_item_price');
-            const desc = item.locator('.inventory_item_desc');
+            const description = item.locator('.inventory_item_desc');
+            const image = item.locator('.inventory_item_img img');
+            const addButton = item.getByRole('button', {
+            name: 'Add to cart'
+            });
 
             await expect(name).not.toBeEmpty();
-            console.log(`Verified product name: ${await name.textContent()}`);
-            await expect(desc).not.toBeEmpty();
-            console.log(`Verified product description: ${await desc.textContent()}`);
-            await expect(price).toContainText('$');
-            console.log(`Verified product price: ${await price.textContent()}`);
-            await expect(this.addToCartButton.first()).toBeVisible();
+            await expect(price).toHaveText(/^\$\d+\.\d{2}$/);
+            await expect(description).not.toBeEmpty();
+            await expect(image).toBeVisible();
+            await expect(addButton).toBeVisible();
+
+            console.log(`Verified product: ${await name.textContent()}`);
         }
     }
 
@@ -128,40 +136,51 @@ export class InventoryPage {
         await this.logoutButton.click();
     }
 
-    async verifyProductSortContainerAZ(){
+    async verifyProductSortContainerAZ(): Promise<void>{
         await expect(this.productSortContainer).toBeVisible();
         await this.productSortContainer.selectOption('az');
 
-        const items = this.inventoryItems;
-        const firstProductName = await items.locator('.inventory_item_name').first().textContent();
-        const lastProductName = await items.locator('.inventory_item_name').last().textContent();
+        const actualNames = await this.inventoryItems
+            .locator('.inventory_item_name')
+            .allTextContents();
 
-        console.log(`First product name: ${firstProductName}`);
-        console.log(`Last product name: ${lastProductName}`);
+        const expectedNames = [...actualNames].sort((a, b) =>
+            a.localeCompare(b)
+        );
+
+        expect(actualNames).toEqual(expectedNames);
     }
 
-    async verifyProductContainerZA(){
+    async verifyProductContainerZA(): Promise<void>{
         await expect(this.productSortContainer).toBeVisible();
         await this.productSortContainer.selectOption('za');
 
-        const items = this.inventoryItems;
-        const firstProductName = await items.locator('.inventory_item_name').first().textContent();
-        const lastProductName = await items.locator('.inventory_item_name').last().textContent();
+        const actualNames = await this.inventoryItems
+            .locator('.inventory_item_name')
+            .allTextContents();
 
-        console.log(`First product name: ${firstProductName}`);
-        console.log(`Last product name: ${lastProductName}`);
+        const expectedNames = [...actualNames]
+            .sort((a, b) => a.localeCompare(b))
+            .reverse();
+
+        expect(actualNames).toEqual(expectedNames);
     }
 
     async verifyProductContainerLowToHigh(){
         await expect(this.productSortContainer).toBeVisible();
         await this.productSortContainer.selectOption('lohi');
 
-        const items = this.inventoryItems;
-        const firstPriceName = await items.locator('.inventory_item_price').first().textContent();
-        const lastPriceName = await items.locator('.inventory_item_price').last().textContent();
+        const prices = await this.inventoryItems
+            .locator('.inventory_item_price')
+            .allTextContents();
 
-        console.log(`First product name: ${firstPriceName}`);
-        console.log(`Last product name: ${lastPriceName}`);
+        const actualPrices = prices.map(price =>
+            parseFloat(price.replace('$', ''))
+        );
+
+        const expectedPrices = [...actualPrices].sort((a, b) => a - b);
+
+        expect(actualPrices).toEqual(expectedPrices);
         
     }
 
@@ -572,11 +591,15 @@ export class InventoryPage {
 
         try{
             expect(productNames).toEqual(expectedProductNames);
-        }catch {
+        }catch (error) {
+
             productNames.forEach((name, index) => {
             const matches = name === expectedProductNames[index];
             console.log(`   ${index + 1}. ${matches ? '✅' : '❌'} Actual: "${name}" | Expected: "${expectedProductNames[index]}"`);
+            
             });
+
+            throw error;
         }
     }
 
@@ -599,11 +622,14 @@ export class InventoryPage {
 
         try{
             expect(productPrices).toEqual(expectedProductPrices);
-        }catch {
+        }catch (error) {
             productPrices.forEach((name, index) => {
             const matches = name === expectedProductPrices[index];
             console.log(`   ${index + 1}. ${matches ? '✅' : '❌'} Actual: "${name}" | Expected: "${expectedProductPrices[index]}"`);
+            
             });
+
+            throw error;
         }
     }
 

@@ -42,10 +42,10 @@ test('Login Page with username problem_user and verify image content', async ({ 
 
     try {
         await inventoryPage.verifyDifferentImagePerItem();
-    }catch {
+    }catch(error) {
         await basePage.takeScreenshot('image-verification-failed.png');
         console.log('Same Image detected for different items');
-        //throw error; //Make sure the test fails, if not test will pass even the image verification failed
+        throw error; //Make sure the test fails, if not test will pass even the image verification failed
     }
 
     await page.close();
@@ -62,10 +62,10 @@ test('Login Page with username problem_user and verify multiply item added', asy
     try {
         //await inventoryPage.addMultiplyItemToCart();
         await inventoryPage.getItemThatDidNotGetAddedToCart();
-    }catch  {
+    }catch (error)  {
         await basePage.takeScreenshot('item-addition-failed.png');
         console.log('Some items cannot be added to the cart');
-        //throw error; //Make sure the test fails, if not test will pass even the image verification failed
+        throw error; //Make sure the test fails, if not test will pass even the image verification failed
     }
     
 })
@@ -85,7 +85,7 @@ test('Login Page with username problem_user and verify checkout process', async 
     } catch (error) {
         await basePage.takeScreenshot('checkout-failed.png');
         console.log('Unable to fill in the last name field');
-        //throw error;
+        throw error;
     }
     await page.close();
     
@@ -105,17 +105,11 @@ test('Verify details first item between inventory page and detail page', async (
 
 })
 
-test('Verify direct link to checkout page one', async ({ loginPage, cartPage, page }) => {
+test('Verify direct link to checkout page one', async ({ loginPage, checkoutPage, page }) => {
     
-    try {
-        await cartPage.goToCartPage();
-    } catch (error) {
-        await loginPage.verifyErroMessage("Epic sadface: You can only access '/cart.html' when you are logged in.");
-        console.log("Unable to direct open cart page");
-        //throw error;
-    }
-    await page.close();
-    
+    await checkoutPage.verifyCheckoutRequiresLogin();
+    await loginPage.verifyErroMessage("Epic sadface: You can only access '/cart.html' when you are logged in.");
+  
 })
 
 test('Verify direct link to checkout page two', async ({ loginPage, checkoutPage, page }) => {
@@ -125,7 +119,7 @@ test('Verify direct link to checkout page two', async ({ loginPage, checkoutPage
     } catch (error) {
         await loginPage.verifyErroMessage("Epic sadface: You can only access '/checkout-step-one.html' when you are logged in.");
         console.log("Unable to direct open checkout page");
-        //throw error;
+        throw error;
     }
      await page.close();
     

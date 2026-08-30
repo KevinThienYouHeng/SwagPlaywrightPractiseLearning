@@ -286,6 +286,14 @@ readonly cartBadge: Locator;
     });
   }
 
+  async verifyCheckoutRequiresLogin(): Promise<void> {
+      await this.navigate(
+        'https://www.saucedemo.com/checkout-step-one.html'
+      );
+
+      await expect(this.page).toHaveURL('https://www.saucedemo.com/');
+    }
+
 
 
 

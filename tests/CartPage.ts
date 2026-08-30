@@ -166,31 +166,31 @@ export class CartPage extends BasePage {
   }
 
   async removeSpecificItemFromCart(productName:string): Promise<void> {
-    const allNames = await this.cartItemNames.allInnerTexts();
-    //const index = allNames.findIndex(name => name === productName);
+   const allNames = await this.cartItemNames.allInnerTexts();
 
-    try{
-      const itemExists = allNames.includes(productName);
-          expect(itemExists).toBe(true);
-          console.log(`Removing item: ${productName}`);
-    }catch{
-        console.log(`Item not found in cart: ${productName}`);
-    }
-    
+  expect(allNames).toContain(productName);
 
-    const itemIndex = allNames.indexOf(productName);
-    const price = await this.getItemPriceByIndex(itemIndex);
-    console.log(`Removing ${productName} with price ${price}`);
+  const itemIndex = allNames.indexOf(productName);
+  const price = await this.getItemPriceByIndex(itemIndex);
 
-    await this.cartItems.filter({ hasText: productName }).locator('.cart_button').click();
+  console.log(`Removing ${productName} with price ${price}`);
 
-    const remainingNames = await this.cartItemNames.allInnerTexts();
-    expect(remainingNames).not.toContain(productName);
-    console.log(`Successfully removed: ${productName}`);
-    console.log(`Remaining items: ${remainingNames.join(', ') || 'Cart is empty'}`);
+  await this.cartItems
+    .filter({ hasText: productName })
+    .locator('.cart_button')
+    .click();
+
+  const remainingNames = await this.cartItemNames.allInnerTexts();
+  expect(remainingNames).not.toContain(productName);
   }
 
   async verifyCartPageUrl(): Promise<void> {
     await expect(this.page).toHaveURL(/.*cart.html/);
+  }
+
+  async verifyCartRequiresLogin(): Promise<void> {
+    await this.navigate('https://www.saucedemo.com/cart.html');
+    await expect(this.page).toHaveURL("https://www.saucedemo.com/");
+    //await expect(this.errorMessage).toHaveText('Epic sadface: You must login to continue.');
   }
 }
