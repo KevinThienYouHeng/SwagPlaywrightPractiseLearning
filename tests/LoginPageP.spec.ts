@@ -107,9 +107,8 @@ test('@smoke Login Page with username performance_glitch_user', async ({basePage
     const starttime = Date.now();
     await loginPage.goToLoginPage();
     await loginPage.login('performance_glitch_user', 'secret_sauce');
-    await basePage.waitForPageLoad(starttime);
+    await basePage.logDuration(starttime);
     await loginPage.verifyLoginSuccess();
-    await page.close();
 })
 
 //Page login successful and this user is used for visual testing

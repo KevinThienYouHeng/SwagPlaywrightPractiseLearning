@@ -59,7 +59,7 @@ export class MobileLoginPage extends BasePage {
         await expect(this.username).not.toBeEmpty();
         await expect(this.password).not.toBeEmpty();
         await this.loginButton.tap();
-        await this.waitForPageLoad(startTime); 
+        await this.logDuration(startTime); 
     }
 
     async verifyVisibleOnMobile(): Promise<void> {

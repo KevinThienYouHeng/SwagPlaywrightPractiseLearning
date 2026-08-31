@@ -53,12 +53,20 @@ export class InventoryPage {
         //this.productPrices = page.locator('.inventory_item_price');
     }
 
-    async addProductToCart(productName: string) {
+    async addProductFromDetailPage(productName: string): Promise<void> {
         const product = this.inventoryItems.locator('.inventory_item_name', { hasText: productName });
+        await expect(product).toBeVisible();
         await product.click();
         await this.addToCartButton.click();
     }
 
+    async addProductFromInventoryPage(productName: string): Promise<void> {
+        const product = this.inventoryItems.filter({ hasText: productName });
+        const addButton = product.getByRole('button', {
+            name: 'Add to cart'
+        });
+        await addButton.click();
+    }   
     async verifyCartCount(expectedCount: number) {
         if(expectedCount === 0){
             await expect(this.cartBadge).toHaveCount(0);
@@ -81,11 +89,16 @@ export class InventoryPage {
         //await expect(this.checkoutButton).toBeVisible();
     }
 
+    async verifyInventoryPageTwo(): Promise<void> {
+        await expect(this.page).toHaveURL(/inventory.html/);
+        await expect(this.inventoryItems).toHaveCount(6);
+    }
+
     //Function verify the six items
     async verifyInventoryPageItem(){
         
         const product =  this.inventoryItems;
-        expect(product).toHaveCount(6);
+        await expect(product).toHaveCount(6);
         const productCount = await product.count();
         //const allproduct = await product.all();
 
@@ -205,18 +218,38 @@ export class InventoryPage {
     }
 
     async addMultiplyItemToCart(){
+        
+        const productCount = await this.inventoryItems.count();
 
-        const count = await this.addToCartButton.count();
-        const item = this.inventoryItems;
+        for (let i = 0; i < productCount; i++) {
+            const item = this.inventoryItems.nth(i);
+            const productName = item.locator('.inventory_item_name');
+            const addButton = item.getByRole('button', {
+            name: 'Add to cart'
+            });
 
-        for ( let i = 0; i < count; i ++){
+            await expect(productName).toBeVisible();
+            await addButton.click();
 
-            await this.addToCartButton.first().click();
-            await expect(this.cartBadge).toHaveText((i + 1).toString());
-            const productName = await item.locator('.inventory_item_name').nth(i).textContent();
-            console.log(`Added product ${i + 1} to cart: ${productName}`);
-            await expect(this.removeButton.first()).toBeVisible();
+            await expect(
+            item.getByRole('button', { name: 'Remove' })
+            ).toBeVisible();
+
+            console.log(`Added product: ${await productName.textContent()}`);
         }
+
+        await expect(this.cartBadge).toHaveText(productCount.toString());
+        // const count = await this.addToCartButton.count();
+        // const item = this.inventoryItems;
+
+        // for ( let i = 0; i < count; i ++){
+
+        //     await this.addToCartButton.first().click();
+        //     await expect(this.cartBadge).toHaveText((i + 1).toString());
+        //     const productName = await item.locator('.inventory_item_name').nth(i).textContent();
+        //     console.log(`Added product ${i + 1} to cart: ${productName}`);
+        //     await expect(this.removeButton.first()).toBeVisible();
+        // }
     }
 
     async addOneRandomItemToCart(){
@@ -453,12 +486,10 @@ export class InventoryPage {
         console.log(`Items in cart: ${itemsName.join(',')}`);
 
         for (const name of itemsName) {
-            try{expect(name).toContain('Sauce Labs');
-                console.log(`Verified ${name}`);
-            }catch {
-                console.log(` Item name: ${name}`);
-            }
             
+            expect(name).toContain('Sauce Labs');
+            console.log(`Verified ${name}`);
+    
         }
         // expectedNames.forEach(expectedName => {
         //     const fullExpectedName = `${itemStartingName} ${expectedName}`;

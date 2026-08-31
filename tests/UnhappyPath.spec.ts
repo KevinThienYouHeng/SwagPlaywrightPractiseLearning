@@ -75,7 +75,8 @@ test('Login Page with username problem_user and verify checkout process', async 
     await loginPage.goToLoginPage();
     await loginPage.login('problem_user', 'secret_sauce');
     await loginPage.verifyLoginSuccess();
-    await inventoryPage.addOneRandomItemToCart();
+    //await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
     await inventoryPage.goToCartPage();
     await cartPage.proceedToCheckout();
 

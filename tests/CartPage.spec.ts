@@ -21,7 +21,8 @@ test('Verify cart page with 1 items', async ({loginPage, inventoryPage, cartPage
     
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
+    //await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
     await inventoryPage.goToCartPage();
     await cartPage.verifyCartBadgeCount(1);
     const cartName = await cartPage.getItemNameByIndex(0);
@@ -39,7 +40,8 @@ test('Verify cart page with 1 items and continue shopping', async ({loginPage, i
     
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
+    //await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
     await inventoryPage.goToCartPage();
     await cartPage.verifyCartBadgeCount(1);
     await cartPage.continueShopping();
@@ -48,11 +50,26 @@ test('Verify cart page with 1 items and continue shopping', async ({loginPage, i
     
 })
 
+test('Verify cart page with specific items', async ({loginPage, inventoryPage, cartPage, page }) => {
+    
+    await loginPage.goToLoginPage();
+    await loginPage.login('standard_user', 'secret_sauce');
+    //await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
+    await inventoryPage.goToCartPage();
+    await cartPage.verifyCartBadgeCount(1);
+    await cartPage.verifyCartItemCount(1);
+    await cartPage.verifyCartItem('Sauce Labs Backpack', '$29.99');
+    await page.close();
+    
+})
+
 test('Verify cart page with 1 items and checkout button', async ({loginPage, inventoryPage, cartPage, checkoutPage, page }) => {
    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
+    //await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
     await inventoryPage.goToCartPage();
     await cartPage.verifyCartBadgeCount(1);
     await cartPage.proceedToCheckout();
@@ -65,7 +82,8 @@ test('Verify cart page with 1 items and browser back button', async ({loginPage,
    
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
+    //await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
     await inventoryPage.goToCartPage();
     await page.reload(); // Reload or refresh the page
     await cartPage.verifyCartBadgeCount(1);
@@ -111,7 +129,8 @@ test('Verify cart page with 1 items and Remove button', async ({ loginPage, inve
     
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
-    await inventoryPage.addOneRandomItemToCart();
+    //await inventoryPage.addOneRandomItemToCart();
+    await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
     await inventoryPage.goToCartPage();
     await cartPage.verifyCartBadgeCount(1);
     await cartPage.removeItemByIndex(0);

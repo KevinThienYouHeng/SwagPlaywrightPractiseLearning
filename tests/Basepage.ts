@@ -30,36 +30,25 @@ export class BasePage {
         await this.page.goto(url);
     }
 
-    async waitForPageLoad(startTime: number): Promise<void> {
-
-    
-        await this.page.waitForLoadState('networkidle');
-
-        const endTime = Date.now();
-
-        const durationMS = endTime - startTime;
+    async logDuration(startTime: number): Promise<void> {
+   
+        const durationMS = Date.now() - startTime;
         const durationSec = (durationMS / 1000).toFixed(2);
 
         console.log(`Page loaded in ${durationSec} seconds.`);
     }
 
-    async waitForPageLoadPerformance(performanceTime: number): Promise<void> {
+    async pageLoadPerformance(performanceTime: number): Promise<void> {
 
-    
-        await this.page.waitForLoadState('networkidle');
-
-        const endTime = performance.now();
-
-        const durationMS = endTime - performanceTime;
+        const durationMS = performance.now() - performanceTime;
         const durationSec = (durationMS / 1000).toFixed(2);
-
         console.log(`Page loaded in ${durationSec} milliseconds.`);
     }
 
     async measureEndpointPerformance(): Promise<void> {
         const startTime = performance.now();
   
-       await this.page.waitForLoadState('networkidle');
+       //await this.page.waitForLoadState('networkidle');
         
         const endTime = performance.now();
         const duration = endTime - startTime;
@@ -116,15 +105,9 @@ export class BasePage {
 
     async checkStatusURL(): Promise<void> {
         const response = await this.page.request.get('https://www.saucedemo.com/');
-        try {
-            expect(response.status()).toBe(200);
-            console.log('Web page is up and running');
-            console.log(`Status code: ${response.status()}`);
-        }catch{
-            console.log('Web page is not reachable');
-            console.log(`Status code: ${response.status()}`);
-        }
-        
+        expect(response.status()).toBe(200);
+        console.log('Web page is up and running');
+        console.log(`Status code: ${response.status()}`);
     }
 
     async longLine(): Promise<void> {

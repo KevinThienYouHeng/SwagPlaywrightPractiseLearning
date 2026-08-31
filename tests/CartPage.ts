@@ -36,7 +36,7 @@ export class CartPage extends BasePage {
     await expect(this.cartTitle).toHaveText('Your Cart');
     await expect(this.cartDescLabel).toBeVisible();
     await expect(this.cartQtyLabel).toBeVisible();
-    await this.waitForPageLoad(startTime);
+    await this.logDuration(startTime);
   }
   
   //Remove item based on index
@@ -44,21 +44,21 @@ export class CartPage extends BasePage {
     const startTime = Date.now();
     await expect(this.removeButtons.nth(index)).toBeVisible();
     await this.removeButtons.nth(index).click();
-    await this.waitForPageLoad(startTime);
+    await this.logDuration(startTime);
   }
  
   async continueShopping(): Promise<void> {
     const startTime = Date.now();
     await expect(this.continueShoppingButton).toBeVisible();
     await this.continueShoppingButton.click();
-    await this.waitForPageLoad(startTime);
+    await this.logDuration(startTime);
   }
  
   async proceedToCheckout(): Promise<void> {
     const startTime = Date.now();
     await expect(this.checkoutButton).toBeVisible();
     await this.checkoutButton.click();
-    await this.waitForPageLoad(startTime);
+    await this.logDuration(startTime);
     await expect(this.page).toHaveURL(/.*checkout-step-one.html/)
   }
  
@@ -142,6 +142,13 @@ export class CartPage extends BasePage {
  
   async verifyItemPriceInCart(expectedPrice: string): Promise<void> {
     await expect(this.cartItemPrices.first()).toHaveText(expectedPrice);
+  }
+
+  async verifyCartItem(expectedName: string, expectedPrice: string ): Promise <void>{
+    const item = this.cartItems.filter({ hasText: expectedName});
+    await expect(item).toHaveCount(1);
+    await expect(item.locator('.inventory_item_name')).toHaveText(expectedName);
+    await expect(item.locator('.inventory_item_price')).toHaveText(expectedPrice);
   }
 
   async removeAllItemsFromCart(): Promise<void> {

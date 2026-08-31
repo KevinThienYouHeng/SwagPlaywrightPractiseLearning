@@ -26,12 +26,9 @@ export class LoginPage extends BasePage {
     }
     async goToLoginPage() : Promise<void> {
         
-        const startTime = Date.now();
-
         await this.navigate('https://www.saucedemo.com/');
-
-        await this.waitForPageLoad(startTime);
-        //await this.takeScreenshot('login-page.png');
+        await expect(this.username).toBeVisible();
+    
     }
 
     async goToLoginPagePerformance() : Promise<void> {
@@ -40,7 +37,7 @@ export class LoginPage extends BasePage {
 
         await this.navigate('https://www.saucedemo.com/');
 
-        await this.waitForPageLoadPerformance(performanceTime);
+        await this.pageLoadPerformance(performanceTime);
         //await this.takeScreenshot('login-page.png');
     }
 
@@ -57,11 +54,11 @@ export class LoginPage extends BasePage {
     }
 
     async login(username: string, password: string) : Promise<void> {
-        const startTime = Date.now();
+        
         await this.username.fill(username);
         await this.password.fill(password);
         await this.loginButton.click();
-        await this.waitForPageLoad(startTime); // From BasePage
+        
     }
 
     //This function is call injection
@@ -90,7 +87,7 @@ export class LoginPage extends BasePage {
         }, password);
                             
         await this.loginButton.click();
-        await this.waitForPageLoad(startTime);
+        await this.logDuration(startTime);
     }
     
 

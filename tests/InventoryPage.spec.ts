@@ -8,7 +8,9 @@ test('User can add item to cart', async ({ loginPage, inventoryPage}) => {
   
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); // Not needed because we are using storageState
-  await inventoryPage.addOneRandomItemToCart();
+  //await inventoryPage.addOneRandomItemToCart();
+  //await inventoryPage.addProductToCart('Sauce Labs Backpack');
+  await inventoryPage.addProductFromInventoryPage('Sauce Labs Backpack');
   await inventoryPage.verifyRemoveButtonVisbilityAfterAddingToCart();
   await inventoryPage.goToCartPage();
   await inventoryPage.verifyCartCount(1);
@@ -79,6 +81,10 @@ test("Verify random item added to cart", async ({ loginPage, inventoryPage, page
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.addRandomItemToCart(2);
+  // await inventoryPage.addProductToCart('Sauce Labs Backpack');
+  // await inventoryPage.goToInventoryPage();
+  // await inventoryPage.addProductToCart('Sauce Labs Bike Light');
+  // await inventoryPage.goToInventoryPage();
   await inventoryPage.verifyRemoveButtonVisbilityAfterAddingToCart();
   await inventoryPage.verifyCartCount(2);
 
@@ -159,7 +165,8 @@ test('Verify sorting after adding an item into the cart', async ({loginPage, inv
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); 
-  await inventoryPage.addOneRandomItemToCart();
+  //await inventoryPage.addOneRandomItemToCart();
+  await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
   await inventoryPage.verifyProductContainerZA();
   await page.close();
 })
@@ -198,7 +205,8 @@ test('Verify Reset App state', async ({loginPage, inventoryPage, page}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); 
-  await inventoryPage.addOneRandomItemToCart();
+  //await inventoryPage.addOneRandomItemToCart();
+  await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
   await inventoryPage.verifyCartCount(1);
   await inventoryPage.resetAppState();
   await page.reload();

@@ -27,6 +27,28 @@ The project should remain useful for learning. Improvements should make the test
 - Authentication setup: `tests/auth.setup.ts`.
 - Additional experiments: API, database, PDF, OCR, performance, Cucumber, and scheduling files.
 
+## Completed improvements
+
+The following refactors and fixes have been completed during the learning process:
+
+- Corrected the `testIgnore` file patterns for `download.spec.ts`, `API.spec.ts`, and `db.spec.ts`.
+- Added screenshot ignore rules and removed generated screenshots from Git tracking while preserving the local files.
+- Kept `auth.setup.ts` for future learning, but removed its `storageState` usage from the main desktop browser projects so login tests can start logged out.
+- Changed several swallowed assertion failures to re-throw the original error after diagnostic logging or screenshots.
+- Replaced the swallowed status-check failure in `BasePage.checkStatusURL()` with a normal failing assertion.
+- Added `await` to the inventory product-count assertion.
+- Added inventory page URL and product-count verification.
+- Improved inventory product validation by checking each item’s own name, price, description, image, and Add to cart button.
+- Replaced logging-only A-Z, Z-A, low-to-high, and high-to-low sorting checks with array comparisons.
+- Improved `addMultiplyItemToCart()` to scope each Add to cart and Remove button to its individual inventory item.
+- Added cart-item verification for a specific product name and price.
+- Replaced several random product selections in core tests with deterministic product selections.
+- Renamed product methods to distinguish inventory-page addition from detail-page addition.
+- Renamed the generic page-load timing helper to `logDuration` and kept performance timing separate from normal UI synchronization.
+- Removed some unnecessary manual `page.close()` calls from fixture-based tests.
+
+Some of these improvements are partial. Remaining `try/catch` blocks, commented-out code, random experiments, and page-object cleanup should be reviewed before considering the related roadmap items complete.
+
 ## Working principles
 
 1. Preserve the learning intent while improving quality.
