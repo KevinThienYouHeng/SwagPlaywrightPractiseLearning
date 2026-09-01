@@ -93,7 +93,7 @@ export class LoginPage extends BasePage {
 
     //Message must be exactly the same if not the test will fail
     //For future, maybe we can make it more flexible way to verify the error message
-    async verifyErroMessage(expectedMessage: string): Promise<void> {
+    async verifyErrorMessage(expectedMessage: string): Promise<void> {
         await expect(this.errorMessage).toBeVisible();
         await expect(this.errorMessage).toHaveText(expectedMessage);
         console.log(`Error message verifired: ${expectedMessage}`);

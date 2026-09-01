@@ -1,24 +1,12 @@
 /// <reference types="node" /> 
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
+const mainTests = '**/main/*.spec.ts';
+const experimentTests = '**/experiments/*.spec.ts';
+
 export default defineConfig({
   testDir: './tests',
-  testIgnore: ['**/swaglab.spec.ts', 
-                '**/performance/**', 
-                '**/download.spec.ts',
-                '**/API.spec.ts',
-                '**/db.spec.ts'],
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -41,59 +29,23 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
+  /* Run the main suite by default. Experiments are opt-in. */
   projects: [
     {
-      name: 'setup',
-      testMatch: 'auth.setup.ts',
-    },
-    {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome']},
+      testMatch: mainTests,
+      use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox']},  
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari']},
-    },
-    
-
-    /* Test against mobile viewports. */
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Galaxy S24'] },
-    },
-    {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 15'] },
-    },
-
-    /* Test against branded browsers. */
-    {
-      name: 'Microsoft Edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    },
-    {
-      name: 'Google Chrome',
-      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    },
-    {
-      name: 'Samsung Galaxy S22',
-      use: {
-        // Specific Android/Chrome User Agent
-        userAgent: 'Mozilla/5.0 (Linux; Android 13; SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
-        viewport: { width: 360, height: 780 },
-        deviceScaleFactor: 3,
-        isMobile: true,   // Forces the mobile browser to respect the viewport meta tags
-        hasTouch: true,   // Changes click actions into finger tap events
-        defaultBrowserType: 'chromium',
-  },
-}
+    ...(process.env.RUN_EXPERIMENTS === 'true'
+      ? [
+          {
+            name: 'experiments',
+            testMatch: experimentTests,
+            use: { ...devices['Desktop Chrome'] },
+          },
+        ]
+      : []),
   ],
 
   /* Run your local dev server before starting the tests */

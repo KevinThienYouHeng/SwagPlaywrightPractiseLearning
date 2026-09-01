@@ -1,8 +1,8 @@
-import { LoginPage } from './LoginPage';
-import { InventoryPage } from './InventoryPage';
-import { CartPage } from './CartPage';
-import { Checkout } from './CheckoutPage';
-import { test } from './index';
+import { LoginPage } from '../../pages/LoginPage';
+import { InventoryPage } from '../../pages/InventoryPage';
+import { CartPage } from '../../pages/CartPage';
+import { Checkout } from '../../pages/CheckoutPage';
+import { test } from '../../pages/index';
 
 const TestConfig = {
     username: 'standard_user',

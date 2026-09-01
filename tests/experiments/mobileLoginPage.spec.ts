@@ -1,7 +1,7 @@
-import { LoginPage } from './LoginPage';
-import { InventoryPage } from './InventoryPage';
-import { BasePage } from './Basepage';
-import { test } from './index';
+import { LoginPage } from '../../pages/LoginPage';
+import { InventoryPage } from '../../pages/InventoryPage';
+import { BasePage } from '../../pages/Basepage';
+import { test } from '../../pages/index';
 
 test('ScreenshotLogin Page for emulate mobile', async ({ mobileLoginPage, loginPage, page }) => {
     

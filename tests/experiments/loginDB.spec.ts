@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { LoginPage } from './LoginPage';
-import { DBhelper } from '../db/database';
+import { LoginPage } from '../../pages/LoginPage';
+import { DBhelper } from '../../db/database';
 
 
 const dbHelper = new DBhelper();
@@ -27,7 +27,7 @@ test.describe('Login tests with data from DB', () => {
 
 
             if (user.expected_error) {
-                await loginPage.verifyErroMessage(user.expected_error);
+                await loginPage.verifyErrorMessage(user.expected_error);
             }else
                 {
                 await loginPage.verifyLoginSuccess();

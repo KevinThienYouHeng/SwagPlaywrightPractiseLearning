@@ -1,8 +1,8 @@
 //import { test } from '@playwright/test';
-import { LoginPage } from './LoginPage';
-import { InventoryPage } from './InventoryPage';
-import { BasePage } from './Basepage';
-import { test } from './index';
+import { LoginPage } from '../../pages/LoginPage';
+import { InventoryPage } from '../../pages/InventoryPage';
+import { BasePage } from '../../pages/Basepage';
+import { test } from '../../pages/index';
 
 //test.describe.configure({mode: 'parallel'});
 
@@ -56,7 +56,7 @@ test('@smoke Login Page with no username ', async ({ loginPage, page }) => {
     await loginPage.routeApiSetup();
     await loginPage.goToLoginPage();
     await loginPage.login('', 'secret_sauce');
-    await loginPage.verifyErroMessage('Epic sadface: Username is required');
+    await loginPage.verifyErrorMessage('Epic sadface: Username is required');
     await page.close();
 })
 
@@ -64,7 +64,7 @@ test('@smoke Login Page with no password', async ({ loginPage, page }) => {
     
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', '');
-    await loginPage.verifyErroMessage('Epic sadface: Password is required');
+    await loginPage.verifyErrorMessage('Epic sadface: Password is required');
     await page.close();
 })
 
@@ -72,7 +72,7 @@ test('@smoke Login Page with no username and no password', async ({loginPage, pa
     
     await loginPage.goToLoginPage();
     await loginPage.login('', '');
-    await loginPage.verifyErroMessage('Epic sadface: Username is required');
+    await loginPage.verifyErrorMessage('Epic sadface: Username is required');
     await page.close();
 })
 
@@ -80,7 +80,7 @@ test('@smoke Login Page with invalid credentials', async ({ loginPage, page }) =
 
     await loginPage.goToLoginPage();
     await loginPage.login('Max', 'Lestappen');
-    await loginPage.verifyErroMessage('Epic sadface: Username and password do not match any user in this service');
+    await loginPage.verifyErrorMessage('Epic sadface: Username and password do not match any user in this service');
     await page.close();
 })
 
@@ -88,7 +88,7 @@ test('@smoke Login Page with username locked_out_user', async ({ loginPage, page
     
     await loginPage.goToLoginPage();
     await loginPage.login('locked_out_user', 'secret_sauce');
-    await loginPage.verifyErroMessage('Epic sadface: Sorry, this user has been locked out.');
+    await loginPage.verifyErrorMessage('Epic sadface: Sorry, this user has been locked out.');
     await page.close();
 })
 

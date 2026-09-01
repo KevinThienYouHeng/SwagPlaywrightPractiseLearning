@@ -49,6 +49,24 @@ The following refactors and fixes have been completed during the learning proces
 
 Some of these improvements are partial. Remaining `try/catch` blocks, commented-out code, random experiments, and page-object cleanup should be reviewed before considering the related roadmap items complete.
 
+## Current progress update
+
+The following work has been completed or started since the original roadmap was written:
+
+- Moved page objects and shared fixtures from `tests/` into `pages/`.
+- Moved the main UI specs into `tests/main/`.
+- Moved learning and technology-specific experiments into `tests/experiments/`.
+- Moved authentication setup into `tests/setup/`.
+- Updated relative imports to match the new folder structure.
+- Updated `playwright.config.ts` so the main project matches `tests/main/*.spec.ts`.
+- Added an opt-in `experiments` project controlled by `RUN_EXPERIMENTS=true`.
+- Documented the PowerShell commands for running all experiments or one experiment file.
+- Added the future plan to create a dedicated `playwright.experiments.config.ts`.
+- Reviewed the unhappy-path `try/catch` blocks conceptually; deliberate diagnostic examples remain for later re-evaluation.
+- Chosen the next improvement: replace random behavior in dependable main tests with deterministic, named products while preserving random and stress tests as experiments.
+
+The current folder move is still an in-progress working-tree change. Preserve the user’s relocation work and do not restore deleted files from the old locations without confirmation.
+
 ## Working principles
 
 1. Preserve the learning intent while improving quality.
@@ -105,6 +123,11 @@ Some of these improvements are partial. Remaining `try/catch` blocks, commented-
 - Capture the selected item or random seed when randomness is retained.
 - Use stable selectors, preferably accessible roles or SauceDemo `data-test` attributes.
 
+Next planned improvement: review `tests/main/InventoryPage.spec.ts` and the
+checkout tests for random product selection. Replace random actions in the
+dependable main suite with fixed named products, and leave random/stress
+scenarios in `tests/experiments/`.
+
 ### Priority 6: Simplify the test lifecycle
 
 - Remove unnecessary `page.close()` calls; Playwright manages test pages and contexts automatically.
@@ -139,6 +162,31 @@ experiments/
   performance/
   ai/
 ```
+
+Future direction: create a dedicated `playwright.experiments.config.ts` for the
+`tests/experiments/` folder. Keep `playwright.config.ts` focused on the main
+regression suite, and run the experimental tests explicitly with the separate
+configuration. This should be done later when the experiment suite needs its
+own discovery rules, browser settings, setup, or CI job.
+
+Until the separate configuration is created, enable the experiments project in
+PowerShell and select it explicitly:
+
+```powershell
+$env:RUN_EXPERIMENTS = "true"
+npx playwright test --project=experiments
+```
+
+To run one experiment file, for example OCR:
+
+```powershell
+$env:RUN_EXPERIMENTS = "true"
+npx playwright test tests/experiments/Ocr.spec.ts --project=experiments
+```
+
+`RUN_EXPERIMENTS` must be set in the same terminal session because the project
+is conditionally added by `playwright.config.ts`. The main suite remains
+available with `npx playwright test` when the variable is not set.
 
 - The core suite should cover login, inventory, cart, and checkout.
 - Experimental suites should have separate commands and should not make the core suite depend on OCR engines, database mutation, external AI credentials, or unrelated files.

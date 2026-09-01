@@ -1,7 +1,7 @@
 
-import { LoginPage } from './LoginPage';
-import { InventoryPage } from './InventoryPage';
-import { test } from './index';
+import { LoginPage } from '../../pages/LoginPage';
+import { InventoryPage } from '../../pages/InventoryPage';
+import { test } from '../../pages/index';
 
 
 test('User can add item to cart', async ({ loginPage, inventoryPage}) => {
@@ -27,7 +27,7 @@ test('Verify content in inventory page', async ({ loginPage, inventoryPage, page
   await inventoryPage.verifyInventoryPage();
   await inventoryPage.verifyCartCount(0);
   await inventoryPage.logoutPage();
-  await page.close();
+  
 });
 
 test('Verify sorting Martix', async ({ loginPage, inventoryPage, page }) => {
@@ -39,7 +39,6 @@ test('Verify sorting Martix', async ({ loginPage, inventoryPage, page }) => {
   await inventoryPage.verifyProductContainerLowToHigh();
   await inventoryPage.verifyProductContainerHighToLow();
 
-  await page.close();
 });
 
 test('Verify sorting ZA', async ({ loginPage, inventoryPage, page }) => {
@@ -48,7 +47,6 @@ test('Verify sorting ZA', async ({ loginPage, inventoryPage, page }) => {
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.VerifyProductSortZA();
 
-  await page.close();
 });
 
 test('Verify sorting LOHI', async ({ loginPage, inventoryPage, page }) => {
@@ -57,7 +55,6 @@ test('Verify sorting LOHI', async ({ loginPage, inventoryPage, page }) => {
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.VerifyProductSortLOHI();
 
-  await page.close();
 });
 
 test('Add multiply item into the cart', async ({ loginPage, inventoryPage, page }) => {
@@ -71,24 +68,17 @@ test('Add multiply item into the cart', async ({ loginPage, inventoryPage, page 
   await inventoryPage.removeAllItem();
   await inventoryPage.verifyCartCount(0); 
 
-  await page.close();
-
-
 });
 
 test("Verify random item added to cart", async ({ loginPage, inventoryPage, page }) => {
   
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
-  await inventoryPage.addRandomItemToCart(2);
-  // await inventoryPage.addProductToCart('Sauce Labs Backpack');
-  // await inventoryPage.goToInventoryPage();
-  // await inventoryPage.addProductToCart('Sauce Labs Bike Light');
-  // await inventoryPage.goToInventoryPage();
+  //await inventoryPage.addRandomItemToCart(2);
+  await inventoryPage.addProductFromInventoryPage('Sauce Labs Backpack');
+  await inventoryPage.addProductFromInventoryPage('Sauce Labs Bike Light');
   await inventoryPage.verifyRemoveButtonVisbilityAfterAddingToCart();
   await inventoryPage.verifyCartCount(2);
-
-  await page.close();
 
 });
 
@@ -96,11 +86,9 @@ test('Click on Product name and add to cart', async ({loginPage, inventoryPage, 
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
-  await inventoryPage.clickProductName();
+  //await inventoryPage.clickProductName();
+  await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
   await inventoryPage.verifyCartCount(1);
-
-  await page.close();
-  
 })
 
 test('Click on Product image and add to cart', async ({loginPage, inventoryPage, page}) => {
@@ -109,30 +97,25 @@ test('Click on Product image and add to cart', async ({loginPage, inventoryPage,
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.clickProductImg();
   await inventoryPage.verifyCartCount(1);
-  
-  await page.close();
+
 })
 
 test('Click on all Product name and add to cart', async ({loginPage, inventoryPage, page}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
-  await inventoryPage.addItemToCartFromDetailPage();
+  await inventoryPage.addItemToCartFromDetailPage(); //All Items
   await inventoryPage.verifyCartCount(6);
 
-  await page.close();
-  
 })
 
 test('Click on all Product images and add to cart', async ({loginPage, inventoryPage, page}) => {
 
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
-  await inventoryPage.addImgToCartFromDetailPageByImg();
+  await inventoryPage.addImgToCartFromDetailPageByImg(); //All Items
   await inventoryPage.verifyCartCount(6);
 
-  await page.close();
-  
 })
 
 test('Login Logout', async ({loginPage, inventoryPage, page}) => {
@@ -140,7 +123,7 @@ test('Login Logout', async ({loginPage, inventoryPage, page}) => {
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.logoutSideBar();
-  await page.close();
+  
 })
 
 test('Login--> About', async ({loginPage, inventoryPage, page, basePage}) => {
@@ -149,7 +132,6 @@ test('Login--> About', async ({loginPage, inventoryPage, page, basePage}) => {
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.aboutSideBar();
   await basePage.getCurrentCookies();
-  await page.close();
 })
 
 test('Login--> About(New Tab)', async ({loginPage, inventoryPage, page}) => {
@@ -157,7 +139,6 @@ test('Login--> About(New Tab)', async ({loginPage, inventoryPage, page}) => {
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce');
   const newTab = await inventoryPage.middleClickForNewTabAboutSideBar();
-  await page.close();
   await newTab.close();
 })
 
@@ -168,7 +149,7 @@ test('Verify sorting after adding an item into the cart', async ({loginPage, inv
   //await inventoryPage.addOneRandomItemToCart();
   await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
   await inventoryPage.verifyProductContainerZA();
-  await page.close();
+  
 })
 
 test('Verify sorting after adding an item into the cart from the product detail page', async ({loginPage, inventoryPage, page}) => {
@@ -178,7 +159,7 @@ test('Verify sorting after adding an item into the cart from the product detail 
   await inventoryPage.clickProductName();
   await inventoryPage.verifyProductContainerZA();
   await inventoryPage.verifyProductContainerLowToHigh();
-  await page.close();
+  
 })
 
 test('Verify different image per item', async ({loginPage, inventoryPage, page}) => {
@@ -187,7 +168,7 @@ test('Verify different image per item', async ({loginPage, inventoryPage, page})
   await loginPage.login('standard_user', 'secret_sauce'); 
   await inventoryPage.interceptImageRequests();
   await inventoryPage.verifyDifferentImagePerItem();
-  await page.close();
+
 })
 
 //This test should failed
@@ -196,8 +177,7 @@ test('Verify items name accuracy', async ({loginPage, inventoryPage, page }) => 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.verifyItemsNameInCart();
-    await page.close();
-    
+
 })
 
 //The cart will become empty but the item will button remain in the cart
@@ -206,13 +186,11 @@ test('Verify Reset App state', async ({loginPage, inventoryPage, page}) => {
   await loginPage.goToLoginPage();
   await loginPage.login('standard_user', 'secret_sauce'); 
   //await inventoryPage.addOneRandomItemToCart();
-  await inventoryPage.addProductFromDetailPage('Sauce Labs Backpack');
+  await inventoryPage.addProductFromInventoryPage('Sauce Labs Backpack');
   await inventoryPage.verifyCartCount(1);
   await inventoryPage.resetAppState();
   await page.reload();
   await inventoryPage.verifyCartCount(0);
-  await page.close();
-
 })
 
 test('Verify details first item between inventory page and detail page', async ({loginPage, inventoryPage, page }) => {
@@ -225,7 +203,6 @@ test('Verify details first item between inventory page and detail page', async (
     await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(3);
     await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(4);
     await inventoryPage.compareInventoryPageInfoAndDetailPageInfo(5); 
-    await page.close();
     
 })
 
@@ -234,8 +211,6 @@ test('Get all items name', async ({loginPage, inventoryPage, page }) => {
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.displayAllItemsName();
-    await page.close();
-    
 })
 
 test('Get all items prices', async ({loginPage, inventoryPage, page }) => {
@@ -243,8 +218,6 @@ test('Get all items prices', async ({loginPage, inventoryPage, page }) => {
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.displayAllPricesName();
-    await page.close();
-    
 })
 
 test('Get all items descriptions', async ({loginPage, inventoryPage, page }) => {
@@ -252,8 +225,7 @@ test('Get all items descriptions', async ({loginPage, inventoryPage, page }) => 
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.displayAllDescriptionsName();
-    await page.close();
-    
+
 })
 
 test('Stress Test Add product to cart', async ({loginPage, inventoryPage, page }) => {
@@ -266,8 +238,6 @@ test('Stress Test Add product to cart', async ({loginPage, inventoryPage, page }
     await inventoryPage.stressUIaddProductToCart('Fleece Jacket',30);
     await inventoryPage.stressUIaddProductToCart('Onesie',40);
     await inventoryPage.stressUIaddProductToCart('T-shirt (Red)',50);
-    await page.close();
-    
 })
 
 test('Stress Test Add Multiple product to cart', async ({loginPage, inventoryPage, page }) => {
@@ -275,6 +245,4 @@ test('Stress Test Add Multiple product to cart', async ({loginPage, inventoryPag
     await loginPage.goToLoginPage();
     await loginPage.login('standard_user', 'secret_sauce');
     await inventoryPage.stressUIaddMultipleProductToCart(5);
-    await page.close();
-
 })

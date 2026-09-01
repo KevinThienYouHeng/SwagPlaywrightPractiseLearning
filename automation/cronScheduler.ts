@@ -1,7 +1,7 @@
 //import cron from 'node-cron';
 const cron = require('node-cron');
 import { chromium } from '@playwright/test';
-import {  LoginPage } from '../tests/LoginPage';
+import {  LoginPage } from '../pages/LoginPage';
 
 console.log('─────────────────────────────');
 console.log(`▶️  Started at: ${new Date().toLocaleTimeString()}`);

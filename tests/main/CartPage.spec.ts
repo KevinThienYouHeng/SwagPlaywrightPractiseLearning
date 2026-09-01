@@ -1,9 +1,9 @@
 //import { test } from '@playwright/test';
-import { LoginPage } from './LoginPage';
-import { InventoryPage } from './InventoryPage';
-import { CartPage } from './CartPage';
-import { Checkout } from './CheckoutPage';
-import { test } from './index';
+import { LoginPage } from '../../pages/LoginPage';
+import { InventoryPage } from '../../pages/InventoryPage';
+import { CartPage } from '../../pages/CartPage';
+import { Checkout } from '../../pages/CheckoutPage';
+import { test } from '../../pages/index';
 
 test('Verify cart page with 0 items', async ({loginPage, inventoryPage, cartPage, page }) => {
     

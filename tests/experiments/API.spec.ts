@@ -1,8 +1,8 @@
 //Learning with AI as i want to understood the fundemental of API Testing
 import { test, expect } from '@playwright/test';
-import { LoginPage } from './LoginPage';
-import { InventoryPage } from './InventoryPage';
-import { BasePage } from './Basepage';
+import { LoginPage } from '../../pages/LoginPage';
+import { InventoryPage } from '../../pages/InventoryPage';
+import { BasePage } from '../../pages/Basepage';
 import Database from 'better-sqlite3';
 import path from 'path';
 

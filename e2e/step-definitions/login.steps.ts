@@ -4,7 +4,7 @@ import { expect } from '@playwright/test';
 import { SwagWorld } from '../support/world';
 
 // Adjust the import path based on where your POMs live
-import { LoginPage } from '../../tests/LoginPage';
+import { LoginPage } from '../../pages/LoginPage';
 
 Given('I am on the login page', async function (this: SwagWorld) {
   const loginPage = new LoginPage(this.page);
@@ -34,5 +34,5 @@ Then('I should see the inventory page', async function (this: SwagWorld) {
 
 Then('I should see an error message {string}', async function (this: SwagWorld, expectedMessage: string) {
   const loginPage = new LoginPage(this.page);
-  await loginPage.verifyErroMessage(expectedMessage);
+  await loginPage.verifyErrorMessage(expectedMessage);
 });
