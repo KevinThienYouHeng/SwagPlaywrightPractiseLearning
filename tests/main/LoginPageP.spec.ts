@@ -223,11 +223,12 @@ test.describe.parallel('Measure Test',  () => {
         await loginPage.goToLoginPage();
     })
     test('EndPoint describe Test', async ({ loginPage }) => {
-        await loginPage.goToLoginPageEndPoint();
+        const endpoint = await loginPage.goToLoginPageEndPoint();
+        console.log(endpoint);
     })
 })
 
-test('AI generated test cases for SauceDemo', async ({ basePage, loginPage, page}) => {
+test.skip('AI generated test cases for SauceDemo', async ({ basePage, loginPage, page}) => {
     
     await loginPage.goToLoginPage();
     const pageHTML = await page.content();

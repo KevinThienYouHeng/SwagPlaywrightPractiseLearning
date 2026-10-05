@@ -45,16 +45,19 @@ export class BasePage {
         console.log(`Page loaded in ${durationSec} milliseconds.`);
     }
 
-    async measureEndpointPerformance(): Promise<void> {
+    async measureEndpointPerformance(url: string): Promise<number> {
         const startTime = performance.now();
   
-       //await this.page.waitForLoadState('networkidle');
+        const response = await this.page.request.get(url);
         
-        const endTime = performance.now();
-        const duration = endTime - startTime;
+        const duration = performance.now() - startTime;
         
-        console.log(`API Navigation response took: ${duration.toFixed(2)}ms`);
+        expect(response.status()).toBe(200);
         expect(duration).toBeLessThan(3000);
+        console.log(`${url} responded in ${duration.toFixed(2)}ms`);
+
+        return duration;
+        
     }
 
     async takeScreenshot(fileName: string): Promise<void> {
