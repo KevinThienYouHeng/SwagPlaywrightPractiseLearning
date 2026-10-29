@@ -25,27 +25,27 @@
   "type": "commonjs",
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
-    "@cucumber/cucumber": "^13.2.1",
-    "@playwright/test": "^1.63.0",
+    "@cucumber/cucumber": "^13.3.0",
+    "@playwright/test": "^1.64.1",
     "@types/better-sqlite3": "^9.6.0",
     "@types/cucumber": "^6.0.1",
     "@types/k6": "^2.0.0",
-    "@types/node": "^26.6.4",
+    "@types/node": "^26.6.6",
     "@types/pdf-parse": "^1.1.5",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.131.0",
+    "@anthropic-ai/sdk": "^1.3.0",
     "@playwright/mcp": "^0.0.83",
     "@types/node-cron": "^3.0.11",
     "better-sqlite3": "^13.0.3",
-    "dotenv": "^18.0.5",
+    "dotenv": "^18.0.9",
     "node-cron": "^4.2.1",
     "pdf-parse": "^2.4.5",
-    "pdf-to-img": "^7.0.0",
+    "pdf-to-img": "^7.0.1",
     "save-dev": "^0.0.1-security",
     "tesseract.js": "^7.0.0",
-    "unpdf": "^1.8.1"
+    "unpdf": "^2.0.0"
   }
 }
